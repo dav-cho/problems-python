@@ -47,47 +47,47 @@
 #################################################################################
 
 
-# class MyQueue:
-#     def __init__(self):
-#         self.stack = []
+class MyQueue:
+    def __init__(self):
+        self.stack = []
 
-#     def push(self, x: int) -> None:
-#         self.stack.append(x)
+    def push(self, x: int) -> None:
+        self.stack.append(x)
 
-#     def pop(self) -> int:
-#         return self.stack.pop(0)
+    def pop(self) -> int:
+        return self.stack.pop(0)
 
-#     def peek(self) -> int:
-#         return self.stack[0]
+    def peek(self) -> int:
+        return self.stack[0]
 
-#     def empty(self) -> bool:
-#         return not self.stack
+    def empty(self) -> bool:
+        return not self.stack
 
 
 # Approach 1: Two Stacks
 # ----------------------
 # push - O(N) per operation
 # pop - O(1) per operation
-# class MyQueue:
-#     def __init__(self):
-#         self.stack = []
-#         self.temp = []
+class MyQueue:
+    def __init__(self):
+        self.stack = []
+        self.temp = []
 
-#     def push(self, x: int) -> None:
-#         while self.stack:
-#             self.temp.append(self.stack.pop())
-#         self.stack.append(x)
-#         while self.temp:
-#             self.stack.append(self.temp.pop())
+    def push(self, x: int) -> None:
+        while self.stack:
+            self.temp.append(self.stack.pop())
+        self.stack.append(x)
+        while self.temp:
+            self.stack.append(self.temp.pop())
 
-#     def pop(self) -> int:
-#         return self.stack.pop()
+    def pop(self) -> int:
+        return self.stack.pop()
 
-#     def peek(self) -> int:
-#         return self.stack[-1]
+    def peek(self) -> int:
+        return self.stack[-1]
 
-#     def empty(self) -> bool:
-#         return not self.stack
+    def empty(self) -> bool:
+        return not self.stack
 
 
 # Approach 2: Two Stacks

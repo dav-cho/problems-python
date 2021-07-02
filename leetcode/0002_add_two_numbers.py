@@ -38,23 +38,23 @@ class ListNode:
         self.next = next
 
 
-# def addTwoNumbers(l1: ListNode, l2: ListNode) -> ListNode:
-#     sentinel_head = ListNode()
-#     current = sentinel_head
-#     carry = 0
+def addTwoNumbers(l1: ListNode, l2: ListNode) -> ListNode:
+    sentinel_head = ListNode()
+    current = sentinel_head
+    carry = 0
 
-#     while l1 or l2 or carry:
-#         val1 = l1.val if l1 else 0
-#         val2 = l2.val if l2 else 0
-#         sum = carry + val1 + val2
-#         carry, digit_sum = divmod(sum, 10)
+    while l1 or l2 or carry:
+        val1 = l1.val if l1 else 0
+        val2 = l2.val if l2 else 0
+        sum = carry + val1 + val2
+        carry, digit_sum = divmod(sum, 10)
 
-#         current.next = ListNode(digit_sum)
-#         current = current.next
-#         l1 = l1.next if l1 else None
-#         l2 = l2.next if l2 else None
+        current.next = ListNode(digit_sum)
+        current = current.next
+        l1 = l1.next if l1 else None
+        l2 = l2.next if l2 else None
 
-#     return sentinel_head.next
+    return sentinel_head.next
 
 
 def addTwoNumbers(l1: ListNode, l2: ListNode) -> ListNode:
@@ -82,22 +82,22 @@ def addTwoNumbers(l1: ListNode, l2: ListNode) -> ListNode:
     return sentinel_head.next
 
 
-# def addTwoNumbers(l1: ListNode, l2: ListNode) -> ListNode:
-#     current = ListNode()
-#     head = ListNode(l1.value + l2.value, next=None)
-#     current.next = head
-#     sum = 0
-#     carry = 0
-#     current_index = 0
+def addTwoNumbers(l1: ListNode, l2: ListNode) -> ListNode:
+    current = ListNode()
+    head = ListNode(l1.value + l2.value, next=None)
+    current.next = head
+    sum = 0
+    carry = 0
+    current_index = 0
 
-#     while l1 or l2 or carry:
-#         temp_sum = l1.val + l2.val
-#         digit_sum = temp_sum % 10
-#         carry = temp_sum // 10
+    while l1 or l2 or carry:
+        temp_sum = l1.val + l2.val
+        digit_sum = temp_sum % 10
+        carry = temp_sum // 10
 
-#         sum += digit_sum
-#         l1, l2 = l1.next, l2.next
-#         current_index += 1
+        sum += digit_sum
+        l1, l2 = l1.next, l2.next
+        current_index += 1
 
 
 # Approach 1: Elementary Math
@@ -119,23 +119,23 @@ def addTwoNumbers(l1: ListNode, l2: ListNode) -> ListNode:
 # Note that we use a dummy head to simplify the code.
 # Without a dummy head, you would have to write extra conditional
 # statements to initialize the head's value.
-# def addTwoNumbers(l1: ListNode, l2: ListNode) -> ListNode:
-#     dummy_head = ListNode()
-#     current = dummy_head
-#     carry = 0
+def addTwoNumbers(l1: ListNode, l2: ListNode) -> ListNode:
+    dummy_head = ListNode()
+    current = dummy_head
+    carry = 0
 
-#     while l1 and l2 and carry:
-#         value1 = l1.value if l1 else 0
-#         value2 = l2.value if l2 else 0
+    while l1 and l2 and carry:
+        value1 = l1.value if l1 else 0
+        value2 = l2.value if l2 else 0
 
-#         sum = carry + value1 + value2
-#         carry, digit_sum = divmod(sum, 10)
-#         print("~ divmod", carry, digit_sum)
+        sum = carry + value1 + value2
+        carry, digit_sum = divmod(sum, 10)
+        print("~ divmod", carry, digit_sum)
 
-#         current.next = ListNode(digit_sum)
-#         current = current.next
+        current.next = ListNode(digit_sum)
+        current = current.next
 
-#         l1 = l1.next if l1 else None
-#         l2 = l2.next if l2 else None
+        l1 = l1.next if l1 else None
+        l2 = l2.next if l2 else None
 
-#     return dummy_head.next
+    return dummy_head.next

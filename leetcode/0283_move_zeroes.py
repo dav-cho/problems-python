@@ -31,25 +31,25 @@
 
 # Approach 1: Space Sub-Optimal
 # ----------------------------
-# def move_zeroes(nums: list[int]) -> None:
-#     # initialize zeroes count
-#     num_zeroes = 0
+def move_zeroes(nums: list[int]) -> None:
+    # initialize zeroes count
+    num_zeroes = 0
 
-#     # count all zeroes
-#     for num in nums:
-#         num_zeroes += 1 if num == 0 else num_zeroes
+    # count all zeroes
+    for num in nums:
+        num_zeroes += 1 if num == 0 else num_zeroes
 
-#     # new array with non zero numbers, keeping the same order
-#     result = [num for num in nums if num != 0]
+    # new array with non zero numbers, keeping the same order
+    result = [num for num in nums if num != 0]
 
-#     # using the count of zeroes, append zeroes to result
-#     while num_zeroes > 0:
-#         result.append(0)
-#         num_zeroes -= 1
+    # using the count of zeroes, append zeroes to result
+    while num_zeroes > 0:
+        result.append(0)
+        num_zeroes -= 1
 
-#     # replace all values in nums with result
-#     for i in range(len(nums)):
-#         nums[i] = result[i]
+    # replace all values in nums with result
+    for i in range(len(nums)):
+        nums[i] = result[i]
 
 
 # Approach 2: Space Optimal, Operation Sub-Optimal
@@ -58,15 +58,15 @@
 # while keeping track of the last non zero index + 1
 # once first loop is done, replace remaining elements with zeroes, using
 # last non zero index as start index
-# def move_zeroes(nums: list[int]) -> None:
-#     last_non_zero_index = 0
+def move_zeroes(nums: list[int]) -> None:
+    last_non_zero_index = 0
 
-#     for index, num in enumerate(nums):
-#         if num is not 0:
-#             nums[last_non_zero_index] = nums[index]
-#             last_non_zero_index += 1
-#     for i in range(last_non_zero_index, len(nums)):
-#         nums[i] = 0
+    for index, num in enumerate(nums):
+        if num is not 0:
+            nums[last_non_zero_index] = nums[index]
+            last_non_zero_index += 1
+    for i in range(last_non_zero_index, len(nums)):
+        nums[i] = 0
 
 
 # Approach 3: Optimal

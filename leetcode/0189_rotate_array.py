@@ -39,13 +39,13 @@
 #
 # time - O(N) --> must loop through atleast once
 # space - O(N + M) --> O(N) --> use two new arrays
-# def rotate(nums: list[int], k: int) -> None:
-#     k %= len(nums)
-#     front = nums[:-k]
-#     back = nums[-k:]
-#     result = back + front
-#     for i in range(len(result)):
-#         nums[i] = result[i]
+def rotate(nums: list[int], k: int) -> None:
+    k %= len(nums)
+    front = nums[:-k]
+    back = nums[-k:]
+    result = back + front
+    for i in range(len(result)):
+        nums[i] = result[i]
 
 
 # Approach 1: Brute Force
@@ -56,17 +56,17 @@
 # time - O(N x K) --> O(N) - all elements are only moved k times (must loop
 # through atleast once)
 # space - O(1) --> no extra space used
-# def rotate(nums: list[int], k: int) -> None:
-#     # speed up rotation and eliminate unecessary rotations
-#     # also works for edge cases where k > length of array
-#     k %= len(nums)
+def rotate(nums: list[int], k: int) -> None:
+    # speed up rotation and eliminate unecessary rotations
+    # also works for edge cases where k > length of array
+    k %= len(nums)
 
-#     for i in range(k):
-#         # save the value of the last element
-#         previous = nums[-1]
-#         for j in range(len(nums)):
-#             # swap last element with current element
-#             nums[j], previous = previous, nums[j]
+    for i in range(k):
+        # save the value of the last element
+        previous = nums[-1]
+        for j in range(len(nums)):
+            # swap last element with current element
+            nums[j], previous = previous, nums[j]
 
 
 # Approach 2: Using Extra Array
@@ -76,15 +76,15 @@
 # time - O(N + M) --> O(N) - one pass to place numbers in new array and another
 # to copy the array into nums
 # space - O(N) --> needs another array of the same size
-# def rotate(nums: list[int], k: int) -> None:
-#     n = len(nums)
-#     a = [0] * n
+def rotate(nums: list[int], k: int) -> None:
+    n = len(nums)
+    a = [0] * n
 
-#     for i in range(n):
-#         a[(i + k) % n] = nums[i]
+    for i in range(n):
+        a[(i + k) % n] = nums[i]
 
-#     # nums[:] = a
-#     nums = a
+    # nums[:] = a
+    nums = a
 
 
 # Approach 3: Using Cyclic Replacements

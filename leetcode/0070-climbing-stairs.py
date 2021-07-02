@@ -89,7 +89,22 @@ def climbStairs(n: int) -> int:
     return dp[n]
 
 
-result1 = climbStairs(2)  # 2
-result2 = climbStairs(3)  # 3
-print("~ result1", result1)
-print("~ result2", result2)
+def test(tests_arr):
+    test_number = 0
+
+    def run_test():
+        for test in tests_arr:
+            nonlocal test_number
+            test_number += 1
+            result = climbStairs(test)
+            print(f"~ test {test_number}")
+            print(f"    case:   {test}")
+            print(f"    result: {result}")
+
+    return run_test
+
+
+tests = [2, 3]
+#        2  3
+
+test(tests)()

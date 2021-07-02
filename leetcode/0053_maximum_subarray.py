@@ -35,21 +35,21 @@
 # time - O(N) --> because of nested loop
 # space - O(1) --> no additional memory needed
 
-# import math
+import math
 
 
-# def maxSubArray(nums: list[int]) -> int:
-#     # initialize max to negative infinity (all values in the array can be negative)
-#     max_subarray = -math.inf
+def maxSubArray(nums: list[int]) -> int:
+    # initialize max to negative infinity (all values in the array can be negative)
+    max_subarray = -math.inf
 
-#     # loop through each element in the array
-#     for i in range(len(nums)):
-#         current_subarray = 0
-#         #loop through again to get all possible subarrays and their sums
-#         for j in range(i, len(nums)):
-#             current_subarray += nums[j]
-#             max_subarray = max(max_subarray, current_subarray)
-#     return max_subarray
+    # loop through each element in the array
+    for i in range(len(nums)):
+        current_subarray = 0
+        # loop through again to get all possible subarrays and their sums
+        for j in range(i, len(nums)):
+            current_subarray += nums[j]
+            max_subarray = max(max_subarray, current_subarray)
+    return max_subarray
 
 
 # Approach 2: Dynamic Programming
@@ -91,41 +91,41 @@ def maxSubArray(nums: list[int]) -> int:
 # space - O(log N) --> extra space needed for the recursive stack - base case
 # (empty array) occurs after log N calls
 
-# import math
+import math
 
 
-# def maxSubArray(nums: list[int]) -> int:
-#     # helper function to find max subarray
-#     def find_max_subarray(nums, left, right):
-#         if left > right:
-#             return -math.inf
+def maxSubArray(nums: list[int]) -> int:
+    # helper function to find max subarray
+    def find_max_subarray(nums, left, right):
+        if left > right:
+            return -math.inf
 
-#         mid = (left + right) // 2
-#         current_sum = max_left_sum = max_right_sum = 0
+        mid = (left + right) // 2
+        current_sum = max_left_sum = max_right_sum = 0
 
-#         # iterate from the middle to beginning
-#         for i in range(mid - 1, left - 1, -1):
-#             current_sum += nums[i]
-#             max_left_sum = max(max_left_sum, current_sum)
+        # iterate from the middle to beginning
+        for i in range(mid - 1, left - 1, -1):
+            current_sum += nums[i]
+            max_left_sum = max(max_left_sum, current_sum)
 
-#         # reset current_sum then iterate from middle to end
-#         current_sum = 0
-#         for i in range(mid + 1, right + 1):
-#             current_sum += nums[i]
-#             max_right_sum = max(max_right_sum, current_sum)
+        # reset current_sum then iterate from middle to end
+        current_sum = 0
+        for i in range(mid + 1, right + 1):
+            current_sum += nums[i]
+            max_right_sum = max(max_right_sum, current_sum)
 
-#         # max combined sum uses middle delement and max sub from each half
-#         max_combined_sum = nums[mid] + max_left_sum + max_right_sum
+        # max combined sum uses middle delement and max sub from each half
+        max_combined_sum = nums[mid] + max_left_sum + max_right_sum
 
-#         # use recursion to find the best subarray possible from both halves
-#         left_half = find_max_subarray(nums, left, mid - 1)
-#         right_half = find_max_subarray(nums, mid + 1, right)
+        # use recursion to find the best subarray possible from both halves
+        left_half = find_max_subarray(nums, left, mid - 1)
+        right_half = find_max_subarray(nums, mid + 1, right)
 
-#         # the largest of the three is the answer for any given input array
-#         return max(max_combined_sum, left_half, right_half)
+        # the largest of the three is the answer for any given input array
+        return max(max_combined_sum, left_half, right_half)
 
-#     # call the helper function with the entire input
-#     return find_max_subarray(nums, 0, len(nums) - 1)
+    # call the helper function with the entire input
+    return find_max_subarray(nums, 0, len(nums) - 1)
 
 
 maxSubArray1 = maxSubArray([-2, 1, -3, 4, -1, 2, 1, -5, 4])  # 6

@@ -29,12 +29,12 @@
 #
 # time  - O(N^2) --> nested loops
 # space - O(1) --> never used any extra space
-# def contains_duplicate(nums: list[int]) -> bool:
-#     for i, num in enumerate(nums):
-#         for j in range(i + 1, len(nums)):
-#             if nums[i] == nums[j]:
-#                 return True
-#     return False
+def contains_duplicate(nums: list[int]) -> bool:
+    for i, num in enumerate(nums):
+        for j in range(i + 1, len(nums)):
+            if nums[i] == nums[j]:
+                return True
+    return False
 
 
 # better
@@ -64,26 +64,27 @@ def contains_duplicate(nums: list[int]) -> bool:
 # *note: sorting modified the original array which is generally not good practice
 # unless explicitly stated to do so - you can make a copy of nums and
 # operate on the copy instead
-# def contains_duplicate(nums: list[int]) -> bool:
-#     nums.sort()
+def contains_duplicate(nums: list[int]) -> bool:
+    nums.sort()
 
-#     for i in range(len(nums) - 1):
-#         if nums[i] == nums[i + 1]:
-#             return True
+    for i in range(len(nums) - 1):
+        if nums[i] == nums[i + 1]:
+            return True
 
-#     return False
+    return False
+
 
 # Approach 3: Hash Table
-# def contains_duplicate(nums: list[int]) -> bool:
-#     hash_table = set()
+def contains_duplicate(nums: list[int]) -> bool:
+    hash_table = set()
 
-#     for num in nums:
-#         if num in hash_table:
-#             return True
+    for num in nums:
+        if num in hash_table:
+            return True
 
-#         hash_table.add(num)
+        hash_table.add(num)
 
-#     return False
+    return False
 
 
 contains_duplicate1 = contains_duplicate([1, 2, 3, 1])  # true
