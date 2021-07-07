@@ -97,95 +97,6 @@ def romanToInt(s: str) -> int:
     return count
 
 
-# Approach 1: Left-to-Right Pass
-# time: O(1) - there is a finite set of roman numerals - the max
-#              number can be 3999 (MMMCMXCIX)
-# space: O(1) - only a constant number of single-value variables are used
-values = {
-    "M": 1000,
-    "D": 500,
-    "C": 100,
-    "L": 50,
-    "X": 10,
-    "V": 5,
-    "I": 1,
-}
-
-
-def romanToInt(s: str) -> int:
-    total = 0
-    i = 0
-
-    while i < len(s):
-        if i + 1 < len(s) and values[s[i]] < values[s[i + 1]]:
-            total += values[s[i + 1]] - values[s[i]]
-            i += 2
-        else:
-            total += values[s[i]]
-            i += 1
-
-    return total
-
-
-# Approach 2: Left-to-Right Pass Improved
-# time: O(1) - same as Approach 1
-# space: O(1) - same as Approach 1
-values = {
-    "I": 1,
-    "IV": 4,
-    "V": 5,
-    "IX": 9,
-    "X": 10,
-    "XL": 40,
-    "XC": 90,
-    "L": 50,
-    "C": 100,
-    "CD": 400,
-    "D": 500,
-    "CM": 900,
-    "M": 1000,
-}
-
-
-def romanToInt(s: str) -> int:
-    total = 0
-    i = 0
-
-    while i < len(s):
-        if i < len(s) - 1 and s[i : i + 2] in values:
-            total += values[s[i : i + 2]]
-            i += 2
-        else:
-            total += values[s[i]]
-            i += 1
-
-    return total
-
-
-# Approach 3: Right-to-Left Pass
-values = {
-    "M": 1000,
-    "D": 500,
-    "C": 100,
-    "L": 50,
-    "X": 10,
-    "V": 5,
-    "I": 1,
-}
-
-
-def romanToInt(s: str) -> int:
-    total = values.get(s[-1])
-
-    for i in reversed(range(len(s) - 1)):
-        if values[s[i]] < values[s[i + 1]]:
-            total -= values[s[i]]
-        else:
-            total += values[s[i]]
-
-    return total
-
-
 tests = ["III", "IV", "IX", "LVIII", "MCMXCIV"]
 #          3     4     9      58       1994
 
@@ -205,3 +116,101 @@ def test(arr):
 
 
 test(tests)
+
+
+## LeetCode Solutions
+#########################
+
+
+## Approach 1: Left-to-Right Pass
+#####################################
+# time: O(1) - there is a finite set of roman numerals - the max
+#              number can be 3999 (MMMCMXCIX)
+# space: O(1) - only a constant number of single-value variables are used
+values = {
+    "I": 1,
+    "V": 5,
+    "X": 10,
+    "L": 50,
+    "C": 100,
+    "D": 500,
+    "M": 1000,
+}
+
+
+class Solution:
+    def romanToInt(self, s: str) -> int:
+        total = 0
+        i = 0
+        while i < len(s):
+            # If this is the subtractive case.
+            if i + 1 < len(s) and values[s[i]] < values[s[i + 1]]:
+                total += values[s[i + 1]] - values[s[i]]
+                i += 2
+            # Else this is NOT the subtractive case.
+            else:
+                total += values[s[i]]
+                i += 1
+        return total
+
+
+## Approach 2: Left-to-Right Pass Improved
+##############################################
+# time: O(1) - same as Approach 1
+# space: O(1) - same as Approach 1
+values = {
+    "I": 1,
+    "V": 5,
+    "X": 10,
+    "L": 50,
+    "C": 100,
+    "D": 500,
+    "M": 1000,
+    "IV": 4,
+    "IX": 9,
+    "XL": 40,
+    "XC": 90,
+    "CD": 400,
+    "CM": 900,
+}
+
+
+class Solution:
+    def romanToInt(self, s: str) -> int:
+        total = 0
+        i = 0
+        while i < len(s):
+            # This is the subtractive case.
+            if i < len(s) - 1 and s[i : i + 2] in values:
+                total += values[s[i : i + 2]]
+                i += 2
+            else:
+                total += values[s[i]]
+                i += 1
+        return total
+
+
+## Approach 3: Right-to-Left Pass
+#####################################
+# time: O(1) - same as Approach 1
+# space: O(1) - same as Approach 1
+values = {
+    "I": 1,
+    "V": 5,
+    "X": 10,
+    "L": 50,
+    "C": 100,
+    "D": 500,
+    "M": 1000,
+}
+
+
+class Solution:
+    def romanToInt(self, s: str) -> int:
+        total = values.get(s[-1])
+        for i in reversed(range(len(s) - 1)):
+            if values[s[i]] < values[s[i + 1]]:
+                total -= values[s[i]]
+            else:
+                total += values[s[i]]
+        return total

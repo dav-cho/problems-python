@@ -23,15 +23,61 @@
 
 ####################################################################
 
+## Approach 1: Sorting
+##########################
+# time: O(log(n)) - sorting costs O(n log(n)) and comparing costs O(n)
+# space: O(1) - language dependent --> space depends on sorting implementation
+class Solution:
+    def isAnagram(self, s: str, t: str) -> bool:
+        pass
+
+
+## Approach 2: Hash Table
+#############################
+# time: O(n) - accessing counter is constant time
+# space: O(1) - although we do use extra space, the hash table's size
+class Solution:
+    def isAnagram(self, s: str, t: str) -> bool:
+        pass
+
 
 from collections import Counter
 
 
-def isAnagram(s: str, t: str) -> bool:
-    return Counter(s) == Counter(t)
+class Solution:
+    def isAnagram(s: str, t: str) -> bool:
+        return Counter(s) == Counter(t)
 
 
-# Approach 1: Sorting
+## Tests
+############
+def test(*args):
+    solution = Solution()
+    count = 1
+
+    def run():
+        for test in args:
+            s, t = test
+            result = solution.isAnagram(s, t)
+            nonlocal count
+            print(f"test {count}")
+            print(f"result {count}: {result}")
+            count += 1
+
+    return run()
+
+
+test1 = ("anagram", "nagaram")  # True
+test2 = ("rat", "car")  # False
+test(test1, test2)
+
+
+## LeetCode Solutions
+#########################
+
+
+## Approach 1: Sorting
+##########################
 # time: O(log(n)) - sorting costs O(n log(n)) and comparing costs O(n)
 # space: O(1) - language dependent --> space depends on sorting implementation
 #               O(1) if heapsort is used
@@ -51,7 +97,8 @@ def isAnagram(s: str, t: str) -> bool:
     # return True
 
 
-# Approach 2: Hash Table
+## Approach 2: Hash Table
+#############################
 # time: O(n) - accessing counter is constant time
 # space: O(1) - although we do use extra space, the hash table's size
 #               stays constant no matter how large n is
@@ -72,31 +119,11 @@ def isAnagram(s: str, t: str) -> bool:
     return True
 
 
-test1 = ("anagram", "nagaram")  # True
-test2 = ("rat", "car")  # False
-
-# Discussion Solutions:
+## Discussion Solutions
+###########################
 def isAnagram(s: str, t: str) -> bool:
     return all(s.count(x) == t.count(x) for x in "abcdefghijklmnopqrstuvwxyz")
 
 
 def isAnagram(s: str, t: str) -> bool:
     return True if sorted(s) == sorted(t) else False
-
-
-def test(*args):
-    count = 1
-
-    def run():
-        for test in args:
-            s, t = test
-            result = isAnagram(s, t)
-            nonlocal count
-            print(f"test {count}")
-            print(f"result {count}: {result}")
-            count += 1
-
-    return run()
-
-
-test(test1, test2)

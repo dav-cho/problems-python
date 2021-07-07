@@ -23,73 +23,147 @@
 
 #############################################################################
 
-# naive
-# ------
+## Approach 1: Naive Linear Search (Time Limit Exceeded)
+############################################################
+# time: O(n^2)
+# space: O(1)
+class Solution:
+    def contains_duplicate(self, nums: list[int]) -> bool:
+        pass
+
+
+## Approach 2: Sorting
+##########################
+# time - O(N log N)
+class Solution:
+    def contains_duplicate(self, nums: list[int]) -> bool:
+        pass
+
+
+# space - O(1)
+## Approach 3: Hash Table
+#############################
+# time: O(n)
+# space: O(n)
+class Solution:
+    def contains_duplicate(self, nums: list[int]) -> bool:
+        pass
+
+
+## naive
+############
 # nested loops
 #
 # time  - O(N^2) --> nested loops
 # space - O(1) --> never used any extra space
-def contains_duplicate(nums: list[int]) -> bool:
-    for i, num in enumerate(nums):
-        for j in range(i + 1, len(nums)):
-            if nums[i] == nums[j]:
-                return True
-    return False
+class Solution:
+    def contains_duplicate(self, nums: list[int]) -> bool:
+        for i, num in enumerate(nums):
+            for j in range(i + 1, len(nums)):
+                if nums[i] == nums[j]:
+                    return True
+        return False
 
 
-# better
-# ------
+## better
+#############
 # hash map
-def contains_duplicate(nums: list[int]) -> bool:
-    hash_table = set()
+class Solution:
+    def contains_duplicate(self, nums: list[int]) -> bool:
+        hash_table = set()
 
-    for num in nums:
-        if num in hash_table:
-            return True
-        hash_table.add(num)
+        for num in nums:
+            if num in hash_table:
+                return True
+            hash_table.add(num)
 
-    return False
+        return False
 
 
-# Approach 2: Sorting
-# ------------------
-# if there are any duplicate integers, they will be consecutive after sorting
-# sorting is often a good preprocessing step
-# after sorting, we can sweep the sorted array to find if there are any
-# two consecutive duplicate elements
-#
+## Tests
+############
+test = Solution()
+contains_duplicate1 = test.contains_duplicate([1, 2, 3, 1])  # true
+contains_duplicate2 = test.contains_duplicate([1, 2, 3, 4])  # false
+contains_duplicate3 = test.contains_duplicate([1, 1, 1, 3, 3, 4, 3, 2, 4, 2])  # true
+print(contains_duplicate1)
+print(contains_duplicate2)
+print(contains_duplicate3)
+
+## Approach 1: Naive Linear Search (Time Limit Exceeded)
+############################################################
+# time: O(n^2)
+# space: O(1)
+
+## Java
+# public boolean containsDuplicate(int[] nums) {
+#     for (int i = 0; i < nums.length; ++i) {
+#         for (int j = 0; j < i; ++j) {
+#             if (nums[j] == nums[i]) return true;
+#         }
+#     }
+#     return false;
+# }
+
+## Approach 2: Sorting
+##########################
 # time - O(N log N) --> sorting is O(N log N) and sweeping is O(N)
 # space - O(1) --> space depends on which sorting implementation, which usually,
 # costs O(1) auxiliary space if heapsort is used
 # *note: sorting modified the original array which is generally not good practice
 # unless explicitly stated to do so - you can make a copy of nums and
 # operate on the copy instead
-def contains_duplicate(nums: list[int]) -> bool:
-    nums.sort()
+#
+# if there are any duplicate integers, they will be consecutive after sorting
+# sorting is often a good preprocessing step
+# after sorting, we can sweep the sorted array to find if there are any
+# two consecutive duplicate elements
+class Solution:
+    def contains_duplicate(self, nums: list[int]) -> bool:
+        nums.sort()
 
-    for i in range(len(nums) - 1):
-        if nums[i] == nums[i + 1]:
-            return True
+        for i in range(len(nums) - 1):
+            if nums[i] == nums[i + 1]:
+                return True
 
-    return False
-
-
-# Approach 3: Hash Table
-def contains_duplicate(nums: list[int]) -> bool:
-    hash_table = set()
-
-    for num in nums:
-        if num in hash_table:
-            return True
-
-        hash_table.add(num)
-
-    return False
+        return False
 
 
-contains_duplicate1 = contains_duplicate([1, 2, 3, 1])  # true
-contains_duplicate2 = contains_duplicate([1, 2, 3, 4])  # false
-contains_duplicate3 = contains_duplicate([1, 1, 1, 3, 3, 4, 3, 2, 4, 2])  # true
-print(contains_duplicate1)
-print(contains_duplicate2)
-print(contains_duplicate3)
+## Java
+# public boolean containsDuplicate(int[] nums) {
+#     Arrays.sort(nums);
+#     for (int i = 0; i < nums.length - 1; ++i) {
+#         if (nums[i] == nums[i + 1]) return true;
+#     }
+#     return false;
+# }
+
+
+## Approach 3: Hash Table
+#############################
+# time: O(n) - we do search() and insert() for n times and each operations
+#              takes constant time
+# space: O(n) - space used by hash table is linear with the number of
+#               elements in it
+class Solution:
+    def contains_duplicate(self, nums: list[int]) -> bool:
+        hash_table = set()
+
+        for num in nums:
+            if num in hash_table:
+                return True
+
+            hash_table.add(num)
+
+        return False
+
+
+## Java
+# public boolean containsDuplicate(int[] nums) {
+#     Set<Integer> set = new HashSet<>(nums.length);
+#     for (int x: nums) {
+#         if (set.contains(x)) return true;
+#         set.add(x);
+#     }
+#     return false;
+# }

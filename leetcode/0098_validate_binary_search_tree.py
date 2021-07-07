@@ -39,58 +39,158 @@ class TreeNode:
         self.right = right
 
 
+# 1. recursive traversal with valid range
 class Solution:
-    # Approach 1 - time: O(N), space: O(N)
-    def isValidBSTRecursive(self, root: TreeNode) -> bool:
-        def validate(node: TreeNode, low=-math.inf, high=math.inf):
+    def isValidBST(self, root: TreeNode) -> bool:
+        # def validate(node: TreeNode, low=-math.inf, high=math.inf):
+        def validate(node: TreeNode, low=float("-inf"), high=float("inf")):
             if not node:
                 return True
             if node.val <= low or node.val >= high:
                 return False
 
+            return validate(node.left, low, node.val) and validate(
+                node.right, node.val, high
+            )
+
+        return validate(root)
+
+
+# 2. iterative traversal with valid range
+class Solution:
+    def isValidBST(self, root: TreeNode) -> bool:
+        if not root:
+            return True
+
+        stack = [(root, float("-inf"), float("inf"))]
+
+        while stack:
+            node, low, high = stack.pop()
+
+            if not node:
+                continue
+            if node.val <= low or node.val >= high:
+                return False
+
+            stack.append((node.left, low, node.val))
+            stack.append((node.right, node.val, high))
+
+        return True
+
+
+# 3. recursive inorder traversal
+class Solution:
+    def isValidBST(self, root: TreeNode) -> bool:
+        self.prev = None
+
+        def inorder(root):
+            if not root:
+                return True
+            if not inorder(root.left):
+                return False
+            if self.prev is not None and root.val <= self.prev:
+                return False
+
+            self.prev = root.val
+
+            return inorder(root.right)
+
+        return inorder(root)
+
+
+# 4. iterative inorder traversal
+class Solution:
+    def isValidBST(self, root: TreeNode) -> bool:
+        stack, prev = [], float("-inf")
+
+        while stack or root:
+            while root:
+                stack.append(root)
+                root = root.left
+
+            root = stack.pop()
+
+            if root.val <= prev:
+                return False
+
+            prev = root.val
+            root = root.right
+
+        return True
+
+
+## LeetCode Solutions
+#########################
+
+## Approach 1: Recursive Traversal with Valid Range
+########################################################
+# time: O(n)
+# space: O(n)
+class Solution:
+    def isValidBSTRecursive(self, root: TreeNode) -> bool:
+        def validate(node, low=-math.inf, high=math.inf):
+            # Empty trees are valid BSTs.
+            if not node:
+                return True
+            # The current node's value must be between low and high.
+            if node.val <= low or node.val >= high:
+                return False
+            # The left and right subtree must also be valid.
             return validate(node.right, node.val, high) and validate(
                 node.left, low, node.val
             )
 
         return validate(root)
 
-    # Approach 2 - time: O(N), space: O(N)
-    def isValidBSTIterative(self, root: TreeNode) -> bool:
+
+## Approach 2: Iterative Traversal with Valid Range
+########################################################
+# time: O(n)
+# space: O(n)
+class Solution:
+    def isValidBST(self, root: TreeNode) -> bool:
         if not root:
-            return True  # empty trees are valid BST
+            return True
 
         stack = [(root, -math.inf, math.inf)]
-
         while stack:
-            current, low, high = stack.pop()
-
-            if not current:
+            root, lower, upper = stack.pop()
+            if not root:
                 continue
-            if current.val <= low or current.val >= high:
+            val = root.val
+            if val <= lower or val >= upper:
                 return False
-
-            stack.append(current.left, low, current.val)
-            stack.append(current.right, current.val, high)
-
+            stack.append((root.right, val, upper))
+            stack.append((root.left, lower, val))
         return True
 
-    # Approach 3 - time: O(N), space: O(N)
-    def isValidBSTRecursiveInorder(self, root: TreeNode) -> bool:
-        def inorder(root: TreeNode):
+
+## Approach 3: Recursive Inorder Traversal
+###############################################
+# time: O(n)
+# space: O(n)
+class Solution:
+    def isValidBST(self, root: TreeNode) -> bool:
+        def inorder(root):
             if not root:
                 return True
-
             if not inorder(root.left):
                 return False
             if root.val <= self.prev:
                 return False
+            self.prev = root.val
+            return inorder(root.right)
 
         self.prev = -math.inf
-
         return inorder(root)
 
-    # Approach 4 - time: O(N), space: O(N)
-    def isValidBSTIterativeInorder(self, root: TreeNode) -> bool:
+
+## Approach 4: Iterative Inorder Traversal
+###############################################
+# time: O(n)
+# space: O(n)
+class Solution:
+    def isValidBST(self, root: TreeNode) -> bool:
         stack, prev = [], -math.inf
 
         while stack or root:
@@ -98,10 +198,11 @@ class Solution:
                 stack.append(root)
                 root = root.left
             root = stack.pop()
-
+            # If next element in inorder traversal
+            # is smaller than the previous one
+            # that's not BST.
             if root.val <= prev:
                 return False
-
             prev = root.val
             root = root.right
 

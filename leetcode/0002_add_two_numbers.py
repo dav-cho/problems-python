@@ -100,8 +100,13 @@ def addTwoNumbers(l1: ListNode, l2: ListNode) -> ListNode:
         current_index += 1
 
 
-# Approach 1: Elementary Math
-# --------------------------
+## LeetCode Solutions
+#########################
+
+## Approach 1: Elementary Math
+##################################
+# time: O(max(m, n))
+# space: O(max(m, n))
 # Initialize current node to dummy head of the returning list.
 # Initialize carry to 00.
 # Initialize pp and qq to head of l1l1 and l2l2 respectively.

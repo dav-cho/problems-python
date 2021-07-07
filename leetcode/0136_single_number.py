@@ -27,8 +27,6 @@
 # element which appears only once.
 
 #############################################################################
-
-
 from collections import Counter
 
 
@@ -47,6 +45,34 @@ def singleNumber(nums: list[int]) -> int:
 # 2 * (a + b + c) - (a + a + b + b + c) = c
 def singleNumber(nums: list[int]) -> int:
     return 2 * sum(set(nums)) - sum(nums)
+
+
+## Approach 1: List Operation
+#################################
+class Solution:
+    def singleNumber(self, nums: list[int]) -> int:
+        pass
+
+
+## Approach 2: Hash Table
+#############################
+class Solution:
+    def singleNumber(self, nums: list[int]) -> int:
+        pass
+
+
+## Approach 3: Math
+#######################
+class Solution:
+    def singleNumber(self, nums: list[int]) -> int:
+        pass
+
+
+## Approach 4: Bit Manipulation
+###################################
+class Solution:
+    def singleNumber(self, nums: list[int]) -> int:
+        pass
 
 
 test1 = [2, 2, 1]  # 1
@@ -69,3 +95,27 @@ def test(*args):
 
 
 test(test1, test2, test3)
+
+
+## LeetCode Solutions
+#########################
+
+## Approach 1: List Operation
+#################################
+# time: O(n^2)
+# space: O(n)
+
+## Approach 2: Hash Table
+#############################
+# time: O(n)
+# space: O(n)
+
+## Approach 3: Math
+#######################
+# time: O(n)
+# space: O(n)
+
+## Approach 4: Bit Manipulation
+###################################
+# time: O(n)
+# space: O(1)

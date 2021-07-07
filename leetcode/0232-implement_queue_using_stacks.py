@@ -46,6 +46,89 @@
 
 #################################################################################
 
+## Approach 1: Two Stacks
+# Push O(1) per operation, Pop - Amortized O(1) per operation
+#################################################################
+# Push:
+#   - time: O(n)
+#   - space: O(n)
+# Pop:
+#   - time: O(1)
+#   - space: O(1)
+# Empty:
+#   - time: O(1)
+#   - space: O(1)
+# Peek:
+#   - time: O(1)
+#   - space: O(1)
+class MyQueue:
+    def __init__(self):
+        """
+        Initialize your data structure here.
+        """
+
+    def push(self, x: int) -> None:
+        """
+        Push element x to the back of queue.
+        """
+
+    def pop(self) -> int:
+        """
+        Removes the element from in front of queue and returns that element.
+        """
+
+    def peek(self) -> int:
+        """
+        Get the front element.
+        """
+
+    def empty(self) -> bool:
+        """
+        Returns whether the queue is empty.
+        """
+
+
+## Approach 2: Two Stacks
+# Push - O(1) per operation, Pop - Amortized O(1) per operation
+###################################################################
+# Push:
+#   - time: O(1)
+#   - space: O(n)
+# Pop:
+#   - time: O(1)
+#   - space: O(1)
+# Empty:
+#   - time: O(1)
+#   - space: O(1)
+# Peek:
+#   - time: O(1)
+#   - space: O(1)
+class MyQueue:
+    def __init__(self):
+        """
+        Initialize your data structure here.
+        """
+
+    def push(self, x: int) -> None:
+        """
+        Push element x to the back of queue.
+        """
+
+    def pop(self) -> int:
+        """
+        Removes the element from in front of queue and returns that element.
+        """
+
+    def peek(self) -> int:
+        """
+        Get the front element.
+        """
+
+    def empty(self) -> bool:
+        """
+        Returns whether the queue is empty.
+        """
+
 
 class MyQueue:
     def __init__(self):
@@ -64,10 +147,49 @@ class MyQueue:
         return not self.stack
 
 
-# Approach 1: Two Stacks
-# ----------------------
-# push - O(N) per operation
-# pop - O(1) per operation
+## Tests
+############
+my_queue = MyQueue()
+
+my_queue.push(1)  # queue is: [1]
+print(my_queue.stack)
+
+my_queue.push(2)  # queue is: [1, 2] (leftmost is front of the queue)
+print(my_queue.stack)
+
+peek1 = my_queue.peek()  # return 1
+print("~ peek1", peek1)
+
+popped1 = my_queue.pop()  # return 1, queue is [2]
+print("~ popped1", popped1)
+print(my_queue.stack)
+
+is_empty = my_queue.empty()  # return false
+print("~ is_empty", is_empty)
+
+
+## LeetCode Solutions
+#########################
+
+
+## Approach 1: Two Stacks
+# Push O(1) per operation, Pop - Amortized O(1) per operation
+#################################################################
+# Push:
+#   - time: O(n) - each element is pushed and popped twice, with
+#                  exception of newly arrived. This gives 4n + 2,
+#                  where n is queue size.
+#   - space: O(n) - need additional memory to store the queue elements
+# Pop:
+#   - time: O(1)
+#   - space: O(1)
+# Empty:
+#   - time: O(1)
+#   - space: O(1)
+# Peek:
+#   - time: O(1) - the front element has been calculated in advance and
+#                  only returned in peek operation
+#   - space: O(1)
 class MyQueue:
     def __init__(self):
         self.stack = []
@@ -90,10 +212,51 @@ class MyQueue:
         return not self.stack
 
 
-# Approach 2: Two Stacks
-# ----------------------
-# push - O(1) per operation
-# pop - Amortized O(1) per operation
+## Java
+# private int front;
+
+# public void push(int x) {
+#     if (s1.empty())
+#         front = x;
+#     while (!s1.isEmpty())
+#         s2.push(s1.pop());
+#     s2.push(x);
+#     while (!s2.isEmpty())
+#         s1.push(s2.pop());
+# }
+
+# public void pop() {
+#     s1.pop();
+#     if (!s1.empty())
+#         front = s1.peek();
+# }
+
+# // Return whether the queue is empty.
+# public boolean empty() {
+#     return s1.isEmpty();
+# }
+
+# // Get the front element.
+# public int peek() {
+#   return front;
+# }
+
+
+## Approach 2: Two Stacks
+# Push - O(1) per operation, Pop - Amortized O(1) per operation
+###################################################################
+# Push:
+#   - time: O(1) - appending an element to a stack is an O(1) operation
+#   - space: O(n) - we need additional memory to store the queue elements
+# Pop:
+#   - time: O(1) - Amortized O(1), worst-case O(n)
+#   - space: O(1) - O(1)
+# Empty:
+#   - time: O(1)
+#   - space: O(1)
+# Peek:
+#   - time: O(1)
+#   - space: O(1)
 class MyQueue:
     def __init__(self):
         self.stack = []
@@ -116,20 +279,35 @@ class MyQueue:
         return not self.stack and not self.temp2
 
 
-my_queue = MyQueue()
+## Java
+# private Stack<Integer> s1 = new Stack<>();
+# private Stack<Integer> s2 = new Stack<>();
 
-my_queue.push(1)  # queue is: [1]
-print(my_queue.stack)
+# // Push element x to the back of queue.
+# public void push(int x) {
+#     if (s1.empty())
+#         front = x;
+#     s1.push(x);
+# }
 
-my_queue.push(2)  # queue is: [1, 2] (leftmost is front of the queue)
-print(my_queue.stack)
+# // Removes the element from in front of queue.
+# public void pop() {
+#     if (s2.isEmpty()) {
+#         while (!s1.isEmpty())
+#             s2.push(s1.pop());
+#     }
+#     s2.pop();
+# }
 
-peek1 = my_queue.peek()  # return 1
-print("~ peek1", peek1)
+# // Return whether the queue is empty.
+# public boolean empty() {
+#     return s1.isEmpty() && s2.isEmpty();
+# }
 
-popped1 = my_queue.pop()  # return 1, queue is [2]
-print("~ popped1", popped1)
-print(my_queue.stack)
-
-is_empty = my_queue.empty()  # return false
-print("~ is_empty", is_empty)
+# // Get the front element.
+# public int peek() {
+#     if (!s2.isEmpty()) {
+#             return s2.peek();
+#     }
+#     return front;
+# }

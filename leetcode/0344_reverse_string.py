@@ -23,24 +23,43 @@
 
 #################################################################################
 
-
-def reverseString(s: list[int]) -> None:
-    start = 0
-    end = len(s) - 1
-
-    while start < end:
-        s[start], s[end] = s[end], s[start]
-        start += 1
-        end -= 1
-
-    print(s)
+## Approach 1: Recursion, In-Place, O(n) Space
+##################################################
+# time: O(n)
+# space: O(n)
+class Solution:
+    def reverseString(self, s: list[str]) -> None:
+        """
+        Do not return anything, modify s in-place instead.
+        """
 
 
-test1 = ["h", "e", "l", "l", "o"]
-test2 = ["H", "a", "n", "n", "a", "h"]
+## Approach 2: Two Pointers, Iteration, O(1) Space
+######################################################
+# time: O(n)
+# space: O(1)
+class Solution:
+    def reverseString(self, s: list[str]) -> None:
+        pass
 
 
+class Solution:
+    def reverseString(self, s: list[int]) -> None:
+        start = 0
+        end = len(s) - 1
+
+        while start < end:
+            s[start], s[end] = s[end], s[start]
+            start += 1
+            end -= 1
+
+        print(s)
+
+
+## Tests
+############
 def test(*args):
+    solution = Solution()
     count = 0
 
     def run():
@@ -48,9 +67,47 @@ def test(*args):
             nonlocal count
             count += 1
             print(f"test {count}")
-            reverseString(test)
+            solution.reverseString(test)
 
     return run()
 
 
+test1 = ["h", "e", "l", "l", "o"]
+test2 = ["H", "a", "n", "n", "a", "h"]
+
 test(test1, test2)
+
+
+## LeetCode Solutions
+#########################
+
+## Life is short, use Python
+class Solution:
+    def reverseString(self, s):
+        s.reverse()
+
+
+## Approach 1: Recursion, In-Place, O(n) Space
+##################################################
+# time: O(n) - perform n / 2 swaps
+# space: O(n) - to keep recursion stack
+class Solution:
+    def reverseString(self, s):
+        def helper(left, right):
+            if left < right:
+                s[left], s[right] = s[right], s[left]
+                helper(left + 1, right - 1)
+
+        helper(0, len(s) - 1)
+
+
+## Approach 2: Two Pointers, Iteration, O(1) Space
+######################################################
+# time: O(n) - swap n / 2 elements
+# space: O(1)
+class Solution:
+    def reverseString(self, s):
+        left, right = 0, len(s) - 1
+        while left < right:
+            s[left], s[right] = s[right], s[left]
+            left, right = left + 1, right - 1

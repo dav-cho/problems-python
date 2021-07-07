@@ -29,41 +29,28 @@
 # iteratively or recursively. Could you implement both?
 
 ######################################################################
-
-
 class ListNode:
-    def __init__(self, val=0, next=None) -> None:
+    def __init__(self, val=0, next=None):
         self.val = val
         self.next = next
 
 
-# Approach 1: Iterative
-def reverseList(head: ListNode) -> ListNode:
-    prev = None
-    current = head
-
-    while current:
-        # next = current.next
-        # current.next = prev
-        # prev = current
-        # current = next
-        current.next, prev, current = prev, current, current.next
-
-    return prev
+## Approach 1: Iterative
+############################
+class Solution:
+    def reverseList(head: ListNode) -> ListNode:
+        pass
 
 
-# Approach 2: Recursive
-def reverseList(head: ListNode) -> ListNode:
-    if not head or not head.next:
-        return head
-
-    p = reverseList(head.next)
-    head.next.next = head
-    head.next = None
-
-    return p
+## Approach 2: Recursive
+############################
+class Solution:
+    def reverseList(head: ListNode) -> ListNode:
+        pass
 
 
+## Tests
+############
 def test(*args):
     count = 1
 
@@ -93,3 +80,49 @@ test2 = [1, 2]
 test3 = []
 
 test(test1, test2, test3)
+## Approach 1: Iterative
+############################
+# time: O(n) - assume that n is the list's length
+# space: O(1)
+
+## Java
+# public ListNode reverseList(ListNode head) {
+#     ListNode prev = null;
+#     ListNode curr = head;
+#     while (curr != null) {
+#         ListNode nextTemp = curr.next;
+#         curr.next = prev;
+#         prev = curr;
+#         curr = nextTemp;
+#     }
+#     return prev;
+# }
+
+## Approach 2: Recursive
+############################
+# time: O(n) - assume n is the list's length
+# space: O(n) - extra space comes from implicit stack due to recursion.
+#               recursion can go n levels deep.
+def reverseList(head: ListNode) -> ListNode:
+    if not head or not head.next:
+        return head
+
+    p = reverseList(head.next)
+    head.next.next = head
+    head.next = None
+
+    return p
+
+
+## Java
+# public ListNode reverseList(ListNode head) {
+#     ListNode prev = null;
+#     ListNode curr = head;
+#     while (curr != null) {
+#         ListNode nextTemp = curr.next;
+#         curr.next = prev;
+#         prev = curr;
+#         curr = nextTemp;
+#     }
+#     return prev;
+# }

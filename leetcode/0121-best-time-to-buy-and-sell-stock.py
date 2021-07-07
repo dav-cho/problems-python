@@ -31,10 +31,26 @@
 
 ###############################################################################
 
-# i = day
-# prices[i] = price on that day
+## Approach 1: Brute Force
+##############################
+class Solution:
+    def maxProfit(prices: list[int]) -> int:
+        pass
 
-# Approach 1: Brute Force
+
+## Approach 2: One Pass
+###########################
+class Solution:
+    def maxProfit(prices: list[int]) -> int:
+        pass
+
+
+## LeetCode Solutions
+#########################
+
+
+## Approach 1: Brute Force
+##############################
 # time: O(N^2) - loop runs N(N - 1) / 2 times
 # space: O(1) - only two variables
 def maxProfit(prices: list[int]) -> int:
@@ -50,9 +66,25 @@ def maxProfit(prices: list[int]) -> int:
     return max
 
 
+## Java
+# public class Solution {
+#     public int maxProfit(int prices[]) {
+#         int maxprofit = 0;
+#         for (int i = 0; i < prices.length - 1; i++) {
+#             for (int j = i + 1; j < prices.length; j++) {
+#                 int profit = prices[j] - prices[i];
+#                 if (profit > maxprofit)
+#                     maxprofit = profit;
+#             }
+#         }
+#         return maxprofit;
+#     }
+# }
+
 import math
 
-# Approach 2: One Pass
+## Approach 2: One Pass
+###########################
 # time: O(N) - only a single pass needed
 # space: O(1) - only two variables are used
 def maxProfit(prices: list[int]) -> int:
@@ -66,6 +98,22 @@ def maxProfit(prices: list[int]) -> int:
             max_profit = price - min_price
 
     return max_profit
+
+
+## Java
+# public class Solution {
+#     public int maxProfit(int prices[]) {
+#         int minprice = Integer.MAX_VALUE;
+#         int maxprofit = 0;
+#         for (int i = 0; i < prices.length; i++) {
+#             if (prices[i] < minprice)
+#                 minprice = prices[i];
+#             else if (prices[i] - minprice > maxprofit)
+#                 maxprofit = prices[i] - minprice;
+#         }
+#         return maxprofit;
+#     }
+# }
 
 
 result1 = maxProfit([7, 1, 5, 3, 6, 4])  # 5

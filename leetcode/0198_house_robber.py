@@ -62,75 +62,95 @@ def rob(nums: list[int]) -> int:
     return dp[N - 1]
 
 
-# Approach 1: Recursion with Memoization
-# time: O(N) - at most process N recursive calls thanks to caching
-# space: O(N) - occupied by cache and recursion stack
-def rob(nums: list[int]) -> int:
-    robbed = {}
+## LeetCode Solutions
+#########################
 
-    def rob_from(index, nums):
-        # no more houses left to examine
-        if index >= len(nums):
+
+## Approach 1: Recursion with Memoization
+#############################################
+# time: O(n) - at most process N recursive calls thanks to caching
+# space: O(n) - occupied by cache and recursion stack
+class Solution:
+    def __init__(self):
+        self.memo = {}
+
+    def rob(self, nums: list[int]) -> int:
+        self.memo = {}
+
+        return self.robFrom(0, nums)
+
+    def robFrom(self, i, nums):
+        # No more houses left to examine.
+        if i >= len(nums):
             return 0
 
-        # return caches value
-        if index in robbed:
-            return robbed[index]
+        # Return cached value.
+        if i in self.memo:
+            return self.memo[i]
 
-        ans = max(rob_from(index + 1, nums), rob_from(index + 1, nums) + nums[index])
+        # Recursive relation evaluation to get the optimal answer.
+        ans = max(self.robFrom(i + 1, nums), self.robFrom(i + 2, nums) + nums[i])
 
-        # cache for future use
-        robbed[index] = ans
-
+        # Cache for future use.
+        self.memo[i] = ans
         return ans
 
-    return rob_from(0, nums)
 
-
-# Approach 2: Dynamic Programming
-# time: O(N) - we loop from N - 2...0 but we use pre-calculated values
+## Approach 2: Dynamic Programming
+######################################
+# time: O(n) - we loop from N - 2...0 but we use pre-calculated values
 #               from the table which is constant time
-# space: O(N) - used by the table
+# space: O(n) - used by the table
 #              - the advantage here is that we don't have a recursion stack,
 #                so when the number of houses is large, we won't run
 #                into stack overflow problems
-def rob(nums: list[int]) -> int:
-    # special handling for empty cases
-    if not nums:
-        return 0
+class Solution:
+    def rob(self, nums: list[int]) -> int:
+        # Special handling for empty case.
+        if not nums:
+            return 0
 
-    max_robbed_amount = [None for _ in range(len(nums) + 1)]
-    N = len(nums)
+        maxRobbedAmount = [None for _ in range(len(nums) + 1)]
+        N = len(nums)
+        # Base case initialization.
+        maxRobbedAmount[N], maxRobbedAmount[N - 1] = 0, nums[N - 1]
 
-    # base case initialization
-    max_robbed_amount[N], max_robbed_amount[N - 1] = 0, nums[N - 1]
+        # DP table calculations.
+        for i in range(N - 2, -1, -1):
+            # Same as recursive solution.
+            maxRobbedAmount[i] = max(
+                maxRobbedAmount[i + 1], maxRobbedAmount[i + 2] + nums[i]
+            )
 
-    # Dynamic programming table calculations
-    for i in range(N - 2, -1, -1):
-        max_robbed_amount[i] = max(
-            max_robbed_amount[i + 1], max_robbed_amount[i + 2] + nums[i]
-        )
-
-    return max_robbed_amount[0]
+        return maxRobbedAmount[0]
 
 
-# Approach 3: Optimized Dynamic Programming
-# time:
-# space:
-def rob(nums: list[int]) -> int:
-    if not nums:
-        return 0
+## Approach 3: Optimized Dynamic Programming
+################################################
+# time: O(n)
+# space: O(1)
+class Solution:
+    def rob(self, nums: list[int]) -> int:
+        # Special handling for empty case.
+        if not nums:
+            return 0
 
-    N = len(nums)
-    rob_next_next = 0
-    rob_next = nums[N - 1]
+        N = len(nums)
 
-    for i in range(N - 2, -1, -1):
-        current = max(rob_next, rob_next_next + nums[i])
-        rob_next_next = rob_next
-        rob_next = current
+        rob_next_plus_one = 0
+        rob_next = nums[N - 1]
 
-    return rob_next
+        # DP table calculations.
+        for i in range(N - 2, -1, -1):
+
+            # Same as recursive solution.
+            current = max(rob_next, rob_next_plus_one + nums[i])
+
+            # Update the variables
+            rob_next_plus_one = rob_next
+            rob_next = current
+
+        return rob_next
 
 
 robResult1 = rob([1, 2, 3, 1])  # 4

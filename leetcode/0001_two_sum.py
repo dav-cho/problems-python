@@ -34,6 +34,26 @@
 
 ##############################################################################
 
+## 1: Brute Force
+#####################
+class Solution:
+    def twoSum(nums: list[int], target: int) -> list[int]:
+        pass
+
+
+## 2: Two-pass Hash Table
+#############################
+class Solution:
+    def twoSum(nums: list[int], target: int) -> list[int]:
+        pass
+
+
+## 3: One-pass Hash Table
+#############################
+class Solution:
+    def twoSum(nums: list[int], target: int) -> list[int]:
+        pass
+
 
 def twoSum(nums: list[int], target: int) -> list[int]:
     compliments = {}
@@ -42,6 +62,22 @@ def twoSum(nums: list[int], target: int) -> list[int]:
         if compliment in compliments:
             return [compliments[compliment], index]
         compliments[value] = index
+
+
+## Approach 1: Brute Force
+#############################
+# time: O(n^2)
+# space: O(1)
+
+## Approach 2: Two-pass Hash Table
+######################################
+# time: O(n)
+# space: O(n)
+
+## Approach 3: One-pass Hash Table
+######################################
+# time: O(n)
+# space: O(n)
 
 
 twoSum1 = twoSum([2, 7, 11, 15], 9)  # [0, 1]
