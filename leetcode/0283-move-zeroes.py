@@ -40,7 +40,15 @@ class Solution:
 # space: O(n) - total operations (array writes) is n (total # of elements)
 class Solution:
     def moveZeroes(self, nums: list[int]) -> None:
-        pass
+        i = 0
+
+        for j in range(len(nums)):
+            if nums[j] != 0:
+                nums[i] = nums[j]
+                i += 1
+
+        for j in range(i, len(nums)):
+            nums[j] = 0
 
 
 ## Approach 3: Optimal
@@ -49,7 +57,14 @@ class Solution:
 # space: O(n) - total # of operations are optimal because total num of
 class Solution:
     def moveZeroes(self, nums: list[int]) -> None:
-        pass
+        i = 0
+
+        for j in range(len(nums)):
+            if nums[j] != 0:
+                curr = nums[j]
+                nums[j] = 0
+                nums[i] = curr
+                i += 1
 
 
 ## Tests
