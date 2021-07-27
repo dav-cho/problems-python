@@ -29,33 +29,86 @@
 # iteratively or recursively. Could you implement both?
 
 ######################################################################
+
+## Definition for singly-linked list node.
 class ListNode:
     def __init__(self, val=0, next=None):
         self.val = val
         self.next = next
 
 
-## Approach 1: Iterative
-############################
+## iterative 1
+##################
 class Solution:
-    def reverseList(head: ListNode) -> ListNode:
-        pass
+    def reverseList(self, head: ListNode) -> ListNode:
+        prev = None
+        curr = head    
+        
+        while curr:
+            next = curr.next
+            curr.next = prev
+            prev = curr
+            curr = next
+            
+        return prev
 
 
-## Approach 2: Recursive
-############################
+## iterative 2
+##################
 class Solution:
-    def reverseList(head: ListNode) -> ListNode:
-        pass
+    def reverse_list(self, head: ListNode) -> ListNode:
+        prev = None
+        curr = head
+
+        while curr:
+            curr.next, prev, curr = prev, curr, curr.next
+
+        return prev
+
+
+## iterative 3
+##################
+class Solution:
+    def reverse_list(self, head: ListNode) -> ListNode:
+        prev = None
+
+        while head:
+            head.next, prev, head = prev, head, head.next
+
+        return prev
+
+
+## recursive
+################
+class Solution:
+    def reverse_list(self, head: ListNode) -> ListNode:
+        if not head or not head.next:
+            return head
+
+        prev = self.reverse_list(head.next)
+        head.next.next = head
+        head.next = None
+
+        return prev
 
 
 ## Tests
 ############
+
+test1 = [1, 2, 3, 4, 5]     # [5, 4, 3, 2, 1]
+test2 = [1, 2]              # [2, 1]
+test3 = []                  # []
+
+
 def test(*args):
     count = 1
 
     def run():
         for test in args:
+            nonlocal count
+            print("~ test", count)
+            count += 1
+
             if not test:
                 return []
 
@@ -66,24 +119,45 @@ def test(*args):
                 current.next = ListNode(test[i])
                 current = current.next
 
-            result = reverseList(head)
-            nonlocal count
-            print(f"test: {count}")
-            print(f"result {count}: {result}")
-            count += 1
+            print_LL(head)
+            solution = Solution()
+            result = solution.reverse_list(head)
+            print_LL(result)
 
     return run()
 
 
-test1 = [1, 2, 3, 4, 5]
-test2 = [1, 2]
-test3 = []
+def print_LL(head):
+    linked_list = []
+
+    while head:
+        linked_list.append(head.val)
+        head = head.next
+
+    print(linked_list)
+        
 
 test(test1, test2, test3)
+
+
 ## Approach 1: Iterative
 ############################
 # time: O(n) - assume that n is the list's length
 # space: O(1)
+
+## Python
+class Solution:
+    def reverseList(self, head: ListNode) -> ListNode:
+        prev = None
+        curr = head    
+        
+        while curr:
+            next = curr.next
+            curr.next = prev
+            prev = curr
+            curr = next
+            
+        return prev
 
 ## Java
 # public ListNode reverseList(ListNode head) {
@@ -98,20 +172,24 @@ test(test1, test2, test3)
 #     return prev;
 # }
 
+
 ## Approach 2: Recursive
 ############################
 # time: O(n) - assume n is the list's length
 # space: O(n) - extra space comes from implicit stack due to recursion.
 #               recursion can go n levels deep.
-def reverseList(head: ListNode) -> ListNode:
-    if not head or not head.next:
-        return head
 
-    p = reverseList(head.next)
-    head.next.next = head
-    head.next = None
-
-    return p
+## Python
+class Solution:
+    def reverseList(self, head: ListNode) -> ListNode:
+        if not head or not head.next:
+            return head
+        
+        prev = self.reverseList(head.next)
+        head.next.next = head
+        head.next = None
+        
+        return prev
 
 
 ## Java

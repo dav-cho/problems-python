@@ -30,21 +30,35 @@
 ##################
 class Solution:
     def sorted_squares(self, nums: list[int]) -> list[int]:
-        return sorted([num ** 2 for num in nums])
+        return sorted(num ** 2 for num in nums)
 
 
 ## O(n) solution
 ####################
 class Solution:
     def sorted_squares(self, nums: list[int]) -> list[int]:
-        pass
+        n = len(nums)
+        result = [None] * n
+        left, right = 0, n - 1
+
+        for i in range(n - 1, -1, -1):
+            if abs(nums[left]) < abs(nums[right]):
+                square = nums[right]
+                right -= 1
+            else:
+                square = nums[left]
+                left += 1
+
+            result[i] = square ** 2
+
+        return result
 
 
 ## Tests
 ############
 
-test1 = [-4, -1, 0, 3, 10]      # [0,1,9,16,100]
-test2 = [-7, -3, 2, 3, 11]      # [4,9,9,49,121]
+test1 = [-4, -1, 0, 3, 10]      # [0, 1, 9, 16, 100]
+test2 = [-7, -3, 2, 3, 11]      # [4, 9, 9, 49, 121]
 
 solution = Solution()
 print(solution.sorted_squares(test1))
@@ -56,11 +70,31 @@ print(solution.sorted_squares(test2))
 
 ## Approach 1: Sort
 #######################
-# time: 
-# space: 
+# time: O(n log(n)) - n is length of A
+# space: O(n) or O(log(n)) - dependent on language specific sort
+#                            (python sort timsort - O(n))
+class Solution(object):
+    def sortedSquares(self, A):
+        return sorted(x*x for x in A)
+
 
 ## Approach 2: Two Pointer
 ##############################
 # time: 
 # space: 
+class Solution:
+    def sortedSquares(self, nums: list[int]) -> list[int]:
+        n = len(nums)
+        result = [0] * n
+        left = 0
+        right = n - 1
+        for i in range(n - 1, -1, -1):
+            if abs(nums[left]) < abs(nums[right]):
+                square = nums[right]
+                right -= 1
+            else:
+                square = nums[left]
+                left += 1
+            result[i] = square * square
+        return result
 
