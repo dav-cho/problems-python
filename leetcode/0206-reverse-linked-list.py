@@ -85,11 +85,11 @@ class Solution:
         if not head or not head.next:
             return head
 
-        prev = self.reverse_list(head.next)
+        p = self.reverse_list(head.next)
         head.next.next = head
         head.next = None
 
-        return prev
+        return p
 
 
 ## Tests
@@ -110,7 +110,8 @@ def test(*args):
             count += 1
 
             if not test:
-                return []
+                print("[]")
+                continue
 
             head = ListNode(test[0])
             current = head
@@ -185,11 +186,11 @@ class Solution:
         if not head or not head.next:
             return head
         
-        prev = self.reverseList(head.next)
+        p = self.reverseList(head.next)
         head.next.next = head
         head.next = None
         
-        return prev
+        return p
 
 
 ## Java

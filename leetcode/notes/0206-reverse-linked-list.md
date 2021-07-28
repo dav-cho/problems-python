@@ -6,10 +6,14 @@ Given the head of a singly linked list, reverse the list, and return the reverse
 
 **Example 1:**
 
+![](./images/0206-01.jpeg)
+
 **Input**: head = [1,2,3,4,5]  
 **Output**: [5,4,3,2,1]
 
 **Example 2:**
+
+![](./images/0206-02.jpeg)
 
 **Input**: head = [1,2]  
 **Output**: [2,1]
@@ -82,6 +86,10 @@ public ListNode reverseList(ListNode head) {
 
 #### Complexity Analysis
 
-Time complexity : $O(n)$. Assume that nn is the list's length, the time complexity is $O(n)$.
+**Time complexity:** $O(n)$
 
-Space complexity : $O(n)$. The extra space comes from implicit stack space due to recursion. The recursion could go up to nn levels deep.
+Assume that nn is the list's length, the time complexity is $O(n)$.
+
+**Space complexity:** $O(n)$
+
+The extra space comes from implicit stack space due to recursion. The recursion could go up to nn levels deep.

@@ -234,12 +234,12 @@ class Solution:
 
 Let $N$ be the length of list A and $M$ be the length of list B.
 
-Time complexity : $O(N + M)$.
+**Time Complexity:**  $O(N + M)$
 
 In the worst case, each list is traversed twice giving $2 \cdot M + 2 \cdot N$, which is equivalent to $O(N + M)$. This is because the pointers firstly go down each list so that they can be "lined up" and then in the second iteration, the intersection node is searched for.
 
 An interesting observation you might have made is that when the lists are of the same length, this algorithm only traverses each list once. This is because the pointers are already "lined up" from the start, so the additional pass is unnecessary.
 
-Space complexity : $O(1)$.
+**Space Complexity:** $O(1)$
 
 We aren't allocating any additional data structures, so the amount of extra space used does not grow with the size of the input. For this reason, Approach 3 is better than Approach 2.

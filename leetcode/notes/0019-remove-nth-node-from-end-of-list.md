@@ -26,7 +26,7 @@ Given the head of a linked list, remove the nth node from the end of the list an
 The number of nodes in the list is $sz$.  
 $1 \leq sz \leq 30$  
 $0 \leq Node.val \leq 100$  
-$1 \leq n \leq sz$  
+$1 \leq n \leq sz$
 
 **Follow up**: Could you do this in one pass?
 
@@ -109,10 +109,10 @@ public ListNode removeNthFromEnd(ListNode head, int n) {
 
 #### Complexity Analysis
 
-Time complexity : $O(L)$.
+**Time Complexity**: $O(L)$
 
 The algorithm makes one traversal of the list of LL nodes. Therefore time complexity is $O(L)$.
 
-Space complexity : $O(1)$.
+**Space complexity**: $O(1)$
 
 We only used constant extra space.

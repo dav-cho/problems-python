@@ -71,7 +71,7 @@ class ListNode:
 
 class MyLinkedList:
     def __init__(self):
-        self.head = ListNode(0)
+        self.head = ListNode(None)
         self.size = 0
 
     def get(self, index: int) -> int:
@@ -128,15 +128,16 @@ class ListNode:
 class MyLinkedList:
 
     def __init__(self):
-        self.head = ListNode(0)
-        self.tail = ListNode(0)
+        self.head = ListNode(None)
+        self.tail = ListNode(None)
+        self.size = 0
+
         self.head.next = self.tail
         self.tail.prev = self.head
-        self.size = 0
 
     def get(self, index: int) -> int:
         if index < 0 or index >= self.size:
-            return - 1
+            return -1
 
         if index + 1 < self.size - index:
             curr = self.head
