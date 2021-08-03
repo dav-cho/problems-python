@@ -47,10 +47,44 @@ class TreeNode:
         self.left = left
         self.right = right
 
-## iterations
-#################
+## recursive
+################
+class Solution:
+    def preorder_traversal(self, root: TreeNode) -> list[int]:
+        result = []
+        self.helper(root, result)
+        return result
+    
+    def helper(self, node, result):
+        if not node:
+            return
+        
+        result.append(node.val)
+        self.helper(node.left, result)
+        self.helper(node.right, result)
+
+
+## iterative simple
+#######################
 class Solution:
     def preorderTraversal(self, root: TreeNode) -> list[int]:
+        result, stack = [], []
+        while stack or root:
+            while root:
+                result.append(root.val)
+                stack.append(root)
+                root = root.left
+                
+            root = stack.pop()
+            root = root.right
+            
+        return result
+
+
+## iterative
+#################
+class Solution:
+    def preorder_traversal(self, root: TreeNode) -> list[int]:
         result = []
         stack = [root]
         while stack:
@@ -66,28 +100,27 @@ class Solution:
 ## morris traversal
 #######################
 class Solution:
-    def preorderTraversal(self, root: TreeNode) -> list[int]:
-        output = []
-        node = root
-        while node:
-            if not node.left:
-                output.append(node.val)
-                node = node.right
+    def preorder_traversal(self, root: TreeNode) -> list[int]:
+        result = []
+        while root:
+            if not root.left:
+                result.append(root.val)
+                root = root.right
             else:
-                predecessor = node.left
+                pred = root.left
                 
-                while predecessor.right and predecessor.right is not node:
-                    predecessor = predecessor.right
-                
-                if not predecessor.right:
-                    output.append(node.val)
-                    predecessor.right = node
-                    node = node.left
+                while pred.right and pred.right is not root:
+                    pred = pred.right
+                    
+                if not pred.right:
+                    result.append(root.val)
+                    pred.right = root
+                    root = root.left
                 else:
-                    predecessor.right = None
-                    node = node.right
-        
-        return output
+                    pred.right = None
+                    root = root.right
+                    
+        return result
 
 
 ## Tests
@@ -97,8 +130,8 @@ class Solution:
 ## LeetCode Solutions
 #########################
 
-## Approach 1: 
-#################
+## Approach 1: Iterations
+#############################
 # time: O(N) - we visit each node exactly once, thus the time complexity is
 #              O(N), where N is the number of nodes, i.e. the size of tree.
 # space: O(N) - depending on the tree structure, we could keep up to the
@@ -126,8 +159,8 @@ class Solution(object):
         return output
 
 
-## Approach 2: 
-#################
+## Approach 2: Morris Traversal
+###################################
 # time: O(N) - we visit each predecessor exactly twice descending down from
 #              the node, thus the time complexity is O(N), where N is the
 #              number of nodes, i.e. the size of tree.

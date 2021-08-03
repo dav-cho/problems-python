@@ -50,31 +50,30 @@ class TreeNode:
 ## recursive
 ################
 class Solution:
-    def inorderTraversal(self, root: TreeNode) -> list[int]:
+    def inorder_traversal(self, root: TreeNode) -> list[int]:
         result = []
         self.helper(root, result)
         return result
     
-    def helper(self, root, result):
-        if not root:
+    def helper(self, node, result):
+        if not node:
             return
         
-        self.helper(root.left, result)
-        result.append(root.val)
-        self.helper(root.right, result)
+        self.helper(node.left, result)
+        result.append(node.val)
+        self.helper(node.right, result)
 
 
 ## iterative
 ################
 class Solution:
-    def inorderTraversal(self, root: TreeNode) -> list[int]:
-        result = []
-        stack = []
-        while root or stack:
+    def inorder_traversal(self, root: TreeNode) -> list[int]:
+        result, stack = [], []
+        while stack or root:
             while root:
                 stack.append(root)
                 root = root.left
-            
+                
             root = stack.pop()
             result.append(root.val)
             root = root.right
@@ -85,23 +84,22 @@ class Solution:
 ## morris traversal
 #######################
 class Solution:
-    def inorderTraversal(self, root: TreeNode) -> list[int]:
+    def inorder_traversal(self, root: TreeNode) -> list[int]:
         result = []
-        curr = root
-        while curr:
-            if not curr.left:
-                result.append(curr.val)
-                curr = curr.right
+        while root:
+            if not root.left:
+                result.append(root.val)
+                root = root.right
             else:
-                pre = curr.left
-                while pre.right:
-                    pre = pre.right
-                pre.right = curr
-                temp = curr
-                curr = curr.left
-                temp.left = None
-        
-        return result    
+                pred = root.left
+                
+                while pred.right:
+                    pred = pred.right
+                    
+                pred.right = root
+                root.left, root = None, root.left
+                
+        return result
 
 
 ## Tests

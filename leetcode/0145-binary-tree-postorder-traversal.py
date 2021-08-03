@@ -41,9 +41,64 @@ class TreeNode:
         self.right = right
 
 
+## recursive
+################
 class Solution:
-    def postorderTraversal(self, root: TreeNode) -> List[int]:
-        pass
+    def postorder_traversal(self, root: TreeNode) -> list[int]:
+        result = []
+        self.helper(root, result)
+        return result
+    
+    def helper(self, node, result):
+        if not node:
+            return
+        
+        self.helper(node.left, result)
+        self.helper(node.right, result)
+        result.append(node.val)
+
+
+## iterative
+################
+class Solution:
+    def postorder_traversal(self, root: TreeNode) -> list[int]:
+        result, stack = [], []
+        while stack or root:
+            while root:
+                result.append(root.val)
+                stack.append(root)
+                root = root.right
+                
+            root = stack.pop()
+            root = root.left
+            
+        return reversed(result)
+
+
+## morris traversal
+#######################
+class Solution:
+    def postorder_traversal(self, root: TreeNode) -> list[int]:
+        result = []
+        while root:
+            if not root.right:
+                result.append(root.val)
+                root = root.left
+            else:
+                pred = root.right
+                
+                while pred.left and pred.left is not root:
+                    pred = pred.left
+                
+                if not pred.left:
+                    result.append(root.val)
+                    pred.left = root
+                    root = root.right
+                else:
+                    pred.left = None
+                    root = root.left
+        
+        return reversed(result)
 
 
 ## Tests
@@ -53,20 +108,20 @@ class Solution:
 ## LeetCode Solutions
 #########################
 
-## Approach 1: 
-##################
+## Approach 1: Rescursive
+#############################
 # time: 
 # space: 
 
 
-## Approach 2: 
-##################
+## Approach 2: Iterative
+############################
 # time: 
 # space: 
 
 
-## Approach 3: 
-##################
+## Approach 3: Morris Traversal
+###################################
 # time: 
 # space: 
 
