@@ -12,21 +12,49 @@ def test_dict():
     print(test[True])
 
 
-def max_ball(v):
-    g = 9.81 ** 2
-    mps = v * 1000 / 3600
-    
-    for t in range(5):
-        height = mps * t - 0.5 * g * t ** 2
-        print(t, height)
-    
-    
-max_ball(15)
-    
-#     t = mx = 0
-#     for s in range(50):
-#         height = v * s - 0.5 * g * s ** 2
-#         if height > mx:
-#             mx = height
-#             t = s
-#     return t
+def test(hello, world, params):
+    hi = 'hi'
+    print(locals())
+
+#test('HELLO', 'WORLD', 'PARAMS')
+
+
+def reverse_string(st):
+    string = st.split()
+    print(string)
+
+#reverse_string('ypwswhua  dayf ytjitiapg kiot ehthququai lrkhdqgjpd')
+#reverse_string('rqywypselytd fhstduupklhfflouhypg  sqalgfeu')
+
+
+def list_comp(string):
+    #print(x for x in string)
+    print(' '.join(x for x in string))
+
+#list_comp('hellooo')
+
+
+def triple_trouble(one, two, three):
+    test = zip(one, two, three)
+    print(''.join(''.join(x) for x in test))
+
+#triple_trouble("aaa", "bbb", "ccc")
+
+def nb_year(p0, percent, aug, p):
+    years = 0
+    while p0 < p:
+        p0 += p0 * percent + aug
+        years += 1
+        
+    return years
+
+#print(nb_year(1500, 5, 100, 5000))
+#print(nb_year(1500000, 2.5, 10000, 2000000))
+
+test = [1, 2, 3]
+test.reverse()
+
+from collections import deque
+test_deque = deque([1, 2, 3])
+print(test_deque[0])
+print(test_deque[-1])

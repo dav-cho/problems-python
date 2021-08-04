@@ -58,6 +58,34 @@ class Solution:
         result.append(node.val)
 
 
+class Solution:
+    def postorder_traversal(self, root: TreeNode) -> list[int]:
+        def helper(node, result):
+            if not node:
+                return
+            
+            helper(node.left, result)
+            helper(node.right, result)
+            result.append(node.val)
+            
+            return result
+        
+        return helper(root, [])
+
+
+class Solution:
+    def postorder_traversal(self, root: TreeNode) -> list[int]:
+        if not root:
+            return
+
+        left = self.postorderTraversal(root.left)
+        right = self.postorderTraversal(root.right)
+        left = left if left else []
+        right = right if right else []
+
+        return left + right + [root.val]
+
+
 ## iterative
 ################
 class Solution:
@@ -73,6 +101,23 @@ class Solution:
             root = root.left
             
         return reversed(result)
+
+
+from collections import deque
+
+class Solution:
+    def postorder_traversal(self, root: TreeNode) -> list[int]:
+        result, stack = deque([]), []
+        while stack or root:
+            while root:
+                result.appendleft(root.val)
+                stack.append(root)
+                root = root.right
+            
+            root = stack.pop()
+            root = root.left
+            
+        return result
 
 
 ## morris traversal
