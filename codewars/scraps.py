@@ -2,6 +2,7 @@
 #### Scraps
 ###############
 
+
 def test_yield():
     yield 1
     yield 2
@@ -9,29 +10,41 @@ def test_yield():
     yield 4
     yield 5
 
-#for value in test_yield():
-#    print(value)
 
-node = '0123'
+######################################################################
 
-def test(param):
-    for i in range(4):
-        digit = int(node[i])
+# print(sum([True, True, True, False, False, True, False, True]))
 
-        for d in (-1, 1):
-            y = (digit + d) % 10
-            yield node[:i] + str(y) + node[i + 1:]
+######################################################################
 
-#for j in test(node):
-#    print(j)
+ls = [1, 2, 3, 4]
+# print(type(ls) == list)
 
+######################################################################
 
-def perfect_squares(n):
-    for num in range(n + 1):
-        root = int(num ** 0.5)
-        if root ** 2 == num:
-            yield num
+a = 1
+b = 2
+c = "3"
 
-for num in perfect_squares(20):
-    print(num)
+#print(not isinstance(a, int))
+
+######################################################################
+
+blah = 'hello'
+#print(blah[::-1])
+
+######################################################################
+
+days = [None, 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
+
+######################################################################
+
+## trick to handle negative indexes
+#print(-2 % 5)
+
+######################################################################
+
+print(24.99 * 3)
+
+######################################################################
 

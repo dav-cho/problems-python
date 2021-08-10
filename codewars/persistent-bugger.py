@@ -15,6 +15,7 @@ def persistence(n, count=0):
 
     return persistence(sum, count)
 
+
 ## Tests
 ############
 
@@ -22,4 +23,3 @@ print(persistence(39), 3)
 print(persistence(4), 0)
 print(persistence(25), 2)
 print(persistence(999), 4)
-

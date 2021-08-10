@@ -14,7 +14,7 @@ import unittest
 
 class Test(unittest.TestCase):
     def test_cases(self):
-        self.assertEquals((), )
+        self.assertEqual((), )
         self.assertAlmostEqual((), )
 
 

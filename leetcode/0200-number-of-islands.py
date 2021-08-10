@@ -67,66 +67,6 @@ class Solution:
 
 class Solution:
     def numIslands(self, grid: list[list[str]]) -> int:
-        result = 0
-        if not grid:
-            return result
-        
-        for row in range(len(grid)):
-            for col in range(len(grid[0])):
-                if grid[row][col] == '1':
-                    result += 1
-                    self.dfs(row, col, grid)
-                    
-        return result
-    
-    def dfs(self, row, col, grid):
-        if not 0 <= row < len(grid):
-            return
-        if not 0 <= col < len(grid[0]):
-            return
-        if grid[row][col] != '1':
-            return
-        
-        grid[row][col] = '0'
-        directions = [(1, 0), (-1, 0), (0, 1), (0, -1)]
-        for x, y in directions:
-            self.dfs(row + x, col + y, grid)
-
-
-class Solution:
-    def numIslands(self, grid: list[list[str]]) -> int:
-        result = 0
-        if not grid:
-            return result
-        
-        self.grid = grid
-        self.num_rows = len(grid)
-        self.num_cols = len(grid[0])
-        
-        for row in range(self.num_rows):
-            for col in range(self.num_cols):
-                if self.grid[row][col] == '1':
-                    result += 1
-                    self.dfs(row, col)
-        
-        return result
-        
-    def dfs(self, row, col):
-        if not 0 <= row < self.num_rows:
-            return
-        if not 0 <= col < self.num_cols:
-            return
-        if self.grid[row][col] == '0':
-            return
-        
-        self.grid[row][col] = '0'
-        directions = [(1, 0), (-1, 0), (0, 1), (0, -1)]
-        for x, y in directions:
-            self.dfs(row + x, col + y)
-        
-
-class Solution:
-    def numIslands(self, grid: list[list[str]]) -> int:
         if not grid:
             return 0
         

@@ -1,17 +1,16 @@
 ##
-#### Drink about
-###################################################
+#### scraps-test
+####################
 
 
-def get_size(w, h, d):
-    rect1 = w * h * 2
-    rect2 = d * h * 2
-    rect3 = w * d * 2
-    area = sum([rect1, rect2, rect3])
+def nb_dig(n, d):
+    squares = [x * x for x in range(n + 1)]
+    count = 0
+    for square in squares:
+        count += str(square).count(str(d))
+        
+    return count
 
-    volume = w * h * d
-
-    return [area, volume]
 
 
 ## Tests
@@ -22,11 +21,10 @@ import unittest
 
 class Test(unittest.TestCase):
     def test_cases(self):
-        self.assertEquals(get_size(4, 2, 6), [88,48])
-        self.assertEquals(get_size(1, 1, 1), [6,1])
-        self.assertEquals(get_size(1, 2, 1), [10,2])
-        self.assertEquals(get_size(1, 2, 2), [16,4])
-        self.assertEquals(get_size(10, 10, 10), [600,1000])
+        self.assertEqual(nb_dig(5750, 0), 4700)
+        self.assertEqual(nb_dig(11011, 2), 9481)
+        self.assertEqual(nb_dig(12224, 8), 7733)
+        self.assertEqual(nb_dig(11549, 1), 11905)
 
 
 if __name__ == '__main__':
