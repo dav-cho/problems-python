@@ -2,59 +2,36 @@
 #### Scraps
 ###############
 
-def test_dict():
-    test = {
-        1 > 0: '1 > 0, true',
-        0 > 1: '0 > 1, false',
-        10 != 10: '10 == 10, true'
-    }
+def test_yield():
+    yield 1
+    yield 2
+    yield 3
+    yield 4
+    yield 5
 
-    print(test[True])
+#for value in test_yield():
+#    print(value)
 
+node = '0123'
 
-def test(hello, world, params):
-    hi = 'hi'
-    print(locals())
+def test(param):
+    for i in range(4):
+        digit = int(node[i])
 
-#test('HELLO', 'WORLD', 'PARAMS')
+        for d in (-1, 1):
+            y = (digit + d) % 10
+            yield node[:i] + str(y) + node[i + 1:]
 
-
-def reverse_string(st):
-    string = st.split()
-    print(string)
-
-#reverse_string('ypwswhua  dayf ytjitiapg kiot ehthququai lrkhdqgjpd')
-#reverse_string('rqywypselytd fhstduupklhfflouhypg  sqalgfeu')
-
-
-def list_comp(string):
-    #print(x for x in string)
-    print(' '.join(x for x in string))
-
-#list_comp('hellooo')
+#for j in test(node):
+#    print(j)
 
 
-def triple_trouble(one, two, three):
-    test = zip(one, two, three)
-    print(''.join(''.join(x) for x in test))
+def perfect_squares(n):
+    for num in range(n + 1):
+        root = int(num ** 0.5)
+        if root ** 2 == num:
+            yield num
 
-#triple_trouble("aaa", "bbb", "ccc")
+for num in perfect_squares(20):
+    print(num)
 
-def nb_year(p0, percent, aug, p):
-    years = 0
-    while p0 < p:
-        p0 += p0 * percent + aug
-        years += 1
-        
-    return years
-
-#print(nb_year(1500, 5, 100, 5000))
-#print(nb_year(1500000, 2.5, 10000, 2000000))
-
-test = [1, 2, 3]
-test.reverse()
-
-from collections import deque
-test_deque = deque([1, 2, 3])
-print(test_deque[0])
-print(test_deque[-1])

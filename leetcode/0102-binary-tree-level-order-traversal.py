@@ -31,21 +31,6 @@ class TreeNode:
         self.left = left
         self.right = right
 
-## attempt 1
-################
-class Solution:
-    def level_order(self, root: TreeNode) -> List[List[int]]:
-        result, queue = [], []
-        while queue or root:
-            while root:
-                result.append(root.val)
-                queue.append(root)
-
-            root = queue.pop(0)
-            queue.append(root.left)
-            queue.append(root.right)
-
-        return result
 
 ## recursive
 ################
