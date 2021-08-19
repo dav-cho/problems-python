@@ -39,11 +39,33 @@
 
 ################################################################################
 
-## 
+
+## dfs
 ##############################
 class Solution:
-    def canVisitAllRooms(self, rooms: List[List[int]]) -> bool:
-        pass
+    def canVisitAllRooms(self, rooms: list[list[int]]) -> bool:
+        seen = [False] * len(rooms)
+        seen[0] = True
+        stack = [0]
+        while stack:
+            for key in rooms[stack.pop()]:
+                if not seen[key]:
+                    seen[key] = True
+                    stack.append(key)
+
+        return all(seen)
+
+
+class Solution:
+    def canVisitAllRooms(self, rooms: list[list[int]]) -> bool:
+        seen, stack = {0}, [0]
+        while stack:
+            for key in rooms[stack.pop()]:
+                if key not in seen:
+                    seen.add(key)
+                    stack.append(key)
+                    
+        return len(seen) == len(rooms)
 
 
 ## Tests
@@ -55,7 +77,8 @@ import unittest
 class Test(unittest.TestCase):
     def test_cases(self):
         solution = Solution()
-        self.assertEqual(solution. , )
+        self.assertEqual(solution.canVisitAllRooms([[1],[2],[3],[]]), True)
+        self.assertEqual(solution.canVisitAllRooms([[1,3],[3,0,1],[2],[0]]), False)
 
 
 if __name__ == "__main__":
@@ -65,10 +88,26 @@ if __name__ == "__main__":
 ## LeetCode Solutions
 #########################
 
-## Approach 1: 
-###################
-# Time: 
-# Space: 
+## Approach 1: Depth-First Search [Accepted]
+################################################
+# Time: O(N + E) - Where N is the number of rooms, and E is the total number
+#                  of keys.
+# Space: O(N) - In additional space complexity, to store stack and seen.
+
+#class Solution(object):
+#    def canVisitAllRooms(self, rooms):
+#        seen = [False] * len(rooms)
+#        seen[0] = True
+#        stack = [0]
+#        #At the beginning, we have a todo list "stack" of keys to use.
+#        #'seen' represents at some point we have entered this room.
+#        while stack:  #While we have keys...
+#            node = stack.pop() # get the next key 'node'
+#            for nei in rooms[node]: # For every key in room # 'node'...
+#                if not seen[nei]: # ... that hasn't been used yet
+#                    seen[nei] = True # mark that we've entered the room
+#                    stack.append(nei) # add the key to the todo list
+#        return all(seen) # Return true iff we've visited every room
 
 
 ## Approach 2: 
