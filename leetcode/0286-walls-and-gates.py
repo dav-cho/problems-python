@@ -69,9 +69,9 @@ class Solution:
                     
         while queue:
             row, col = queue.popleft()
-            for direction in directions:
-                r = row + direction[0]
-                c = col + direction[1]
+            for x, y in directions:
+                r = row + x
+                c = col + y
                 if r < 0 or r >= rows:
                     continue
                 if c < 0 or c >= cols:

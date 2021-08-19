@@ -4,21 +4,36 @@
 
 
 def digital_root(n):
-    if n == 0:
-        return 0
+    digit_sum = sum(int(x) for x in str(n))
 
-    rest = n // 10
-    digit = n % 10
-    print(digit, rest)
+    while digit_sum > 9:
+        digit_sum = digital_root(digit_sum)
 
-    return digit + (digital_root(rest))
+    return digit_sum
+
+
+def digital_root(n):
+    return n if n < 10 else digital_root(sum(map(int,str(n))))
+
+
+def digital_root(n):
+    return n % 9 or n and 9
 
 
 ## Tests
 ############
 
-print(digital_root(16)) # 7
-print(digital_root(942)) # 6
-print(digital_root(132189)) # 6
-print(digital_root(493193)) # 2
+import unittest
+
+
+class Test(unittest.TestCase):
+    def test_cases(self):
+        self.assertEqual(digital_root(16), 7)
+        self.assertEqual(digital_root(942), 6)
+        self.assertEqual(digital_root(132189), 6)
+        self.assertEqual(digital_root(493193), 2)
+
+
+if __name__ == "__main__":
+    unittest.main()
 
