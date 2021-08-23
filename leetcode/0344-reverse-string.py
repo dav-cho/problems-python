@@ -23,24 +23,34 @@
 
 #################################################################################
 
-## Approach 1: Recursion, In-Place, O(n) Space
-##################################################
-# time: O(n)
-# space: O(n)
+
+## simple
+##############################
 class Solution:
     def reverseString(self, s: list[str]) -> None:
-        """
-        Do not return anything, modify s in-place instead.
-        """
+        s.reverse()
 
 
-## Approach 2: Two Pointers, Iteration, O(1) Space
-######################################################
-# time: O(n)
-# space: O(1)
+## recursion
+##############################
 class Solution:
     def reverseString(self, s: list[str]) -> None:
-        pass
+        def helper(left, right):
+            if left < right:
+                s[left], s[right] = s[right], s[left]
+                helper(left + 1, right - 1)
+                
+        helper(0, len(s) - 1)
+
+
+## 2 pointers
+##############################
+class Solution:
+    def reverseString(self, s: list[str]) -> None:
+        left, right = 0, len(s) - 1
+        while left < right:
+            s[left], s[right] = s[right], s[left]
+            left += 1; right -= 1
 
 
 class Solution:
@@ -52,8 +62,6 @@ class Solution:
             s[start], s[end] = s[end], s[start]
             start += 1
             end -= 1
-
-        print(s)
 
 
 ## Tests
@@ -87,10 +95,10 @@ class Solution:
         s.reverse()
 
 
-## Approach 1: Recursion, In-Place, O(n) Space
+## Approach 1: Recursion, In-Place, O(N) Space 
 ##################################################
-# time: O(n) - perform n / 2 swaps
-# space: O(n) - to keep recursion stack
+# time: O(N) - Time to perform N/2N/2 swaps.
+# space: O(N) - To keep the recursion stack
 class Solution:
     def reverseString(self, s):
         def helper(left, right):
@@ -103,11 +111,12 @@ class Solution:
 
 ## Approach 2: Two Pointers, Iteration, O(1) Space
 ######################################################
-# time: O(n) - swap n / 2 elements
-# space: O(1)
+# time: O(N) - To swap N/2 element.
+# space: O(1) - It's a constant space solution.
 class Solution:
     def reverseString(self, s):
         left, right = 0, len(s) - 1
         while left < right:
             s[left], s[right] = s[right], s[left]
             left, right = left + 1, right - 1
+
