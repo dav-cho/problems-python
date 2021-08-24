@@ -28,203 +28,303 @@
 
 ###########################################################################
 
-## Approach 1: Brute Force
+
+## dynamic programming
+##########################
+class Solution:
+    def climbStairs(self, n: int) -> int:
+        if n == 1:
+            return 1
+        
+        cache = [0] * (n + 1)
+        cache[1] = 1; cache[2] = 2
+        
+        for i in range(3, n + 1):
+            cache[i] = cache[i - 2] + cache[i - 1]
+            
+        return cache[n]
+
+
+## recursive
 ##############################
 class Solution:
-    def climbStairs(n: int) -> int:
-        pass
+    def climbStairs(self, n: int) -> int:
+        if n < 4:
+            return n
+        
+        return self.climbStairs(n - 2) + self.climbStairs(n - 1)
 
 
-## Approach 2: Recursion with Memoization
-#############################################
+# [time limit exceeded]
 class Solution:
-    def climbStairs(n: int) -> int:
-        pass
+    def climbStairs(self, n: int) -> int:
+        return self.climb(0, n)
+    
+    def climb(self, i, n):
+        if i > n:
+            return 0
+        if i == n:
+            return 1
+        
+        return self.climb(i + 1, n) + self.climb(i + 2, n)
 
 
-## Approach 3: Dynamic Programming
-######################################
+## memoized recursive
+##############################
 class Solution:
-    def climbStairs(n: int) -> int:
-        pass
+    def __init__(self):
+        self.cache = {1: 1, 2: 2, 3: 3}
+        
+    def climbStairs(self, n: int) -> int:
+        if n in self.cache:
+            return self.cache[n]
+        
+        self.cache[n] = self.climbStairs(n - 2) + self.climbStairs(n - 1)
+        return self.cache[n]
 
 
-## Approach 4: Fibonacci Number
-###################################
 class Solution:
-    def climbStairs(n: int) -> int:
-        pass
+    def climbStairs(self, n: int) -> int:
+        cache = [0] * (n + 1)
+
+        def climb(i, n):
+            if i > n:
+                return 0
+            if i == n:
+                return 1
+            if cache[i] > 0:
+                return cache[i]
+            
+            cache[i] = climb(i + 1, n) + climb(i + 2, n)
+            return cache[i]
+        
+        return climb(0, n)
 
 
-def test(tests_arr):
-    test_number = 0
+class Solution:
+    def climbStairs(self, n: int) -> int:
+        cache = {}
+        
+        def helper(n):
+            if n in cache:
+                return cache[n]
+            
+            if n < 4:
+                result = n
+            else:
+                result = helper(n - 2) + helper(n - 1)
+                
+            cache[n] = result
+            return result
+        
+        return helper(n)
 
-    def run_test():
-        for test in tests_arr:
-            nonlocal test_number
-            test_number += 1
-            result = climbStairs(test)
-            print(f"~ test {test_number}")
-            print(f"    case:   {test}")
-            print(f"    result: {result}")
 
-    return run_test
+## iterative
+################
+class Solution:
+    def climbStairs(self, n: int) -> int:
+        if n == 1:
+            return 1
+        
+        a, b = 1, 2
+        for i in range(3, n + 1):
+            c = a + b
+            a, b = b, c
+            
+        return b
 
 
-tests = [2, 3]
-#        2  3
+class Solution:
+    def climbStairs(self, n: int) -> int:
+        if n < 4:
+            return n
+        
+        a, b, c = 2, 3, 0
+        for _ in range(4, n + 1):
+            c = a + b
+            a, b = b, c
+            
+        return c
 
-test(tests)()
+
+## iterative memoized
+##############################
+class Solution:
+    def __init__(self):
+        self.cache = {1: 1, 2: 2, 3: 3}
+        
+    def climbStairs(self, n: int) -> int:
+        if n in self.cache:
+            return self.cache[n]
+        
+        for i in range(3, n + 1):
+            self.cache[i] = self.cache[i - 2] + self.cache[i - 1]
+            
+        return self.cache[n]
+
+
+## Tests
+############
+
+import unittest
+
+
+class Test(unittest.TestCase):
+    def test_cases(self):
+        solution = Solution()
+        self.assertEqual(solution.climbStairs(2), 2)
+        self.assertEqual(solution.climbStairs(3), 3)
+
+
+if __name__ == "__main__":
+    unittest.main()
 
 
 ## LeetCode Solutions
 #########################
 
-
 ## Approach 1: Brute Force
 ##############################
-# time: O(2^N)
-# space: O(N)
-def climbStairs(n: int) -> int:
-    def climb(i, n):
-        if i > n:
-            return 0
-        if i is n:
-            return 1
-
-        return climb(i + 1, n) + climb(i + 2, n)
-
-    return climb(0, n)
-
+# Time: O(2^n) - Size of recursion tree will be 2^n.
+# Space: O(n) - The depth of the recursion tree can go upto n.
 
 ## Java
-# public class Solution {
-#     public int climbStairs(int n) {
-#         int memo[] = new int[n + 1];
-#         return climb_Stairs(0, n, memo);
-#     }
-#     public int climb_Stairs(int i, int n, int memo[]) {
-#         if (i > n) {
-#             return 0;
-#         }
-#         if (i == n) {
-#             return 1;
-#         }
-#         if (memo[i] > 0) {
-#             return memo[i];
-#         }
-#         memo[i] = climb_Stairs(i + 1, n, memo) + climb_Stairs(i + 2, n, memo);
-#         return memo[i];
-#     }
-# }
+#public class Solution {
+#    public int climbStairs(int n) {
+#        return climb_Stairs(0, n);
+#    }
+#    public int climb_Stairs(int i, int n) {
+#        if (i > n) {
+#            return 0;
+#        }
+#        if (i == n) {
+#            return 1;
+#        }
+#        return climb_Stairs(i + 1, n) + climb_Stairs(i + 2, n);
+#    }
+#}
 
 
 ## Approach 2: Recursion with Memoization
 #############################################
-# time: O(n) - size of recursion tree can go up to n
-# space: O(n) - depth of recursion tree can go up to n
-def climbStairs(n: int) -> int:
-    climbed = {}
-
-    def climb(i, n):
-        if i > n:
-            return 0
-        if i is n:
-            return 1
-        # if i in climbed and climbed[i] > 0:
-        if i in climbed:
-            return climbed[i]
-
-        climbed[i] = climb(i + 1, n) + climb(i + 2, n)
-
-        return climbed[i]
-
-    return climb(0, n)
-
+# Time: O(n) - Size of recursion tree can go upto n.
+# Space: O(n) - The depth of recursion tree can go upto n.
 
 ## Java
-# public class Solution {
-#     public int climbStairs(int n) {
-#         int memo[] = new int[n + 1];
-#         return climb_Stairs(0, n, memo);
-#     }
-#     public int climb_Stairs(int i, int n, int memo[]) {
-#         if (i > n) {
-#             return 0;
-#         }
-#         if (i == n) {
-#             return 1;
-#         }
-#         if (memo[i] > 0) {
-#             return memo[i];
-#         }
-#         memo[i] = climb_Stairs(i + 1, n, memo) + climb_Stairs(i + 2, n, memo);
-#         return memo[i];
-#     }
-# }
+#public class Solution {
+#    public int climbStairs(int n) {
+#        int memo[] = new int[n + 1];
+#        return climb_Stairs(0, n, memo);
+#    }
+#    public int climb_Stairs(int i, int n, int memo[]) {
+#        if (i > n) {
+#            return 0;
+#        }
+#        if (i == n) {
+#            return 1;
+#        }
+#        if (memo[i] > 0) {
+#            return memo[i];
+#        }
+#        memo[i] = climb_Stairs(i + 1, n, memo) + climb_Stairs(i + 2, n, memo);
+#        return memo[i];
+#    }
+#}
+
 
 ## Approach 3: Dynamic Programming
 ######################################
-# time: O(n) - single loop up to n
-# space: O(n) - dp array of size n is used
-# one can reach step i in one of two ways:
-#       take a single step from (i - 1)
-#       take two steps from (i - 2)
-# so the total number of ways to reach step i is equal to the sum of
-# ways of reaching (i - 1) step and ways of reaching (i -2) step.
-# dp = number of ways to reach step i:
-# dp[i] = dp[i - 1] + dp[i - 2]
-def climbStairs(n: int) -> int:
-    if n == 1:
-        return 1
-
-    dp = [0] * (n + 1)
-    dp[1], dp[2] = 1, 2
-
-    for i in range(3, n + 1):
-        dp[i] = dp[i - 1] + dp[i - 2]
-
-    return dp[n]
-
+# Time: O(n) - Single loop upto n.
+# Space: O(n) - dp array of size nn is used.
 
 ## Java
-# public class Solution {
-#     public int climbStairs(int n) {
-#         if (n == 1) {
-#             return 1;
-#         }
-#         int[] dp = new int[n + 1];
-#         dp[1] = 1;
-#         dp[2] = 2;
-#         for (int i = 3; i <= n; i++) {
-#             dp[i] = dp[i - 1] + dp[i - 2];
-#         }
-#         return dp[n];
-#     }
-# }
+#public class Solution {
+#    public int climbStairs(int n) {
+#        if (n == 1) {
+#            return 1;
+#        }
+#        int[] dp = new int[n + 1];
+#        dp[1] = 1;
+#        dp[2] = 2;
+#        for (int i = 3; i <= n; i++) {
+#            dp[i] = dp[i - 1] + dp[i - 2];
+#        }
+#        return dp[n];
+#    }
+#}
+
 
 ## Approach 4: Fibonacci Number
 ###################################
-# time: O(n) - Single loop up to n is required to calculate nth fibonacci number
-# space: O(1) - Constant space is used
-class Solution:
-    def climbStairs(n: int) -> int:
-        pass
+# Time: O(n) - Single loop upto n is required to calculate nth fibonacci number.
+# Space: O(1) - O(1). Constant space is used.
 
+## Java
+#public class Solution {
+#    public int climbStairs(int n) {
+#        if (n == 1) {
+#            return 1;
+#        }
+#        int first = 1;
+#        int second = 2;
+#        for (int i = 3; i <= n; i++) {
+#            int third = first + second;
+#            first = second;
+#            second = third;
+#        }
+#        return second;
+#    }
+#}
+
+
+## Approach 5: Binets Method
+################################
+# Time: O(log(n)) - Traversing on logn bits.
+# Space: O(1) - Constant space is used.
 
 ## Java
 # public class Solution {
-#     public int climbStairs(int n) {
-#         if (n == 1) {
-#             return 1;
-#         }
-#         int first = 1;
-#         int second = 2;
-#         for (int i = 3; i <= n; i++) {
-#             int third = first + second;
-#             first = second;
-#             second = third;
-#         }
-#         return second;
-#     }
-# }
+#    public int climbStairs(int n) {
+#        int[][] q = {{1, 1}, {1, 0}};
+#        int[][] res = pow(q, n);
+#        return res[0][0];
+#    }
+#    public int[][] pow(int[][] a, int n) {
+#        int[][] ret = {{1, 0}, {0, 1}};
+#        while (n > 0) {
+#            if ((n & 1) == 1) {
+#                ret = multiply(ret, a);
+#            }
+#            n >>= 1;
+#            a = multiply(a, a);
+#        }
+#        return ret;
+#    }
+#    public int[][] multiply(int[][] a, int[][] b) {
+#        int[][] c = new int[2][2];
+#        for (int i = 0; i < 2; i++) {
+#            for (int j = 0; j < 2; j++) {
+#                c[i][j] = a[i][0] * b[0][j] + a[i][1] * b[1][j];
+#            }
+#        }
+#        return c;
+#    }
+#}
+
+
+## Approach 6: Fibonacci Formula
+####################################
+# Time: O(log(n)). pow method takes logn time.
+# Space: O(1). Constant space is used.
+
+## Java
+#public class Solution {
+#    public int climbStairs(int n) {
+#        double sqrt5=Math.sqrt(5);
+#        double fibn=Math.pow((1+sqrt5)/2,n+1)-Math.pow((1-sqrt5)/2,n+1);
+#        return (int)(fibn/sqrt5);
+#    }
+#}
+
+

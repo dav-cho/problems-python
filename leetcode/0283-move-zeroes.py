@@ -70,8 +70,8 @@ class Solution:
 ## Tests
 ############
 test = Solution()
-move_zeroes1 = test.move_zeroes([0, 1, 0, 3, 12])  # [1, 3, 12, 0, 0]
-move_zeroes2 = test.move_zeroes([0])  # [0]
+move_zeroes1 = test.moveZeroes([0, 1, 0, 3, 12])  # [1, 3, 12, 0, 0]
+move_zeroes2 = test.moveZeroes([0])  # [0]
 print(move_zeroes1)
 print(move_zeroes2)
 

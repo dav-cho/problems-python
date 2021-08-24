@@ -40,6 +40,29 @@ class TreeNode:
         self.left = left
         self.right = right
 
+
+## iterative - most optimal
+###############################
+class Solution:
+    def maxDepth(self, root: Optional[TreeNode]) -> int:
+        if not root:
+            return 0
+        
+        stack = [(root, 1)]
+        depth = 0
+        while stack:
+            node, curr_depth = stack.pop()
+            
+            if not node:
+                continue
+            
+            depth = max(depth, curr_depth)
+            stack.append((node.left, curr_depth + 1))
+            stack.append((node.right, curr_depth + 1))
+            
+        return depth
+
+
 ## recursion and dfs
 ########################
 class Solution:
@@ -53,8 +76,6 @@ class Solution:
         return max(left, right) + 1
 
 
-## tail recursion and bfs
-#############################
 class Solution:
     def max_depth(self, root: TreeNode) -> int:
         def helper(root, depth):
@@ -85,8 +106,6 @@ class Solution:
         return helper(root, 1)
 
 
-## tail recursion and bfs 2
-###############################
 class Solution:
     def max_depth(self, root: TreeNode) -> int:
         return self.helper(root, 0)
@@ -116,6 +135,13 @@ class Solution:
         right = self.helper(root.right, depth + 1)
 
         return max(left, right)
+
+
+## tail recursion + bfs
+###############################
+class Solution:
+    def max_depth(self, root: TreeNode) -> int:
+        pass
 
 
 ## iterative
