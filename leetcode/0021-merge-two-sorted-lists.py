@@ -27,6 +27,8 @@
 
 ################################################################################
 
+from types import Optional
+
 ## Definition for singly-linked list.
 class ListNode:
     def __init__(self, val=0, next=None):
@@ -34,37 +36,10 @@ class ListNode:
         self.next = next
 
 
-## first attempt
-####################
-class Solution:
-    def merge_two_lists(self, l1: ListNode, l2: ListNode) -> ListNode:
-        if not l1 and not l2:
-            return
-        if not l1:
-            return l2
-        if not l2:
-            return l2
-
-        head = ListNode(None)
-        curr = head
-        while l1 and l2:
-            if l1.val < l2.val:
-                curr.next = l1
-                l1 = l1.next
-            else:
-                curr.next = l2
-                l2 = l2.next
-            curr = curr.next
-
-        curr.next = l1 if l1 else l2
-
-        return head.next
-
-
 ## recursive
 ################
 class Solution:
-    def merge_two_lists(self, l1: ListNode, l2: ListNode) -> ListNode:
+    def mergeTwoLists(self, l1: Optional[ListNode], l2: Optional[ListNode]) -> Optional[ListNode]:
         if not l1:
             return l2
         if not l2:
@@ -81,10 +56,10 @@ class Solution:
 ## iterative
 ################
 class Solution:
-    def merge_two_lists(self, l1: ListNode, l2: ListNode) -> ListNode:
+    def mergeTwoLists(self, l1: Optional[ListNode], l2: Optional[ListNode]) -> Optional[ListNode]:
         sentinel = ListNode(None)
-
         curr = sentinel
+
         while l1 and l2:
             if l1.val <= l2.val:
                 curr.next = l1
@@ -160,13 +135,13 @@ test(test1, test2, test3)
 
 ## Approach 1: Recursion
 ############################
-# time: O(n + m) - Because each recursive call increments the pointer to
+# Time: O(n + m) - Because each recursive call increments the pointer to
 #                  l1 or l2 by one (approaching the dangling null at the end
 #                  of each list), there will be exactly one call to
 #                  mergeTwoLists per element in each list. Therefore, the time
 #                  complexity is linear in the combined size of the lists.
 
-# space: O(n + m) - The first call to mergeTwoLists does not return until the
+# Space: O(n + m) - The first call to mergeTwoLists does not return until the
 #                   ends of both l1 and l2 have been reached, so n + m stack
 #                   frames consume O(n + m) space.
 
@@ -205,13 +180,13 @@ class Solution:
 
 ## Approach 2: Iteration
 ############################
-# time: O(n + m) - Because exactly one of l1 and l2 is incremented on each
+# Time: O(n + m) - Because exactly one of l1 and l2 is incremented on each
 #                  loop iteration, the while loop runs for a number of
 #                  iterations equal to the sum of the lengths of the two lists.
 #                  All other work is constant, so the overall complexity is
 #                  linear.
 
-# space: O(1) - The iterative approach only allocates a few pointers, so it
+# Space: O(1) - The iterative approach only allocates a few pointers, so it
 #               has a constant overall memory footprint.
 
 # Intuition:

@@ -101,3 +101,29 @@ head = build_ll([1,2,3,4])
 #self.print_ll(head)
 
 ######################################################################
+
+COLORS = set("RGB")
+
+def triangle(row):
+    while len(row)>1:
+        row = ''.join( a if a==b else (COLORS-{a,b}).pop() for a,b in zip(row, row[1:]))
+    return row
+
+######################################################################
+
+import operator
+
+def logical_calc(array, op):
+    ops = {
+        'AND': operator.and_,
+        'OR': operator.or_,
+        'XOR': operator.xor
+    }
+    
+    return reduce(ops[op], array)
+
+######################################################################
+
+
+
+######################################################################
