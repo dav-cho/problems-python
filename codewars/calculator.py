@@ -48,8 +48,8 @@ class Calculator(object):
             while k < len(queue) - 1:
                 if queue[k] in operators:
                     op = operations[queue[k]]
-                    a = float(queue[k - 1])
-                    b = float(queue[k + 1])
+                    a = int(queue[k - 1])
+                    b = int(queue[k + 1])
                     queue[k - 1] = str(op(a, b))
                     queue.pop(k)
                     queue.pop(k)
@@ -59,7 +59,8 @@ class Calculator(object):
         helper('*/')
         helper('+-')
 
-        return float(queue[0])
+        return int(queue[0])
+
 
 
 ## Tests
