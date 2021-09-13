@@ -36,6 +36,27 @@ class TreeNode:
 ################
 class Solution:
     def level_order(self, root: TreeNode) -> List[List[int]]:
+        res = []
+        if not root:
+            return res
+        
+        def bfs(node, level):
+            if len(res) == level:
+                res.append([])
+                
+            res[level].append(node.val)
+            
+            if node.left:
+                bfs(node.left, level + 1)
+            if node.right:
+                bfs(node.right, level + 1)
+                
+        bfs(root, 0)
+        return res
+
+
+class Solution:
+    def level_order(self, root: TreeNode) -> List[List[int]]:
         result = []
         if not root:
             return result

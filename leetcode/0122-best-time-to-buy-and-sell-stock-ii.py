@@ -41,44 +41,87 @@
 
 ################################################################################
 
+## brute force
+##############################
+class Solution:
+    def maxProfit(prices: list[int]) -> int:
+        def calculate(start):
+            if start >= len(prices):
+                return 0
 
-def maxProfit(prices: list[int]) -> int:
-    max = 0
-    for i in range(1, len(prices)):
-        if prices[i] > prices[i - 1]:
-            max += prices[i] - prices[i - 1]
+            max = 0
+            for i in range(start, len(prices)):
+                max_profit = 0
+                for j in range(i + 1, len(prices)):
+                    if prices[i] < prices[j]:
+                        profit = calculate(j + 1) + prices[j] - prices[i]
+                        if profit > max_profit:
+                            max_profit = profit
+                if max_profit > max:
+                    max = max_profit
 
-    return max
+            return max
+
+        return calculate(0)
+
+## peak valley
+##############################
+class Solution:
+    def maxProfit(self, prices: list[int]) -> int:
+        i = 0
+        max_profit = 0
+        
+        while i < len(prices) - 1:
+            while i < len(prices) - 1 and prices[i] >= prices[i + 1]:
+                i += 1
+            valley = prices[i]
+            
+            while i < len(prices) - 1 and prices[i] <= prices[i + 1]:
+                i += 1
+            peak = prices[i]
+            
+            max_profit += peak - valley
+            
+        return max_profit
+
+
+## one pass
+##############################
+class Solution:
+    def maxProfit(self, prices: list[int]) -> int:
+        max_profit = 0
+        for i in range(1, len(prices)):
+            if prices[i] > prices[i - 1]:
+                max_profit += prices[i] - prices[i - 1]
+                
+        return max_profit
+
+
+## Tests
+############
+
+import unittest
+
+
+class Test(unittest.TestCase):
+    def test_cases(self):
+        solution = Solution()
+        self.assertEqual(solution.maxProfit([7,1,5,3,6,4]), 7)
+        self.assertEqual(solution.maxProfit([1,2,3,4,5]), 4)
+        self.assertEqual(solution.maxProfit([7,6,4,3,1]), 0)
+
+
+if __name__ == "__main__":
+    unittest.main()
 
 
 ## LeetCode Solutions
 #########################
 
-
 ## Approach 1: Brute Force
 ##############################
-# time: O(n^n) - recursive function is called n^n times
-# space: O(n) - depth of recursion is n
-def maxProfit(prices: list[int]) -> int:
-    def calculate(start):
-        if start >= len(prices):
-            return 0
-
-        max = 0
-        for i in range(start, len(prices)):
-            max_profit = 0
-            for j in range(i + 1, len(prices)):
-                if prices[i] < prices[j]:
-                    profit = calculate(j + 1) + prices[j] - prices[i]
-                    if profit > max_profit:
-                        max_profit = profit
-            if max_profit > max:
-                max = max_profit
-
-        return max
-
-    return calculate(0)
-
+# Time: O(n^n) - Recursive function is called n^n times
+# Space: O(n) - Depth of recursion is n
 
 ## Java
 # class Solution {
@@ -108,30 +151,8 @@ def maxProfit(prices: list[int]) -> int:
 
 ## Approach 2: Peak Valley Approach
 #######################################
-# calculate the profits from each valley (low point) to peak (next high point)
-# time: O(n) - single pass
-# space: O(1) - no additional space besides a few variables
-def maxProfit(prices: list[int]) -> int:
-    i = 0
-    valley = prices[0]
-    peak = prices[0]
-    max = 0
-
-    last = len(prices) - 1
-    while i < last:
-        while i < last and prices[i] >= prices[i + 1]:
-            i += 1
-
-        valley = prices[i]
-
-        while i < last and prices[i] <= prices[i + 1]:
-            i += 1
-
-        peak = prices[i]
-        max += peak - valley
-
-    return max
-
+# Time: O(n) - Single pass.
+# Space: O(1) - Constant space required.
 
 ## Java
 # class Solution {
@@ -155,17 +176,8 @@ def maxProfit(prices: list[int]) -> int:
 
 ## Approach 3: Simple One Pass
 ##################################
-# accumulate sum of the profits of each consecutive transaction
-# time: O(n) - single pass
-# space: O(1) - no additional memory besides a few constant size variables
-def maxProfit(prices: list[int]) -> int:
-    max = 0
-    for i in range(1, len(prices)):
-        if prices[i] > prices[i - 1]:
-            max += prices[i] - prices[i - 1]
-
-    return max
-
+# Time: O(n) - Single pass.
+# Space: O(1) - Constant space needed.
 
 ## Java
 # class Solution {
@@ -179,23 +191,3 @@ def maxProfit(prices: list[int]) -> int:
 #     }
 # }
 
-test1 = [7, 1, 5, 3, 6, 4]  # 7
-test2 = [1, 2, 3, 4, 5]  # 4
-test3 = [7, 6, 4, 3, 1]  # 0
-
-
-def test(*args):
-    count = 0
-
-    def run():
-        for test in args:
-            result = maxProfit(test)
-            nonlocal count
-            print(f"~ test {count}")
-            print(f"{test} --> {result}")
-            count += 1
-
-    return run()
-
-
-test(test1, test2, test3)

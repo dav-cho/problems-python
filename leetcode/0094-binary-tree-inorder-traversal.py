@@ -64,6 +64,22 @@ class Solution:
         self.helper(node.right, result)
 
 
+class Solution:
+    def inorder_traversal(self, root: TreeNode) -> list[int]:
+        def inorder(node):
+            if not node:
+                return
+            
+            inorder(node.left)
+            res.append(node.val)
+            inorder(node.right)
+            
+        res = []
+        inorder(root)
+        
+        return res
+
+
 ## iterative
 ################
 class Solution:

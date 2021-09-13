@@ -154,6 +154,7 @@ def my_languages(results):
 
 ######################################################################
 
-
+def presses(phrase):
+    return sum(1 + button.find(c) for c in phrase.lower() for button in BUTTONS if c in button)
 
 ######################################################################
