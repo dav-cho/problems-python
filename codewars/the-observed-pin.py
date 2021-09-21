@@ -2,36 +2,25 @@
 #### The observed PIN (4 kyu)
 #################################
 
+import itertools
+
 def get_pins(observed):
-    #numpad = [
-    #    [1, 2, 3], 
-    #    [4, 5, 6],
-    #    [7, 8, 9],
-    #    [None, 0, None],
-    #]
-    #dirs = [(1, 0), (-1, 0), (0, 1), (0, -1)]
+    adj_list = {
+        '1': ['1', '2', '4'],
+        '2': ['1', '2', '3', '5'],
+        '3': ['2', '3', '6'],
+        '4': ['1', '4', '5', '7'],
+        '5': ['2', '4', '5', '6', '8'],
+        '6': ['3', '5', '6', '9'],
+        '7': ['4', '7', '8'],
+        '8': ['5', '7', '8', '9', '0'],
+        '9': ['6', '8', '9'],
+        '0': ['8', '0']
+    }
 
-    def backtrack(first=0):
-        if first == n:
-            pass
+    neighbors = [adj_list[x] for x in observed]
 
-        for i in range(start, n):
-            pass
-
-    n = len(observed)
-    dirs = [1, -1, 3, -3]
-    adj_list = [[] for _ in range(n)]
-
-    for i, num in enumerate(observed):
-        adj_list[i] = [num]
-        for dir in dirs:
-            adj_list[i].append(int(num) + dir)
-
-    res = []
-    for i in range(n):
-        for j in range(i, n):
-            pass
-
+    return [''.join(elem) for elem in list(itertools.product(*neighbors))]
 
 ## Tests
 #############

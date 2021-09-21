@@ -65,8 +65,47 @@ class Node:
 
 ## dfs
 ##############################
-from collections import deque
+class Solution:
+    def cloneGraph(self, node: 'Node') -> 'Node':
+        def dfs(node):
+            if not node:
+                return
+            if node in seen:
+                return seen[node]
+            
+            clone = Node(node.val)
+            seen[node] = clone
+            
+            clone.neighbors = [dfs(neighbor) for neighbor in node.neighbors]
+                
+            return clone
+        
+        seen = {}
+        return dfs(node)
 
+
+class Solution:
+    def cloneGraph(self, node: 'Node') -> 'Node':
+        def dfs(node):
+            if not node:
+                return
+            if node in seen:
+                return seen[node]
+            
+            clone = Node(node.val)
+            seen[node] = clone
+            
+            if node.neighbors:
+                clone.neighbors = [dfs(neighbor) for neighbor in node.neighbors]
+                
+            return clone
+        
+        seen = {}
+        
+        return dfs(node)
+
+
+from collections import deque
 
 class Solution:
     def __init__(self):

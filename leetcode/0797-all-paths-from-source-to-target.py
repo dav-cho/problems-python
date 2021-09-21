@@ -39,8 +39,82 @@
 
 ################################################################################
 
+## dfs
+##############################
+class Solution:
+    def allPathsSourceTarget(self, graph: list[list[int]]) -> list[list[int]]:
+        def dfs(curr_node, path):
+            path.append(curr_node)
+            if curr_node == len(graph) - 1:
+                res.append(list(path))
+                
+            for neighbor in graph[curr_node]:
+                backtrack(neighbor, path)
+                path.pop()
+                
+        res = []
+        backtrack(0, [])
+        
+        return res
+
+
 ## backtracking
 ##############################
+class Solution:
+    def allPathsSourceTarget(self, graph: list[list[int]]) -> list[list[int]]:
+        def backtrack(curr_node, path):
+            if curr_node == len(graph) - 1:
+                res.append(list(path))
+                
+            for neighbor in graph[curr_node]:
+                path.append(neighbor)
+                backtrack(neighbor, path)
+                path.pop()
+                
+        res = []
+        backtrack(0, [0])
+        
+        return res
+
+
+class Solution:
+    def allPathsSourceTarget(self, graph: list[list[int]]) -> list[list[int]]:
+        def backtrack(curr_node, path):
+            if curr_node == target:
+                res.append(list(path))
+                
+            for neighbor in graph[curr_node]:
+                path.append(neighbor)
+                backtrack(neighbor, path)
+                path.pop()
+                
+        target = len(graph) - 1
+        res = []
+        backtrack(0, [0])
+        
+        return res
+
+
+class Solution:
+    def allPathsSourceTarget(self, graph: list[list[int]]) -> list[list[int]]:
+        def backtrack(curr_node, path):
+            if curr_node == target:
+                res.append(list(path))
+                return
+            
+            for neighbor in graph[curr_node]:
+                path.append(neighbor)
+                backtrack(neighbor, path)
+                path.pop()
+            
+        target = len(graph) - 1
+        res = []
+        path = [0]
+        backtrack(0, path)
+        
+        return res
+
+
 from collections import deque
 
 class Solution:
@@ -83,6 +157,29 @@ class Solution:
         backtrack(0, path)
 
         return res
+
+
+## top-down dynamic programming
+###################################
+from functools import lru_cache
+
+class Solution:
+    def allPathsSourceTarget(self, graph: list[list[int]]) -> list[list[int]]:
+        target = len(graph) - 1
+        
+        @lru_cache(maxsize=None)
+        def all_paths_to_target(curr_node):
+            if curr_node == target:
+                return [[target]]
+            
+            res = []
+            for next_node in graph[curr_node]:
+                for path in all_paths_to_target(next_node):
+                    res.append([curr_node] + path)
+                    
+            return res
+        
+        return all_paths_to_target(0)
 
 
 ## Tests

@@ -158,3 +158,10 @@ def presses(phrase):
     return sum(1 + button.find(c) for c in phrase.lower() for button in BUTTONS if c in button)
 
 ######################################################################
+
+creams = 180
+a = 65
+b = 84
+c = 60
+
+######################################################################
