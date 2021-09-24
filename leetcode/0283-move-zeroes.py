@@ -23,191 +23,192 @@
 
 ########################################################################
 
-## Approach 1: Space Sub-Optimal
-####################################
-# time: O(n) - since we create the ans array to store results
-# space: O(n)
+## first attempt
+##############################
 class Solution:
     def moveZeroes(self, nums: list[int]) -> None:
-        """
-        Do not return anything, modify nums in-place instead.
-        """
+        k = 0
+        for num in nums:
+            if num != 0:
+                nums[k] = num
+                k += 1
+        
+        for i in range(k, len(nums)):
+            nums[i] = 0
+
+        return nums
 
 
-## Approach 2: Space Optimal, Operation Sub-Optimal
-#######################################################
-# time: O(1)
-# space: O(n) - total operations (array writes) is n (total # of elements)
+## operation sub-optimal, space sub-optimal
+###############################################
 class Solution:
     def moveZeroes(self, nums: list[int]) -> None:
-        i = 0
+        zeroes = nums.count(0)
+        res = []
+        
+        for num in nums:
+            if num != 0:
+                res.append(num)
+                
+        while zeroes:
+            res.append(0)
+            zeroes -= 1
+            
+        for i in range(len(nums)):
+            nums[i] = res[i]
 
-        for j in range(len(nums)):
-            if nums[j] != 0:
-                nums[i] = nums[j]
-                i += 1
-
-        for j in range(i, len(nums)):
-            nums[j] = 0
+        return nums
 
 
-## Approach 3: Optimal
-##########################
-# time: O(1)
-# space: O(n) - total # of operations are optimal because total num of
+## space optimal
+##############################
 class Solution:
     def moveZeroes(self, nums: list[int]) -> None:
-        i = 0
+        k = 0
+        for num in nums:
+            if num != 0:
+                nums[k] = num
+                k += 1
+                
+        for i in range(k, len(nums)):
+            nums[i] = 0
 
-        for j in range(len(nums)):
-            if nums[j] != 0:
-                curr = nums[j]
-                nums[j] = 0
-                nums[i] = curr
-                i += 1
+        return nums
+
+
+## optimal
+##############################
+class Solution:
+    def moveZeroes(self, nums: list[int]) -> None:
+        k = 0
+        for i in range(len(nums)):
+            if nums[i] != 0:
+                nums[i], nums[k] = nums[k], nums[i]
+                k += 1
+
+        return nums
+
+
+class Solution:
+    def moveZeroes(self, nums: list[int]) -> None:
+        k = 0
+        for i, num in enumerate(nums):
+            if num != 0:
+                nums[i], nums[k] = nums[k], nums[i]
+                k += 1
+
+        return nums
+
+
+## 
+##############################
+class Solution:
+    def moveZeroes(self, nums: list[int]) -> None:
+        pass
 
 
 ## Tests
-############
-test = Solution()
-move_zeroes1 = test.moveZeroes([0, 1, 0, 3, 12])  # [1, 3, 12, 0, 0]
-move_zeroes2 = test.moveZeroes([0])  # [0]
-print(move_zeroes1)
-print(move_zeroes2)
+#############
+
+import unittest
+
+
+class Test(unittest.TestCase):
+    def test_cases(self):
+        solution = Solution()
+        self.assertEqual(solution.moveZeroes([0,1,0,3,12]), [1,3,12,0,0])
+        self.assertEqual(solution.moveZeroes([0]), [0])
+
+
+if __name__ == "__main__":
+    unittest.main()
 
 
 ## LeetCode Solutions
 #########################
 
-
-## Approach 1: Space Sub-Optimal
-####################################
-# time: O(n) - since we create the ans array to store results
-# space: O(n)
-class Solution:
-    def move_zeroes(self, nums: list[int]) -> None:
-        # initialize zeroes count
-        num_zeroes = 0
-
-        # count all zeroes
-        for num in nums:
-            num_zeroes += 1 if num == 0 else num_zeroes
-
-        # new array with non zero numbers, keeping the same order
-        result = [num for num in nums if num != 0]
-
-        # using the count of zeroes, append zeroes to result
-        while num_zeroes > 0:
-            result.append(0)
-            num_zeroes -= 1
-
-        # replace all values in nums with result
-        for i in range(len(nums)):
-            nums[i] = result[i]
-
+## Approach 1: (Space Sub-Optimal) [Accepted]
+#################################################
+# Time: O(n) - However, the total number of operations are sub-optimal. We can
+#              achieve the same result in less number of operations.
+#            - If asked in an interview, the above solution would be a good
+#              start. You can explain the interviewer(not code) the above and
+#              build your base for the next Optimal Solution.
+# Space: O(n) - Since we are creating the "ans" array to store results.
 
 ## C++
-# void moveZeroes(vector<int>& nums) {
-#     int n = nums.size();
+#void moveZeroes(vector<int>& nums) {
+#    int n = nums.size();
+#
+#    // Count the zeroes
+#    int numZeroes = 0;
+#    for (int i = 0; i < n; i++) {
+#        numZeroes += (nums[i] == 0);
+#    }
+#
+#    // Make all the non-zero elements retain their original order.
+#    vector<int> ans;
+#    for (int i = 0; i < n; i++) {
+#        if (nums[i] != 0) {
+#            ans.push_back(nums[i]);
+#        }
+#    }
+#
+#    // Move all zeroes to the end
+#    while (numZeroes--) {
+#        ans.push_back(0);
+#    }
+#
+#    // Combine the result
+#    for (int i = 0; i < n; i++) {
+#        nums[i] = ans[i];
+#    }
+#}
 
-#     // Count the zeroes
-#     int numZeroes = 0;
-#     for (int i = 0; i < n; i++) {
-#         numZeroes += (nums[i] == 0);
-#     }
 
-#     // Make all the non-zero elements retain their original order.
-#     vector<int> ans;
-#     for (int i = 0; i < n; i++) {
-#         if (nums[i] != 0) {
-#             ans.push_back(nums[i]);
-#         }
-#     }
-
-#     // Move all zeroes to the end
-#     while (numZeroes--) {
-#         ans.push_back(0);
-#     }
-
-#     // Combine the result
-#     for (int i = 0; i < n; i++) {
-#         nums[i] = ans[i];
-#     }
-# }
-
-
-## Approach 2: Space Optimal, Operation Sub-Optimal
-#######################################################
-# time: O(1)
-# space: O(n) - total operations (array writes) is n (total # of elements)
-# loop through once, moving all non zero elements to the front of the array
-# while keeping track of the last non zero index + 1
-# once first loop is done, replace remaining elements with zeroes, using
-# last non zero index as start index
-def move_zeroes(nums: list[int]) -> None:
-    last_non_zero_index = 0
-
-    for index, num in enumerate(nums):
-        if num is not 0:
-            nums[last_non_zero_index] = nums[index]
-            last_non_zero_index += 1
-    for i in range(last_non_zero_index, len(nums)):
-        nums[i] = 0
-
+## Approach 2: (Space Optimal, Operation Sub-Optimal) [Accepted]
+####################################################################
+# Time: O(n) - However, the total number of operations are still sub-optimal.
+#              The total operations (array writes) that code does is n (Total
+#              number of elements).
+# Space: O(1) - Only constant space is used.
 
 ## C++
-# void moveZeroes(vector<int>& nums) {
-#     int lastNonZeroFoundAt = 0;
-#     // If the current element is not 0, then we need to
-#     // append it just in front of last non 0 element we found.
-#     for (int i = 0; i < nums.size(); i++) {
-#         if (nums[i] != 0) {
-#             nums[lastNonZeroFoundAt++] = nums[i];
-#         }
-#     }
-#  	// After we have finished processing new elements,
-#  	// all the non-zero elements are already at beginning of array.
-#  	// We just need to fill remaining array with 0's.
-#     for (int i = lastNonZeroFoundAt; i < nums.size(); i++) {
-#         nums[i] = 0;
-#     }
-# }
+#void moveZeroes(vector<int>& nums) {
+#    int lastNonZeroFoundAt = 0;
+#    // If the current element is not 0, then we need to
+#    // append it just in front of last non 0 element we found. 
+#    for (int i = 0; i < nums.size(); i++) {
+#        if (nums[i] != 0) {
+#            nums[lastNonZeroFoundAt++] = nums[i];
+#        }
+#    }
+# 	// After we have finished processing new elements,
+# 	// all the non-zero elements are already at beginning of array.
+# 	// We just need to fill remaining array with 0's.
+#    for (int i = lastNonZeroFoundAt; i < nums.size(); i++) {
+#        nums[i] = 0;
+#    }
+#}
 
 
-## Approach 3: Optimal
-##########################
-# time: O(1)
-# space: O(n) - total # of operations are optimal because total num of
-#               operations is number of non-0 elements. This gives us a
-#               much better best case than appraoch 2. However, worst case
-#               is the same.
-# last approach is not optimal since you have to loop through once for
-# something like [0, 0, 0, ...., 0, 1]
-# realization: if current element is non zero, its correct position can be
-# at best it's current position or one before. Since the current position
-# will be occupied by a zero or non zero, we fill the position with a zero
-# so it doesn't have to be revisited later
-# 1. all elements before the slow pointer (last non zero index) are non zeroes
-# 2. all elements between current and slow pointer are zeroes
-# when we encounter a non zero element, we swap elements at both pointers
-# then advance both pointers. If it's a zero, we just advance current pointer
-class Solution:
-    def move_zeroes(self, nums: list[int]) -> None:
-        last_non_zero_index = 0
-
-        for current, num in enumerate(nums):
-            if num != 0:
-                nums[current] = 0
-                nums[last_non_zero_index] = num
-                last_non_zero_index += 1
-        print(nums)
-
+## Approach 3: (Optimal) [Accepted]
+#######################################
+# Time: O(n) - However, the total number of operations are optimal. The total
+#              operations (array writes) that code does is Number of non-0
+#              elements.This gives us a much better best-case (when most of the
+#              elements are 0) complexity than last solution. However, the
+#              worst-case (when all elements are non-0) complexity for both the
+#              algorithms is same.
+# Space: O(1) - Only constant space is used.
 
 ## C++
-# void moveZeroes(vector<int>& nums) {
-#     for (int lastNonZeroFoundAt = 0, cur = 0; cur < nums.size(); cur++) {
-#         if (nums[cur] != 0) {
-#             swap(nums[lastNonZeroFoundAt++], nums[cur]);
-#         }
-#     }
-# }
+#void moveZeroes(vector<int>& nums) {
+#    for (int lastNonZeroFoundAt = 0, cur = 0; cur < nums.size(); cur++) {
+#        if (nums[cur] != 0) {
+#            swap(nums[lastNonZeroFoundAt++], nums[cur]);
+#        }
+#    }
+#}
+
+

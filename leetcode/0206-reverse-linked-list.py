@@ -30,178 +30,122 @@
 
 ######################################################################
 
-## Definition for singly-linked list node.
+from typing import Optional
+
+## Definition for singly-linked list.
 class ListNode:
     def __init__(self, val=0, next=None):
         self.val = val
         self.next = next
 
 
-## iterative 1
-##################
+## iterative
+##############################
 class Solution:
-    def reverseList(self, head: ListNode) -> ListNode:
+    def reverseList(self, head: Optional[ListNode]) -> Optional[ListNode]:
         prev = None
-        curr = head    
         
-        while curr:
-            next = curr.next
-            curr.next = prev
-            prev = curr
-            curr = next
-            
-        return prev
-
-
-## iterative 2
-##################
-class Solution:
-    def reverse_list(self, head: ListNode) -> ListNode:
-        prev = None
-        curr = head
-
-        while curr:
-            curr.next, prev, curr = prev, curr, curr.next
-
-        return prev
-
-
-## iterative 3
-##################
-class Solution:
-    def reverse_list(self, head: ListNode) -> ListNode:
-        prev = None
-
         while head:
             head.next, prev, head = prev, head, head.next
-
+            
         return prev
 
 
 ## recursive
-################
+##############################
 class Solution:
-    def reverse_list(self, head: ListNode) -> ListNode:
+    def reverseList(self, head: Optional[ListNode]) -> Optional[ListNode]:
         if not head or not head.next:
             return head
-
-        p = self.reverse_list(head.next)
-        head.next.next = head
+        
+        prev = self.reverseList(head.next)
+        
+        head.next.next = head;
         head.next = None
-
-        return p
-
-
-## Tests
-############
-
-test1 = [1, 2, 3, 4, 5]     # [5, 4, 3, 2, 1]
-test2 = [1, 2]              # [2, 1]
-test3 = []                  # []
-
-
-def test(*args):
-    count = 1
-
-    def run():
-        for test in args:
-            nonlocal count
-            print("~ test", count)
-            count += 1
-
-            if not test:
-                print("[]")
-                continue
-
-            head = ListNode(test[0])
-            current = head
-
-            for i in range(1, len(test)):
-                current.next = ListNode(test[i])
-                current = current.next
-
-            print_LL(head)
-            solution = Solution()
-            result = solution.reverse_list(head)
-            print_LL(result)
-
-    return run()
-
-
-def print_LL(head):
-    linked_list = []
-
-    while head:
-        linked_list.append(head.val)
-        head = head.next
-
-    print(linked_list)
         
+        return prev
 
-test(test1, test2, test3)
 
-
-## Approach 1: Iterative
-############################
-# time: O(n) - assume that n is the list's length
-# space: O(1)
-
-## Python
+## first attempt
+##############################
 class Solution:
-    def reverseList(self, head: ListNode) -> ListNode:
+    def reverseList(self, head: Optional[ListNode]) -> Optional[ListNode]:
         prev = None
-        curr = head    
         
-        while curr:
-            next = curr.next
-            curr.next = prev
-            prev = curr
-            curr = next
+        while head:
+            nxt = head.next
+            
+            head.next = prev
+            prev = head
+            head = nxt
             
         return prev
 
-## Java
-# public ListNode reverseList(ListNode head) {
-#     ListNode prev = null;
-#     ListNode curr = head;
-#     while (curr != null) {
-#         ListNode nextTemp = curr.next;
-#         curr.next = prev;
-#         prev = curr;
-#         curr = nextTemp;
-#     }
-#     return prev;
-# }
 
-
-## Approach 2: Recursive
-############################
-# time: O(n) - assume n is the list's length
-# space: O(n) - extra space comes from implicit stack due to recursion.
-#               recursion can go n levels deep.
-
-## Python
+## 
+##############################
 class Solution:
-    def reverseList(self, head: ListNode) -> ListNode:
-        if not head or not head.next:
-            return head
-        
-        p = self.reverseList(head.next)
-        head.next.next = head
-        head.next = None
-        
-        return p
+    def reverseList(self, head: Optional[ListNode]) -> Optional[ListNode]:
+        pass
 
+
+## 
+##############################
+class Solution:
+    def reverseList(self, head: Optional[ListNode]) -> Optional[ListNode]:
+        pass
+
+
+## Tests
+#############
+
+import unittest
+
+
+class Test(unittest.TestCase):
+    def test_cases(self):
+        solution = Solution()
+
+
+if __name__ == "__main__":
+    unittest.main()
+
+
+## LeetCode Solutions
+#########################
+
+## Approach 1: (Iterative) [Accepted]
+#########################################
+# Time: O(n) - Assume that n is the list's length, the time complexity is O(n).
+# Space: O(1)
 
 ## Java
-# public ListNode reverseList(ListNode head) {
-#     ListNode prev = null;
-#     ListNode curr = head;
-#     while (curr != null) {
-#         ListNode nextTemp = curr.next;
-#         curr.next = prev;
-#         prev = curr;
-#         curr = nextTemp;
-#     }
-#     return prev;
-# }
+#public ListNode reverseList(ListNode head) {
+#    ListNode prev = null;
+#    ListNode curr = head;
+#    while (curr != null) {
+#        ListNode nextTemp = curr.next;
+#        curr.next = prev;
+#        prev = curr;
+#        curr = nextTemp;
+#    }
+#    return prev;
+#}
+
+
+## Approach 2: (Recursive) [Accepted]
+#########################################
+# Time: O(n) - Assume that n is the list's length, the time complexity is O(n).
+# Space: O(n) - The extra space comes from implicit stack space due to
+#               recursion. The recursion could go up to n levels deep.
+
+## Java
+#public ListNode reverseList(ListNode head) {
+#    if (head == null || head.next == null) return head;
+#    ListNode p = reverseList(head.next);
+#    head.next.next = head;
+#    head.next = null;
+#    return p;
+#}
+
+

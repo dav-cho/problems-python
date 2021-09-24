@@ -57,64 +57,58 @@
 
 ################################################################################
 
-
-## Approach 1 
-#################
-# time: O(n)
-# space: O(1)
+## two pointers
+##############################
 class Solution:
     def removeDuplicates(self, nums: list[int]) -> int:
-        i = 0
-
-        for j in range(1, len(nums)):
-            if nums[i] != nums[j]:
-                i += 1
-                nums[i] = nums[j]
-
-        return i + 1
-
-
-test1 = [1, 1, 2]  #  2, [1,2,_]
-test2 = [0, 0, 1, 1, 1, 2, 2, 3, 3, 4]  # 5, [0,1,2,3,4,_,_,_,_,_]
+        k = 1
+        for i in range(1, len(nums)):
+            if nums[i] != nums[i - 1]:
+                nums[k] = nums[i]
+                k += 1
+                
+        return k
 
 
-def test(*args):
-    solution = Solution()
-    count = 1
+## Tests
+#############
 
-    def run():
-        for test in args:
-            nonlocal count
-            print("~ test", count)
-            print(test)
-
-            result = solution.removeDuplicates(test)
-
-            print(test[:result])
-            print(result)
-
-    return run()
+import unittest
 
 
-test(test1, test2)
+class Test(unittest.TestCase):
+    def test_cases(self):
+        solution = Solution()
+        self.assertEqual(solution.removeDuplicates([1,1,2]), 2)
+        # nums = [1,2,_]
+        self.assertEqual(solution.removeDuplicates([0,0,1,1,1,2,2,3,3,4]), 5)
+        # nums = [0,1,2,3,4,_,_,_,_,_]
+
+
+if __name__ == "__main__":
+    unittest.main()
 
 
 ## LeetCode Solutions
 #########################
 
 ## Approach 1: Two Pointers
-###############################
-# time: 
-# space:
+##############################
+# Time: O(n) - Assume that n is the length of array. Each of i and j traverses
+#              at most n steps.
+# Space: O(1)
+
 ## Java
-# public int removeDuplicates(int[] nums) {
-#     if (nums.length == 0) return 0;
-#     int i = 0;
-#     for (int j = 1; j < nums.length; j++) {
-#         if (nums[j] != nums[i]) {
-#             i++;
-#             nums[i] = nums[j];
-#         }
-#     }
-#     return i + 1;
-# }
+#public int removeDuplicates(int[] nums) {
+#    if (nums.length == 0) return 0;
+#    int i = 0;
+#    for (int j = 1; j < nums.length; j++) {
+#        if (nums[j] != nums[i]) {
+#            i++;
+#            nums[i] = nums[j];
+#        }
+#    }
+#    return i + 1;
+#}
+
+

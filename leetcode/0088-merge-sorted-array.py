@@ -114,6 +114,19 @@ class Solution:
                 j += 1
 
 
+## sorting
+##############################
+class Solution:
+    def merge(self, nums1: list[int], m: int, nums2: list[int], n: int) -> None:
+        i, j = m, 0
+        
+        while i < m + n and j < n:
+            nums1[i] = nums2[j]
+            i += 1
+            j += 1
+            
+        nums1.sort()
+
 ## Tests
 ############
 

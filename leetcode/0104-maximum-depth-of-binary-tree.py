@@ -1,17 +1,13 @@
 ##
-#### Maximum Depth of Binary Tree (easy)
-############################################
+#### Maximum Depthof Binary Tree (easy)
+###########################################
 
 # Given the root of a binary tree, return its maximum depth.
 
-# A binary tree's maximum depth is the number of nodes along the
-# longest path from the root node down to the farthest leaf node.
+# A binary tree's maximum depth is the number of nodes along the longest path
+# from the root node down to the farthest leaf node.
 
 # Example 1:
-#         3
-#    9         20
-#           15    7
-
 # Input: root = [3,9,20,null,null,15,7]
 # Output: 3
 
@@ -26,12 +22,12 @@
 # Example 4:
 # Input: root = [0]
 # Output: 1
-
+ 
 # Constraints:
 # The number of nodes in the tree is in the range [0, 104].
 # -100 <= Node.val <= 100
 
-########################################################################
+################################################################################
 
 ## Definition for a binary tree node.
 class TreeNode:
@@ -41,160 +37,76 @@ class TreeNode:
         self.right = right
 
 
-## iterative - most optimal
-###############################
+## recursive
+##############################
 class Solution:
     def maxDepth(self, root: Optional[TreeNode]) -> int:
         if not root:
             return 0
         
-        stack = [(root, 1)]
-        depth = 0
-        while stack:
-            node, curr_depth = stack.pop()
-            
-            if not node:
-                continue
-            
-            depth = max(depth, curr_depth)
-            stack.append((node.left, curr_depth + 1))
-            stack.append((node.right, curr_depth + 1))
-            
-        return depth
-
-
-## recursion and dfs
-########################
-class Solution:
-    def max_depth(self, root: TreeNode) -> int:
-        if not root:
-            return 0
-        
-        left = self.max_depth(root.left)
-        right = self.max_depth(root.right)
+        left = self.maxDepth(root.left)
+        right = self.maxDepth(root.right)
         
         return max(left, right) + 1
 
 
 class Solution:
-    def max_depth(self, root: TreeNode) -> int:
-        def helper(root, depth):
-            if not root:
-                return depth
-            
-            left = helper(root.left, depth + 1)
-            right = helper(root.right, depth + 1)
-            
-            return max(left, right)
-        
-        return helper(root, 0)
-
-
-class Solution:
-    def max_depth(self, root: TreeNode) -> int:
-        def helper(root, depth):
-            if not root:
-                return 0
-            if not root.left and not root.right:
-                return depth
-
-            left = helper(root.left, depth + 1)
-            right = helper(root.right, depth + 1)
-            
-            return max(left, right)
-            
-        return helper(root, 1)
-
-
-class Solution:
-    def max_depth(self, root: TreeNode) -> int:
-        return self.helper(root, 0)
-    
-    def helper(self, root, depth):
-        if not root:
-            return depth
-
-        left = self.helper(root.left, depth + 1)
-        right = self.helper(root.right, depth + 1)
-
-        return max(left, right)
-
-
-class Solution:
-    def max_depth(self, root: TreeNode) -> int:
-        return self.helper(root, 1)
-    
-    
-    def helper(self, root, depth):
+    def maxDepth(self, root: Optional[TreeNode]) -> int:
         if not root:
             return 0
-        if not root.left and not root.right:
-            return depth
+        else:
+            left = self.maxDepth(root.left)
+            right = self.maxDepth(root.right)
+            
+        return max(left, right) + 1
 
-        left = self.helper(root.left, depth + 1)
-        right = self.helper(root.right, depth + 1)
 
-        return max(left, right)
+class Solution:
+    def maxDepth(self, root: Optional[TreeNode]) -> int:
+        return max(map(self.maxDepth, (root.left, root.right))) + 1 if root else 0
 
 
 ## tail recursion + bfs
-###############################
+##############################
 class Solution:
-    def max_depth(self, root: TreeNode) -> int:
-        pass
-
-
-## iterative
-################
-class Solution:
-    def max_depth(self, root: TreeNode) -> int:
+    def maxDepth(self, root: Optional[TreeNode]) -> int:
         if not root:
             return 0
         
-        stack = [(root, 1)]
-        depth = 0
-        while stack:
-            node, curr_depth = stack.pop()
-            if not node:
-                continue
+        def bfs():
+            nonlocal depth
                 
-            depth = max(depth, curr_depth)
-            stack.append((node.left, curr_depth + 1))
-            stack.append((node.right, curr_depth + 1))
-            
-        return depth
+            while queue:
+                node, level = queue.popleft()
 
+                depth = max(depth, level)
 
-class Solution:
-    def max_depth(self, root: TreeNode) -> int:
-        stack = []
-        if root:
-            stack.append((root, 1))
-            
-        depth = 0
-        while stack:
-            root, curr_depth = stack.pop()
-            if not root:
-                continue
-            
-            depth = max(depth, curr_depth)
-            stack.append((root.left, curr_depth + 1))
-            stack.append((root.right, curr_depth + 1))
-                
-        return depth
+                if node.left:
+                    queue.append((node.left, level + 1))
+                if node.right:
+                    queue.append((node.right, level + 1))
 
-
-## iterative 2
-##################
-class Solution:
-    def max_depth(self, root: TreeNode) -> int:
-        stack = []
-        if root:
-            stack.append((root, 1))
+            return depth
         
+        queue = deque([(root, 1)])
         depth = 0
+        
+        return bfs()
+
+
+## iterative
+##############################
+class Solution:
+    def maxDepth(self, root: Optional[TreeNode]) -> int:
+        stack = []
+        depth = 0
+        
+        if root:
+            stack.append((root, 1))
+            
         while stack:
             root, curr_depth = stack.pop()
+            
             if root:
                 depth = max(depth, curr_depth)
                 stack.append((root.left, curr_depth + 1))
@@ -203,56 +115,70 @@ class Solution:
         return depth
 
 
-## recursive one line
-#########################
+## bfs
+##############################
 class Solution:
-    def max_depth(self, root: TreeNode) -> int:
-        return 1 + max(map(self.max_depth, (root.left, root.right))) if root else 0
+    def maxDepth(self, root: Optional[TreeNode]) -> int:
+        if not root:
+            return 0
+        
+        queue = [root]
+        depth = 0
+        
+        while queue:
+            depth += 1
+            level = []
+            
+            for node in queue:
+                if node.left:
+                    level.append(node.left)
+                if node.right:
+                    level.append(node.right)
+                    
+            queue = level
+            
+        return depth
+
+
+## 
+##############################
+class Solution:
+    def maxDepth(self, root: Optional[TreeNode]) -> int:
+        pass
 
 
 ## Tests
-############
+#############
 
-test1 = [3, 9, 20, None, None, 15, 7]   # 3
-test2 = [1, None, 2]                    # 2
-test3 = []                              # 0
-test4 = [0]                             # 1
-
-tests = (
-    test1,
-    test2,
-    test3,
-    test4,
-)
+import unittest
 
 
-def test(*args):
-    count = 0
-
-    def run():
-        for test in args:
-            nonlocal count
-            count += 1
-            result = max_depth(test)
-            print(f"test: {count}")
-            print(f"result {count}: {result}")
-
-    return run()
+class Test(unittest.TestCase):
+    def test_cases(self):
+        solution = Solution()
+        self.assertEqual(solution. , )
 
 
-test(*tests)
+if __name__ == "__main__":
+    unittest.main()
 
+
+## LeetCode Solutions
+#########################
 
 ## Approach 1: Recursion
-############################
-# time: O(N) - We visit each node exactly once, thus the time complexity is
-#              O(N), where N is the number of nodes.
-# space: O(N) - In the worst case, the tree is completely unbalanced, e.g. each
-#               node has only left child node, the recursion call would occur N
-#               times (the height of the tree), therefore the storage to keep
-#               the call stack would be O(N). But in the best case (the tree is
-#               completely balanced), the height of the tree would be log(N).
-#               Therefore, the space complexity in this case would be O(log(N)).
+##############################
+# Time: O(N)
+# - We visit each node exactly once, thus the time complexity is O(N), where N
+#   is the number of nodes.
+
+# Space: O(N)
+# - In the worst case, the tree is completely unbalanced, e.g. each node has
+#   only left child node, the recursion call would occur N times (the height of
+#   the tree), therefore the storage to keep the call stack would be O(N). But
+#   in the best case (the tree is completely balanced), the height of the tree
+#   would be log(N). Therefore, the space complexity in this case would
+#   be O(log(N)).
 class Solution:
     def maxDepth(self, root):
         """
@@ -269,10 +195,25 @@ class Solution:
 
 ## Approach 2: Tail Recursion + BFS
 #######################################
-# time: O(N) - Still we visit each node once and only once.
-# space: O(N) - i.e. the maximum number of nodes at the same level (the number
-#               of leaf nodes in a full binary tree), since we traverse the tree#               in the BFS manner. 
-#               O(2 ^ (log(N - 1)) == O(N / 2) == O(N)
+# Time: O(N) - Still we visit each node and only once.
+# Space: O(N) - The maximun number of nodes at the same level (the number of
+#               leaf nodes in a full binary tree), since we traverse the tree
+#               in the bfs manner.
+#               O(2^(log_2(N - 1))) = O(N/2) = O(N)
+
+# - As one can see, this probably is not the best example to apply the tail
+#   recursion technique. Because though we did gain the constant space
+#   complexity for the recursive calls, we pay the price of O(N) complexity to
+#   maintain the state information for recursive calls. This defeats the
+#   purpose of applying tail recursion.
+# - However, we would like to stress on the point that tail recursion is a
+#   useful form of recursion that could eliminate the space overhead incurred
+#   by the recursive function calls.
+
+# Note: a function cannot be tail recursion if there are multiple occurrences of
+# recursive calls in the function, even if the last action is the recursive
+# call. Because the system has to maintain the function call stack for the
+# sub-function calls that occur within the same function.
 
 ## C++
 #class Solution {
@@ -330,14 +271,17 @@ class Solution:
 #    }
 #};
 
+
 ## Approach 3: Iteration
-############################
-# time: O(N)
-# space: O(N) - in the worst case, the tree is completely unbalanced, e.g. each
-#               node has only left child node, the recursion call would occur N
-#               times (the height of the tree), therefore the storage to keep
-#               the call stack would be O(N). But in the average case (the tree
-#               is balanced), the height of the tree would be log(N). Therefore,#               the space complexity in this case would be O(log(N)).
+##############################
+# Time: O(N)
+# Space: O(logN)
+# - In the worst case, the tree is completely unbalanced, e.g. each node has
+#   only left child node, the recursion call would occur N times (the height of
+#   the tree), therefore the storage to keep the call stack would be O(N). But
+#   in the average case (the tree is balanced), the height of the tree would be
+#   log(N). Therefore, the space complexity in this case would be O(log(N)).
+
 class Solution:
     def maxDepth(self, root):
         """
@@ -357,4 +301,5 @@ class Solution:
                 stack.append((current_depth + 1, root.right))
         
         return depth
+
 

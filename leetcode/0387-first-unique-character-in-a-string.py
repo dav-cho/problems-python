@@ -23,70 +23,45 @@
 
 ####################################################################
 
-## Approach 1: Linear Time Solution
-#######################################
-# time: O(n)
-# space: O(1)
+## first attempt
+##############################
+from collections import Counter
+
 class Solution:
     def firstUniqChar(self, s: str) -> int:
-        pass
-
-
-# string slices using pointer
-def firstUniqChar(s: str) -> int:
-    for i, char in enumerate(s):
-        front = s[:i]
-        back = s[i + 1 :]
-
-        if char not in front and char not in back:
-            return i
-
-    return -1
-
-
-# hash map using Counter
-def firstUniqChar(s: str) -> int:
-    counts = Counter(s)
-
-    for char in counts:
-        if counts[char] == 1:
-            return s.index(char)
-
-    return -1
+        counts = Counter(s)
+        for i, char in enumerate(s):
+            if counts[char] == 1:
+                return i
+            
+        return -1
 
 
 ## Tests
-############
-def test(arr):
-    solution = Solution()
-    count = 1
+#############
 
-    def run():
-        for test in arr:
-            result = solution.firstUniqChar(test)
-            nonlocal count
-            print(f"~ test {count}")
-            print(f"{test} --> {result}")
-
-    return run()
+import unittest
 
 
-tests = ["leetcode", "loveleetcode", "aabb"]
-#            0             2           -1
+class Test(unittest.TestCase):
+    def test_cases(self):
+        solution = Solution()
+        self.assertEqual(solution.firstUniqChar("leetcode"), 0)
+        self.assertEqual(solution.firstUniqChar("loveleetcode"), 2)
+        self.assertEqual(solution.firstUniqChar("aabb"), -1)
 
-test(tests)
+
+if __name__ == "__main__":
+    unittest.main()
 
 
 ## LeetCode Solutions
 #########################
 
-
-import collections
-
 ## Approach 1: Linear Time Solution
 #######################################
-# time: O(n) - we go through the string of length n, two times
-# space: O(1) - english alphabet contains 26 letters - constant space
+# Time: O(N) - Since we go through the string of length N two times.
+# Space: O(1) - Because English alphabet contains 26 letters.
 class Solution:
     def firstUniqChar(self, s: str) -> int:
         """
@@ -95,9 +70,11 @@ class Solution:
         """
         # build hash map : character and how often it appears
         count = collections.Counter(s)
-
+        
         # find the index
         for idx, ch in enumerate(s):
             if count[ch] == 1:
-                return idx
+                return idx     
         return -1
+
+

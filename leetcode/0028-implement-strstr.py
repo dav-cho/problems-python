@@ -1,6 +1,6 @@
 ##
 #### Implement strStr() (easy)
-##################################
+########################################
 
 # Implement strStr().
 
@@ -8,10 +8,11 @@
 # needle is not part of haystack.
 
 # Clarification:
-# - What should we return when needle is an empty string? This is a great
-#   question to ask during an interview.
-# - For the purpose of this problem, we will return 0 when needle is an empty
-#   string. This is consistent to C's strstr() and Java's indexOf().
+# What should we return when needle is an empty string? This is a great question
+# to ask during an interview.
+
+# For the purpose of this problem, we will return 0 when needle is an empty
+# string. This is consistent to C's strstr() and Java's indexOf().
 
 # Example 1:
 # Input: haystack = "hello", needle = "ll"
@@ -31,31 +32,35 @@
 
 ################################################################################
 
-## 
+## first attempt
 ##############################
 class Solution:
     def strStr(self, haystack: str, needle: str) -> int:
         if not needle:
             return 0
         
-        return haystack.index(needle) if needle in haystack else -1
+        N = len(haystack)
+        M = len(needle)
+        
+        for i in range(N - M + 1):
+            if haystack[i:i + M] == needle:
+                return i
+        
+        return -1
 
-    
+
 ## 
 ##############################
 class Solution:
     def strStr(self, haystack: str, needle: str) -> int:
-        if not needle:
-            return 0
-        if haystack == needle:
-            return 0
+        pass
 
-        n = len(needle)
-        for i in range(len(haystack) - n + 1):
-            if needle == haystack[i:i + n]:
-                return i
-            
-        return -1
+
+## 
+##############################
+class Solution:
+    def strStr(self, haystack: str, needle: str) -> int:
+        pass
 
 
 ## Tests
@@ -67,7 +72,9 @@ import unittest
 class Test(unittest.TestCase):
     def test_cases(self):
         solution = Solution()
-        self.assertEqual(solution. , )
+        self.assertEqual(solution.strStr("hello", "ll"), 2)
+        self.assertEqual(solution.strStr("aaaaa", "bba"), -1)
+        self.assertEqual(solution.strStr("", ""), 0)
 
 
 if __name__ == "__main__":

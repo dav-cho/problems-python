@@ -51,11 +51,39 @@
 
 ################################################################################
 
-## 
+## dfs
 ##############################
 class Solution:
+    GRAY = 1
+    BLACK = 2
+
     def leadsToDestination(self, n: int, edges: list[list[int]], source: int, destination: int) -> bool:
-        pass
+        graph = self.build_digraph(n, edges)
+        return self.leads_to_dest(graph, source, destination, [None] * n)
+    
+    def leads_to_dest(self, graph, node, dest, states):
+        if states[node] != None:
+            return states[node] == Solution.BLACK
+        
+        if len(graph[node]) == 0:
+            return node == dest
+        
+        states[node] = Solution.GRAY
+        
+        for next_node in graph[node]:
+            if not self.leads_to_dest(graph, next_node, dest, states):
+                return False
+            
+        states[node] = Solution.BLACK
+        
+        return True
+    
+    def build_digraph(self, n, edges):
+        graph = [[] for _ in range(n)]
+        for x, y in edges:
+            graph[x].append(y)
+        
+        return graph
 
 
 ## Tests
@@ -67,7 +95,11 @@ import unittest
 class Test(unittest.TestCase):
     def test_cases(self):
         solution = Solution()
-        self.assertEqual(solution. , )
+        self.assertEqual(solution.leadsToDestination(3, [[0,1],[0,2]], 0, 2), False)
+        self.assertEqual(solution.leadsToDestination(4, [[0,1],[0,3],[1,2],[2,1]], 0, 3), False)
+        self.assertEqual(solution.leadsToDestination(4, [[0,1],[0,2],[1,3],[2,3]], 0, 3), True)
+        self.assertEqual(solution.leadsToDestination(3, [[0,1],[1,1],[1,2]], 0, 2), False)
+        self.assertEqual(solution.leadsToDestination(2, [[0,1],[1,1]], 0, 1), False)
 
 
 if __name__ == "__main__":
@@ -77,10 +109,62 @@ if __name__ == "__main__":
 ## LeetCode Solutions
 #########################
 
-## Approach 1: 
-##############################
-# Time: 
-# Space: 
+## Approach 1: Depth First Search
+#####################################
+# Time: O(V)
+# - Typically for an entire DFS over an input graph, it takes O(V + E) where V
+#   represents the number of vertices in the graph and likewise, E represents
+#   the number of edges in the graph. In the worst case E can be O(V^2) in case
+#   each vertex is connected to every other vertex in the graph. However even
+#   in the worst case, we will end up discovering a cycle very early on and
+#   prune the recursion tree. If we were to traverse the entire graph, then the
+#   complexity would be O(V^2) as the O(E) part would dominate. However, due to
+#   pruning and backtracking in case of cycle detection, we end up with an
+#   overall time complexity of O(V).
+# Space: O(V + E)
+# - Where O(E) is occupied by the adjacency list and O(V) is occupied by the
+#   recursion stack and the color states.
+
+class Solution:
+    
+    # We don't use the state WHITE as such anywhere. Instead, the "null" value in the states array below is a substitute for WHITE.
+    GRAY = 1
+    BLACK = 2
+
+    def leadsToDestination(self, n: int, edges: List[List[int]], source: int, destination: int) -> bool:
+        graph = self.buildDigraph(n, edges)
+        return self.leadsToDest(graph, source, destination, [None] * n)
+        
+    def leadsToDest(self, graph, node, dest, states):
+        
+        # If the state is GRAY, this is a backward edge and hence, it creates a Loop.
+        if states[node] != None:
+            return states[node] == Solution.BLACK
+        
+        # If this is a leaf node, it should be equal to the destination.
+        if len(graph[node]) == 0:
+            return node == dest
+        
+        # Now, we are processing this node. So we mark it as GRAY.
+        states[node] = Solution.GRAY
+        
+        for next_node in graph[node]:
+            
+            # If we get a `false` from any recursive call on the neighbors, we short circuit and return from there.
+            if not self.leadsToDest(graph, next_node, dest, states):
+                return False;
+        
+        # Recursive processing done for the node. We mark it BLACK.
+        states[node] = Solution.BLACK
+        return True
+        
+    def buildDigraph(self, n, edges):
+        graph = [[] for _ in range(n)]
+        
+        for edge in edges:
+            graph[edge[0]].append(edge[1])
+            
+        return graph
 
 
 ## Approach 2: 

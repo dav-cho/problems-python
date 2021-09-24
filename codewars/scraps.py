@@ -159,9 +159,184 @@ def presses(phrase):
 
 ######################################################################
 
-creams = 180
-a = 65
-b = 84
-c = 60
+a = 15
+b = 14
+c = 13
+d = 13
+e = 8
+
+total = sum([a, b, c, d, e])
 
 ######################################################################
+
+def count_one(n):
+    count = 0
+
+    while n:
+        n = n & (n - 1)
+        count += 1
+    
+    return count
+
+
+def get_sum(a, b):
+    if b == 0:
+        return a
+
+    print('^', a ^ b)
+    print('&', a & b)
+
+    return get_sum(a ^ b, (a & b) << 1)
+
+def missing_number(nums):
+    res = 0
+
+    for i, num in enumerate(nums):
+        res ^= i
+        res ^= num
+
+    res ^= len(nums)
+
+    return res
+
+######################################################################
+
+def bitwise_not(arr):
+    for num in arr:
+        print(f"""
+            num:    {num}
+            ~:      {~num}
+            math:   {5 - num - 1}
+            ~math:  {~num + 5}""")
+
+#bitwise_not(range(10))
+
+######################################################################
+
+from pprint import pprint
+
+
+def rotate(matrix):
+    N = len(matrix)
+
+    pprint(matrix)
+
+    for i in range(N):
+        for j in range(i):
+            matrix[i][j], matrix[j][i] = matrix[j][i], matrix[i][j]
+
+    pprint(matrix)
+
+######################################################################
+
+a = [[1,4,7],
+     [2,5,8],
+     [3,6,9]]
+
+b = [[1,2,3],
+     [4,5,6],
+     [7,8,9]]
+
+######################################################################
+
+#for i in range(5):
+#    print('&:', i & 1)
+#    print('1-:', 1 - i & 1)
+
+######################################################################
+
+a = {1, 2, 3}
+b = {3, 4, 5}
+c = {5, 6, 7}
+
+#print(a | b)
+#print(b | c)
+#print(a | c)
+#print(a | b | c)
+
+#print(set(range(1, 10)) - set(range(1, 6)))
+
+######################################################################
+
+a = int('00101100', 2)
+b = bin(44)
+#print(a)
+#print(b)
+
+c = bin(123)
+d = f'{123:08b}'
+e = '{0:08b}'.format(123)
+#print(c)
+#print(d)
+#print(e)
+
+f = int('00101100', 2)
+#g = f"{00101100:d}"
+#print(f)
+#print(g)
+
+######################################################################
+
+converted = 0
+
+for i, val in enumerate(d[::-1]):
+    #print(f'val{i}:', val)
+    #print('&:', int(val) & 1)
+    #print('<<:', 1 << i)
+    #print('& <<:', int(val) & (1 << i))
+
+    if int(val) & 1 == 1:
+        converted += 1 << i
+        #print('converted:', converted)
+
+######################################################################
+
+read = 4
+write = 2
+execute = 1
+
+my_permission = 0
+my_permission = read | write | execute
+#print(my_permission)
+
+my_permission = 0
+my_permission = my_permission | read | write | execute
+#print(my_permission)
+
+my_permission = 0
+my_permission = my_permission | read | write
+#print(my_permission)
+
+message = 'yes' if my_permission & read else 'no'
+#print(message)
+message = 'yes' if my_permission & write else 'no'
+#print(message)
+message = 'yes' if my_permission & execute else 'no'
+#print(message)
+
+######################################################################
+
+#print('15pcs:', 9.75 / 15)
+#print('35pcs:', 21.70 / 35)
+#print('70pcs:', 25.90 / 70)
+#print('90pcs:', 32.40 / 90)
+#print('110pcs:', 38.50 / 110)
+#print('120pcs:', 25.90 * 2 / 140)
+#print()
+
+#print('cobalt:', 45.50 / 70)
+#print('coffee', 51.70 / 110)
+
+######################################################################
+
+a = [1, 2, 3]
+b = [3, 4, 5]
+
+from collections import Counter
+
+counts_a = Counter(a)
+counts_b = Counter(b)
+#print(list(counts_a & counts_b))
+
+######################################################################
+

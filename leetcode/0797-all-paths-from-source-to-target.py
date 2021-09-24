@@ -39,6 +39,56 @@
 
 ################################################################################
 
+## bfs
+##############################
+class Solution:
+    def allPathsSourceTarget(self, graph: list[list[int]]) -> list[list[int]]:
+                res = []
+        if not graph or len(graph) == 0:
+            return res
+        
+        path = [0]
+        queue = deque([path])
+        
+        while queue:
+            curr_path = queue.popleft()
+            node = curr_path[-1]
+            for neighbor in graph[node]:
+                temp_path = curr_path.copy()
+                temp_path.append(neighbor)
+                
+                if neighbor == len(graph) - 1:
+                    res.append(temp_path)
+                else:
+                    queue.append(temp_path)
+                    
+        return res
+
+
+class Solution:
+    def allPathsSourceTarget(self, graph: list[list[int]]) -> list[list[int]]:
+        res = []
+        if not graph or len(graph) == 0:
+            return res
+
+        path = [0]
+        queue = deque([path])
+        
+        while queue:
+            curr_path = queue.popleft()
+            node = curr_path[-1]
+            for neighbor in graph[node]:
+                temp_path = list(curr_path)
+                temp_path.append(neighbor)
+                
+                if neighbor == len(graph) - 1:
+                    res.append(temp_path)
+                else:
+                    queue.append(temp_path)
+                    
+        return res
+
+
 ## dfs
 ##############################
 class Solution:
@@ -301,5 +351,32 @@ class Solution:
             return results
 
         return allPathsToTarget(0)
+
+
+## Approach 3: bfs (from graphs explore card)
+#################################################
+class Solution:
+    def allPathsSourceTarget(self, graph: List[List[int]]) -> List[List[int]]:
+        paths = []
+        if not graph or len(graph) == 0:
+            return paths
+
+        queue = deque()
+        path = [0]
+        queue.append(path)
+
+        while queue:
+            currentPath = queue[0]
+            queue.popleft()
+            node = currentPath[-1]
+            for nextNode in graph[node]:
+                tmpPath = currentPath.copy()
+                tmpPath.append(nextNode)
+
+                if nextNode == len(graph) - 1:
+                    paths.append(tmpPath)
+                else:
+                    queue.append(tmpPath)
+        return paths
 
 

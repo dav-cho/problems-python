@@ -38,6 +38,31 @@
 
 ################################################################################
 
+## best - bfs
+##############################
+class Solution:
+    def validPath(self, n: int, edges: list[list[int]], start: int, end: int) -> bool:
+        adj_list = [[] for _ in range(n)]
+        for x, y in edges:
+            adj_list[x].append(y)
+            adj_list[y].append(x)
+            
+        seen = {start}
+        queue = deque([start])
+        
+        while queue:
+            node = queue.popleft()
+            if node == end:
+                return True
+            
+            for neighbor in adj_list[node]:
+                if neighbor not in seen:
+                    queue.append(neighbor)
+                    seen.add(neighbor)
+                
+        return False
+
+
 ## dfs
 ##############################
 class Solution:

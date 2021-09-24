@@ -72,7 +72,7 @@ class Solution:
                 curr = next_idx
                 count += 1
 
-                if start == curr:
+                if curr == start:
                     break
             start += 1
 

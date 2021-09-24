@@ -23,15 +23,23 @@
 
 #################################################################################
 
-
-## simple
+## two pointer - best
 ##############################
 class Solution:
     def reverseString(self, s: list[str]) -> None:
-        s.reverse()
+        for i in range(len(s) // 2):
+            s[i], s[-i - 1] = s[-i - 1], s[i]
 
 
-## recursion
+## first attempt
+##############################
+class Solution:
+    def reverseString(self, s: list[str]) -> None:
+        for i in range(len(s) // 2):
+            s[i], s[-(i + 1)] = s[-(i + 1)], s[i]
+
+
+## recursive - O(n) space
 ##############################
 class Solution:
     def reverseString(self, s: list[str]) -> None:
@@ -43,62 +51,30 @@ class Solution:
         helper(0, len(s) - 1)
 
 
-## 2 pointers
-##############################
-class Solution:
-    def reverseString(self, s: list[str]) -> None:
-        left, right = 0, len(s) - 1
-        while left < right:
-            s[left], s[right] = s[right], s[left]
-            left += 1; right -= 1
-
-
-class Solution:
-    def reverseString(self, s: list[int]) -> None:
-        start = 0
-        end = len(s) - 1
-
-        while start < end:
-            s[start], s[end] = s[end], s[start]
-            start += 1
-            end -= 1
-
-
 ## Tests
-############
-def test(*args):
-    solution = Solution()
-    count = 0
+#############
 
-    def run():
-        for test in args:
-            nonlocal count
-            count += 1
-            print(f"test {count}")
-            solution.reverseString(test)
-
-    return run()
+import unittest
 
 
-test1 = ["h", "e", "l", "l", "o"]
-test2 = ["H", "a", "n", "n", "a", "h"]
+class Test(unittest.TestCase):
+    def test_cases(self):
+        solution = Solution()
+        self.assertEqual(solution.reverseString(["h","e","l","l","o"]), ["o","l","l","e","h"])
+        self.assertEqual(solution.reverseString(["H","a","n","n","a","h"]), ["h","a","n","n","a","H"])
 
-test(test1, test2)
+
+if __name__ == "__main__":
+    unittest.main()
 
 
 ## LeetCode Solutions
 #########################
 
-## Life is short, use Python
-class Solution:
-    def reverseString(self, s):
-        s.reverse()
-
-
-## Approach 1: Recursion, In-Place, O(N) Space 
+## Approach 1: Recursion, In-Place, O(N) Space
 ##################################################
-# time: O(N) - Time to perform N/2N/2 swaps.
-# space: O(N) - To keep the recursion stack
+# Time: O(N) - Time to perform N/2 swaps.
+# Space: O(N) - To keep the recursion stack.
 class Solution:
     def reverseString(self, s):
         def helper(left, right):
@@ -111,12 +87,13 @@ class Solution:
 
 ## Approach 2: Two Pointers, Iteration, O(1) Space
 ######################################################
-# time: O(N) - To swap N/2 element.
-# space: O(1) - It's a constant space solution.
+# Time: O(N) - To swap N/2 elements.
+# Space: O(1) - It's a constant space solution.
 class Solution:
     def reverseString(self, s):
         left, right = 0, len(s) - 1
         while left < right:
             s[left], s[right] = s[right], s[left]
             left, right = left + 1, right - 1
+
 
