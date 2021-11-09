@@ -1,27 +1,26 @@
 ##
 #### Min Stack (easy)
-#########################
+########################################
 
 # Design a stack that supports push, pop, top, and retrieving the minimum
 # element in constant time.
 
 # Implement the MinStack class:
+
 # MinStack() initializes the stack object.
-# void push(val) pushes the element val onto the stack.
+# void push(int val) pushes the element val onto the stack.
 # void pop() removes the element on the top of the stack.
 # int top() gets the top element of the stack.
 # int getMin() retrieves the minimum element in the stack.
  
 # Example 1:
-# Input
+# Input:
 # ["MinStack","push","push","push","getMin","pop","top","getMin"]
 # [[],[-2],[0],[-3],[],[],[],[]]
-
-# Output
+# Output:
 # [null,null,null,null,-3,null,0,-2]
-
-# Explanation
-# MinStack minStack = new MinStack();
+# Explanation:
+# minStack minStack = new MinStack();
 # minStack.push(-2);
 # minStack.push(0);
 # minStack.push(-3);
@@ -30,75 +29,36 @@
 # minStack.top();    // return 0
 # minStack.getMin(); // return -2
 
-# Constraints:
+# constraints:
 # -231 <= val <= 231 - 1
-# Methods pop, top and getMin operations will always be called on non-empty stacks.
-# At most 3 * 104 calls will be made to push, pop, top, and getMin.
+# methods pop, top and getMin operations will always be called on non-empty stacks.
+# at most 3 * 104 calls will be made to push, pop, top, and getMin.
+
+# Your MinStack object will be instantiated and called as such:
+# obj = MinStack()
+# obj.push(val)
+# obj.pop()
+# param_3 = obj.top()
+# param_4 = obj.getMin()
 
 ################################################################################
 
-## basic
-############
+## stack with min/value pairs
+#################################
 class MinStack:
     def __init__(self):
         self.stack = []
-        self.min = float('inf')
 
     def push(self, val: int) -> None:
-        self.stack.append(val)
+        if not self.stack:
+            curr_min = val
+        else:
+            curr_min = min(self.stack[-1][1], val)
+            
+        self.stack.append((val, curr_min))
 
     def pop(self) -> None:
         return self.stack.pop()
-
-    def top(self) -> int:
-        return self.stack[-1]
-
-    def getMin(self) -> int:
-        return min(self.stack)
-
-
-class MinStack:
-    def __init__(self):
-        self.stack = []
-        self.min = float('inf')
-
-    def push(self, val: int) -> None:
-        self.stack.append(val)
-        
-        if val < self.min:
-            self.min = val
-
-    def pop(self) -> None:
-        val = self.stack.pop()
-        if val == self.min:
-            if self.stack:
-                self.min = min(self.stack)
-            else:
-                self.min = float('inf')
-            
-        return val
-
-    def top(self) -> int:
-        return self.stack[-1]
-
-    def getMin(self) -> int:
-        return self.min
-
-
-## value and min pair
-#########################
-class MinStack:
-    def __init__(self):
-        self.stack = []
-
-    def push(self, val: int) -> None:
-        if self.stack:
-            self.stack.append((val, min(self.stack[-1][1], val)))
-        else:
-            self.stack.append((val, val))
-
-    def pop(self) -> None:
-        return self.stack.pop()[0]
 
     def top(self) -> int:
         return self.stack[-1][0]
@@ -108,106 +68,128 @@ class MinStack:
 
 
 ## two stacks
-#################
+##############################
 class MinStack:
     def __init__(self):
         self.stack = []
-        self.min_stack = []
+        self.mins = []
 
     def push(self, val: int) -> None:
+        if not self.mins:
+            self.mins.append(val)
+        elif val <= self.mins[-1]:
+            self.mins.append(val)
+            
         self.stack.append(val)
-        
-        if not self.min_stack or val <= self.min_stack[-1]:
-            self.min_stack.append(val)
 
     def pop(self) -> None:
-        val = self.stack.pop()
-        if val == self.min_stack[-1]:
-            self.min_stack.pop()
+        if self.stack[-1] == self.mins[-1]:
+            self.mins.pop()
             
-        return val
+        return self.stack.pop()
 
     def top(self) -> int:
         return self.stack[-1]
 
     def getMin(self) -> int:
-        return self.min_stack[-1]
+        return self.mins[-1]
 
 
 class MinStack:
     def __init__(self):
         self.stack = []
-        self.min_stack = []
+        self.mins = []
 
     def push(self, val: int) -> None:
-        if not self.stack:
-            self.stack.append(val)
-            self.min_stack.append(val)
-            return
+        if not self.mins or val <= self.mins[-1]:
+            self.mins.append(val)
         
         self.stack.append(val)
-        
-        if val <= self.min_stack[-1]:
-            self.min_stack.append(val)
 
     def pop(self) -> None:
-        val = self.stack.pop()
-        if val == self.min_stack[-1]:
-            self.min_stack.pop()
+        if self.stack[-1] == self.mins[-1]:
+            self.mins.pop()
             
-        return val
+        return self.stack.pop()
 
     def top(self) -> int:
         return self.stack[-1]
 
     def getMin(self) -> int:
-        return self.min_stack[-1]
+        return self.mins[-1]
 
 
-## two stacks improved
-##########################
+## improved two stacks
+##############################
 class MinStack:
     def __init__(self):
         self.stack = []
-        self.min_stack = []
+        self.mins = []
 
     def push(self, val: int) -> None:
+        if not self.mins or val < self.mins[-1][0]:
+            self.mins.append([val, 1])
+        elif val == self.mins[-1][0]:
+            self.mins[-1][1] += 1
+        
         self.stack.append(val)
-        
-        if not self.min_stack or val < self.min_stack[-1][0]:
-            self.min_stack.append([val, 1])
-        elif val == self.min_stack[-1][0]:
-            self.min_stack[-1][1] += 1
-            
+
     def pop(self) -> None:
-        val = self.stack.pop()
+        if self.mins[-1][0] == self.stack[-1]:
+            self.mins[-1][1] -= 1
+        if self.mins[-1][1] == 0:
+            self.mins.pop()
         
-        if val == self.min_stack[-1][0]:
-            self.min_stack[-1][1] -= 1
-        if self.min_stack[-1][1] <= 0:
-            self.min_stack.pop()
-            
-        return val
+        return self.stack.pop()
 
     def top(self) -> int:
         return self.stack[-1]
 
     def getMin(self) -> int:
-        return self.min_stack[-1][0]
+        return self.mins[-1][0]
+
+
+## first attempt
+##############################
+class MinStack:
+    def __init__(self):
+        self.stack = []
+        self.mins = []
+
+    def push(self, val: int) -> None:
+        if self.mins:
+            self.mins.append(min(self.min[-1], val))
+        else:
+            self.mins.append(val)
+            
+        self.stack.append(val)
+
+    def pop(self) -> None:
+        self.mins.pop()
+        
+        return self.stack.pop()
+
+    def top(self) -> int:
+        return self.stack[-1]
+
+    def getMin(self) -> int:
+        return self.mins[-1]
 
 
 ## Tests
 #############
 
-minStack = MinStack()
-minStack.push(-2)
-minStack.push(0)
-minStack.push(-3)
-print(minStack.getMin())   # return -3
-print(minStack.pop())
-print(minStack.top())  # return 0
-print(minStack.getMin())  # return -2
-print(minStack.stack)
+import unittest
+
+
+class Test(unittest.TestCase):
+    def test_cases(self):
+        solution = Solution()
+        self.assertEqual(solution. , )
+
+
+if __name__ == "__main__":
+    unittest.main()
 
 
 ## LeetCode Solutions
@@ -215,20 +197,23 @@ print(minStack.stack)
 
 ## Approach 1: Stack of Value/ Minimum Pairs
 ################################################
-# Time: O(1) - For all operations
-# push(...) - Checking the top of a Stack, comparing numbers, and pushing to
-#             the top of a Stack (or adding to the end of an Array or List) are
-#              all O(1) operations. Therefore, this overall is an O(1) operation.
-# pop(...) - Popping from a Stack (or removing from the end of an Array, or
-#            List) is an O(1) operation.
-# top(...) - Looking at the top of a Stack is an O(1) operation.
-# getMin(...) - Same as above. This operation is O(1) because we do not need to
-#               compare values to find it. If we had not kept track of it on the
-#               Stack, and instead had to search for it each time, the overall
-#               time complexity would have been O(n).
+# Time: O(1) - For all operations.
+# - push(...): Checking the top of a Stack, comparing numbers, and pushing to
+#              the top of a Stack (or adding to the end of an Array or List)
+#              are all O(1) operations. Therefore, this overall is an O(1)
+#              operation.
+# - pop(...): Popping from a Stack (or removing from the end of an Array, or
+#             List) is an O(1) operation.
+# - top(...): Looking at the top of a Stack is an O(1) operation.
+# - getMin(...): Same as above. This operation is O(1) because we do not need
+#                to compare values to find it. If we had not kept track of it
+#                on the Stack, and instead had to search for it each time, the
+#                overall time complexity would have been O(n).
 
-# Space: O(n) - Worst case is that all the operations are push. In this case,
-#               there will be (2 * n) = O(n) space used.
+# Space: O(n)
+# - Worst case is that all the operations are push. In this case, there will be
+#   O(2⋅n)=O(n) space used.
+
 class MinStack:
 
     def __init__(self):
@@ -260,9 +245,8 @@ class MinStack:
 
 
 ## Approach 2: Two Stacks
-#############################
-# Time: O(1) - For all operations. Same as above. All our modifications are
-#              still O(1).
+##############################
+# Time: O(1) - Same as above. All our modifications are still O(1).
 # Space: O(n) - Same as above.
 class MinStack:
 
@@ -336,6 +320,6 @@ class MinStack:
 
 
     def getMin(self) -> int:
-        return self.min_stack[-1][0]   
+        return self.min_stack[-1][0]
 
 

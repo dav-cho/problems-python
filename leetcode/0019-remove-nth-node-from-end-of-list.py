@@ -39,7 +39,24 @@ class ListNode:
 class Solution:
     def removeNthFromEnd(self, head: Optional[ListNode], n: int) -> Optional[ListNode]:
         sentinel = ListNode(None, head)
-        size = 0
+        slow = sentinel
+        fast = head
+        
+        for _ in range(n):
+            fast = fast.next
+            
+        while fast:
+            slow = slow.next
+            fast = fast.next
+            
+        slow.next = slow.next.next if slow.next else None
+        
+        return sentinel.next
+
+
+class Solution:
+    def removeNthFromEnd(self, head: Optional[ListNode], n: int) -> Optional[ListNode]:
+        sentinel = ListNode(None, head)
         left = sentinel
         right = head
         

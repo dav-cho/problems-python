@@ -34,8 +34,61 @@ class TreeNode:
         self.left = left
         self.right = right
 
+
 ## recursive
 ################
+class Solution:
+    def isSymmetric(self, root: TreeNode) -> bool:
+        def helper(a, b):
+            if not a and not b:
+                return True
+            if not a or not b:
+                return False
+            if a.val != b.val:
+                return False
+            
+            outside = helper(a.left, b.right)
+            inside = helper(a.right, b.left)
+            
+            return outside and inside
+        
+        return helper(root, root)
+
+
+class Solution:
+    def isSymmetric(self, root: TreeNode) -> bool:
+        def helper(node_a, node_b):
+            if not node_a and not node_b:
+                return True
+            if not node_a or not node_b:
+                return False
+            if node_a.val != node_b.val:
+                return False
+            
+            left = helper(node_a.left, node_b.right)
+            right = helper(node_a.right, node_b.left)
+            
+            return left and right
+        
+        return helper(root, root)
+
+
+class Solution:
+    def isSymmetric(self, root: TreeNode) -> bool:
+        def helper(node_a, node_b):
+            if not node_a and not node_b:
+                return True
+            if not node_a or not node_b:
+                return False
+            
+            left = helper(node_a.left, node_b.right)
+            right = helper(node_a.right, node_b.left)
+            
+            return node_a.val == node_b.val and left and right
+        
+        return helper(root, root)
+
+
 class Solution:
     def isSymmetric(self, root: TreeNode) -> bool:
         def is_mirror(node1, node2):
@@ -72,7 +125,48 @@ class Solution:
 ################
 class Solution:
     def isSymmetric(self, root: TreeNode) -> bool:
+        stack = [(root, root)]
+        
+        while stack:
+            a, b = stack.pop()
+            
+            if not a and not b:
+                continue
+            if not a or not b:
+                return False
+            if a.val != b.val:
+                return False
+            
+            stack.append((a.left, b.right))
+            stack.append((a.right, b.left))
+            
+        return True
+
+
+class Solution:
+    def isSymmetric(self, root: TreeNode) -> bool:
+        stack = [(root, root)]
+        
+        while stack:
+            node_a, node_b = stack.pop()
+            
+            if not node_a and not node_b:
+                continue
+            if not node_a or not node_b:
+                return False
+            if node_a.val != node_b.val:
+                return False
+            
+            stack.append((node_a.left, node_b.right))
+            stack.append((node_a.right, node_b.left))
+            
+        return True
+
+
+class Solution:
+    def isSymmetric(self, root: TreeNode) -> bool:
         queue = [root, root]
+
         while queue:
             node1 = queue.pop()
             node2 = queue.pop()

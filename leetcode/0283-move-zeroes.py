@@ -23,20 +23,16 @@
 
 ########################################################################
 
-## first attempt
+
+## *best
 ##############################
 class Solution:
     def moveZeroes(self, nums: list[int]) -> None:
         k = 0
-        for num in nums:
-            if num != 0:
-                nums[k] = num
+        for i in range(len(nums)):
+            if nums[i] != 0:
+                nums[i], nums[k] = nums[k], nums[i]
                 k += 1
-        
-        for i in range(k, len(nums)):
-            nums[i] = 0
-
-        return nums
 
 
 ## operation sub-optimal, space sub-optimal
@@ -100,11 +96,20 @@ class Solution:
         return nums
 
 
-## 
+## first attempt
 ##############################
 class Solution:
     def moveZeroes(self, nums: list[int]) -> None:
-        pass
+        k = 0
+        for num in nums:
+            if num != 0:
+                nums[k] = num
+                k += 1
+        
+        for i in range(k, len(nums)):
+            nums[i] = 0
+
+        return nums
 
 
 ## Tests

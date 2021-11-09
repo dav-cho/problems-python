@@ -27,101 +27,6 @@ class ListNode:
         self.next = next
 
 
-## use an array of the values and compare reversed array
-############################################################
-class Solution:
-    def is_palindrome(self, head: ListNode) -> bool:
-        arr = []
-        curr = head
-        while curr:
-            arr.append(curr.val)
-            curr = curr.next
-        
-        return arr == arr[::-1]
-
-
-## recursive
-################
-class Solution:
-    def is_palindrome(self, head: ListNode) -> bool:
-        self.front_pointer = head
-
-        def recursively_check(curr=head):
-            if curr:
-                if not recursively_check(curr.next):
-                    return False
-                if self.front_pointer.val != curr.val:
-                    return False
-
-                self.front_pointer = self.front_pointer.next
-
-            return True
-
-        return recursively_check()
-
-
-## reverse second half in place
-###################################
-class Solution:
-    def is_palindrome(self, head: ListNode) -> bool:
-        if head is None:
-            return True
-
-        left_end = self.end_left(head)
-        right_start = self.reverse_list(left_end.next)
-
-        result = True
-        left = head
-        right = right_start
-        while result and right:
-            if left.val != right.val:
-                result = False
-
-            left = left.next
-            right = right.next
-
-        left_end.next = self.reverse_list(right_start)
-
-        return result
-
-    def end_left(self, head):
-        slow = head
-        fast = head
-        while fast.next and fast.next.next:
-            slow = slow.next
-            fast = fast.next.next
-
-        return slow
-
-    def reverse_list(self, head):
-        prev = None
-        curr = head
-        while curr:
-            curr.next, prev, curr = prev, curr, curr.next
-
-        return prev
-
-
-################################################################################
-
-
-## first attempt (wrong answer)
-##############################
-class Solution:
-    def isPalindrome(self, head: ListNode) -> bool:
-        stack = []
-        
-        while head:
-            if stack and head.val == stack[-1]:
-                stack.pop()
-            else:
-                stack.append(head.val)
-                
-            head = head.next
-            
-        return len(stack) == 0
-
-
 ## extra array
 ##############################
 class Solution:
@@ -179,6 +84,23 @@ class Solution:
         def helper(node):
             nonlocal head
             
+            if not node:
+                return True
+            if not helper(node.next) or node.val != head.val:
+                return False
+            
+            head = head.next
+            
+            return True
+        
+        return helper(head)
+
+
+class Solution:
+    def isPalindrome(self, head: ListNode) -> bool:
+        def helper(node):
+            nonlocal head
+            
             if node:
                 if not helper(node.next) or node.val != head.val:
                     return False
@@ -230,7 +152,26 @@ class Solution:
 ##############################
 class Solution:
     def isPalindrome(self, head: ListNode) -> bool:
-        pass
+        slow = fast = head
+        
+        while fast.next and fast.next.next:
+            slow = slow.next
+            fast = fast.next.next
+            
+        slow = slow.next
+        prev = None
+        
+        while slow:
+            slow.next, prev, slow = prev, slow, slow.next
+            
+        while prev:
+            if head.val != prev.val:
+                return False
+            
+            head = head.next
+            prev = prev.next
+            
+        return True
 
 
 ## Tests

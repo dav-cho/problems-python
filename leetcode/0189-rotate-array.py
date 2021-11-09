@@ -32,32 +32,49 @@
 
 ################################################################################
 
-## brute force(TLE)
-##############################
-class Solution:
-    def rotate(self, nums: list[int], k: int) -> None:
-        k %= len(nums)
-        
-        for i in range(k):
-            prev = nums[-1]
-            for j in range(len(nums)):
-                nums[j], prev = prev, nums[j]
-
-
-## extra array
-##############################
-class Solution:
-    def rotate(self, nums: list[int], k: int) -> None:
-        n = len(nums)
-        a = [0] * n
-        for i in range(n):
-            a[(i + k) % n] = nums[i]
-            
-        nums[:] = a
-
-
 ## cyclic replacements
 ##############################
+class Solution:
+    def rotate(self, nums: list[int], k: int) -> None:
+        N = len(nums)
+        start = 0
+        count = N
+        while count:
+            prev = nums[start]
+            curr = start
+            while True:
+                next_idx = (curr + k) % N
+                prev, nums[next_idx] = nums[next_idx], prev
+                curr = next_idx
+                count -= 1
+                if curr == start:
+                    break
+            start += 1
+
+
+class Solution:
+    def rotate(self, nums: list[int], k: int) -> None:
+        N = len(nums)
+        k %= N
+        start = 0
+        count = N
+        
+        while count:
+            prev = nums[start]
+            curr = start
+            
+            while True:
+                next_idx = (curr + k) % N
+                prev, nums[next_idx] = nums[next_idx], prev
+                curr = next_idx
+                count -= 1
+                
+                if curr == start:
+                    break
+                    
+            start += 1
+
+
 class Solution:
     def rotate(self, nums: list[int], k: int) -> None:
         n = len(nums)
@@ -65,7 +82,9 @@ class Solution:
 
         start = count = 0
         while count < n:
-            curr, prev = start, nums[start]
+            prev = nums[start]
+            curr = start
+
             while True:
                 next_idx = (curr + k) % n
                 nums[next_idx], prev = prev, nums[next_idx]
@@ -75,6 +94,74 @@ class Solution:
                 if curr == start:
                     break
             start += 1
+
+
+class Solution:
+    def rotate(self, nums: list[int], k: int) -> None:
+        n = len(nums)
+        k %= n
+
+        start = count = 0
+        while count < n:
+            curr, prev = start, nums[start]
+
+            while True:
+                next_idx = (curr + k) % n
+                nums[next_idx], prev = prev, nums[next_idx]
+                curr = next_idx
+                count += 1
+
+                if curr == start:
+                    break
+            start += 1
+
+
+class Solution:
+    def rotate(self, nums: list[int], k: int) -> None:
+        N = len(nums)
+        k %= N
+        start = count = 0
+        
+        while count < N:
+            prev = nums[start]
+            curr = start
+            
+            while True:
+                next_idx = (curr + k) % N
+                
+                temp = prev
+                prev = nums[next_idx]
+                nums[next_idx] = temp
+                curr = next_idx
+                count += 1
+                
+                if curr == start:
+                    break
+                    
+            start += 1
+
+
+## extra array
+##############################
+class Solution:
+    def rotate(self, nums: list[int], k: int) -> None:
+        N = len(nums)
+        temp = [None] * N
+        
+        for i in range(N):
+            temp[(i + k) % N] = nums[i]
+            
+        nums[:] = temp
+
+
+class Solution:
+    def rotate(self, nums: list[int], k: int) -> None:
+        n = len(nums)
+        a = [0] * n
+        for i in range(n):
+            a[(i + k) % n] = nums[i]
+            
+        nums[:] = a
 
 
 ## reverse
@@ -92,6 +179,18 @@ class Solution:
         self.reverse(nums, 0, n - 1)
         self.reverse(nums, 0, k - 1)
         self.reverse(nums, k, n - 1)
+
+
+## brute force(TLE)
+##############################
+class Solution:
+    def rotate(self, nums: list[int], k: int) -> None:
+        k %= len(nums)
+        
+        for i in range(k):
+            prev = nums[-1]
+            for j in range(len(nums)):
+                nums[j], prev = prev, nums[j]
 
 
 ## Tests

@@ -36,8 +36,26 @@ class TreeNode:
         self.left = left
         self.right = right
 
+
 ## dfs valid range recursive
 ##############################
+class Solution:
+    def isValidBST(self, root: TreeNode) -> bool:
+        def helper(node, low=float('-inf'), high=float('inf')):
+            if not node:
+                return True
+            
+            if not low < node.val < high:
+                return False
+            
+            left = helper(node.left, low, node.val)
+            right = helper(node.right, node.val, high)
+            
+            return left and right
+        
+        return helper(root)
+
+
 class Solution:
     def isValidBST(self, root: TreeNode) -> bool:
         def validate(node, low=float('-inf'), high=float('inf')):
@@ -56,6 +74,46 @@ class Solution:
 
 ## dfs valid range iterative
 ##############################
+class Solution:
+    def isValidBST(self, root: TreeNode) -> bool:
+        stack = [(root, float('-inf'), float('inf'))]
+        
+        while stack:
+            node, low, high = stack.pop()
+            
+            if not node:
+                continue
+            
+            if not low < node.val < high:
+                return False
+            
+            stack.append((node.left, low, node.val))
+            stack.append((node.right, node.val, high))
+                
+        return True
+
+
+class Solution:
+    def isValidBST(self, root: TreeNode) -> bool:
+        if not root:
+            return True
+        
+        stack = [(root, float('-inf'), float('inf'))]
+        
+        while stack:
+            node, low, high = stack.pop()
+            
+            if not low < node.val < high:
+                return False
+            
+            if node.left:
+                stack.append((node.left, low, node.val))
+            if node.right:
+                stack.append((node.right, node.val, high))
+                
+        return True
+
+
 class Solution:
     def isValidBST(self, root: TreeNode) -> bool:
         stack = [(root, float('-inf'), float('inf'))]
@@ -94,6 +152,27 @@ class Solution:
 ##############################
 class Solution:
     def isValidBST(self, root: TreeNode) -> bool:
+        vals = []
+        
+        def dfs_inorder(node):
+            if not node:
+                return
+            
+            dfs_inorder(node.left)
+            vals.append(node.val)
+            dfs_inorder(node.right)
+            
+        dfs_inorder(root)
+        
+        for i in range(1, len(vals)):
+            if vals[i] <= vals[i - 1]:
+                return False
+            
+        return True
+
+
+class Solution:
+    def isValidBST(self, root: TreeNode) -> bool:
         def inorder(root):
             if not root:
                 return True
@@ -111,7 +190,7 @@ class Solution:
 
 class Solution:
     def isValidBST(self, root: TreeNode) -> bool:
-            def inorder(node):
+        def inorder(node):
             if not node:
                 return True
             if not inorder(node.left):
@@ -130,15 +209,19 @@ class Solution:
 ##############################
 class Solution:
     def isValidBST(self, root: TreeNode) -> bool:
-        stack, prev = [], float('-inf')
+        stack = []
+        prev = float('-inf')
+        
         while stack or root:
             while root:
                 stack.append(root)
                 root = root.left
-                
+
             root = stack.pop()
+            
             if root.val <= prev:
                 return False
+            
             prev = root.val
             root = root.right
             

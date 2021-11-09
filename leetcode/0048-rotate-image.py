@@ -58,6 +58,23 @@ class Solution:
         pass
 
 
+## best*
+###############################
+class Solution:
+    def rotate(self, matrix: list[list[int]]) -> None:
+        N = len(matrix)
+        
+        # reverse diagonally
+        for i in range(N):
+            for j in range(i):
+                matrix[i][j], matrix[j][i] = matrix[j][i], matrix[i][j]
+                
+        # reverse horizontally
+        for row in matrix:
+            for col in range(N // 2):
+                row[col], row[~col] = row[~col], row[col]
+
+
 ## rotate in groups of four
 ###############################
 class Solution:

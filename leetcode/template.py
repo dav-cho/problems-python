@@ -6,6 +6,7 @@
 
 ################################################################################
 
+
 ## 
 ##############################
 
@@ -21,6 +22,7 @@ class Test(unittest.TestCase):
     def test_cases(self):
         solution = Solution()
         self.assertEqual(solution. , )
+        self.assertCountEqual()
 
 
 if __name__ == "__main__":

@@ -30,104 +30,131 @@
 
 
 ## dynamic programming
-##########################
+##############################
+class Solution:
+    def climbStairs(self, n: int) -> int:
+        memo = [0, 1, 2] + [None] * (n - 2)
+        
+        for i in range(3, n + 1):
+            memo[i] = memo[i - 2] + memo[i - 1]
+            
+        return memo[n]
+
+
+class Solution:
+    def climbStairs(self, n: int) -> int:
+        memo = [1, 2] + [None] * (n - 2)
+        
+        for i in range(2, n):
+            memo[i] = memo[i - 2] + memo[i - 1]
+            
+        return memo[n - 1]
+
+
 class Solution:
     def climbStairs(self, n: int) -> int:
         if n == 1:
             return 1
         
-        cache = [0] * (n + 1)
-        cache[1] = 1; cache[2] = 2
+        memo = [None] * (n + 1)
+        memo[1], memo[2] = 1, 2
         
         for i in range(3, n + 1):
-            cache[i] = cache[i - 2] + cache[i - 1]
+            memo[i] = memo[i - 2] + memo[i - 1]
             
-        return cache[n]
+        return memo[n]
 
 
-## recursive
+## recursion w/ memoization
 ##############################
+
+from collections import defaultdict
+
 class Solution:
     def climbStairs(self, n: int) -> int:
-        if n < 4:
-            return n
+        memo = {}
         
-        return self.climbStairs(n - 2) + self.climbStairs(n - 1)
-
-
-# [time limit exceeded]
-class Solution:
-    def climbStairs(self, n: int) -> int:
-        return self.climb(0, n)
-    
-    def climb(self, i, n):
-        if i > n:
-            return 0
-        if i == n:
-            return 1
+        def helper(i):
+            if i in memo:
+                return memo[i]
+            elif i > n:
+                return 0
+            elif i == n:
+                return 1
+            
+            memo[i] = helper(i + 1) + helper(i + 2)
+            
+            return memo[i]
         
-        return self.climb(i + 1, n) + self.climb(i + 2, n)
-
-
-## memoized recursive
-##############################
-class Solution:
-    def __init__(self):
-        self.cache = {1: 1, 2: 2, 3: 3}
-        
-    def climbStairs(self, n: int) -> int:
-        if n in self.cache:
-            return self.cache[n]
-        
-        self.cache[n] = self.climbStairs(n - 2) + self.climbStairs(n - 1)
-        return self.cache[n]
+        return helper(0)
 
 
 class Solution:
     def climbStairs(self, n: int) -> int:
-        cache = [0] * (n + 1)
-
-        def climb(i, n):
+        memo = {}
+        
+        def helper(i):
+            if i in memo:
+                return memo[i]
             if i > n:
                 return 0
             if i == n:
                 return 1
-            if cache[i] > 0:
-                return cache[i]
             
-            cache[i] = climb(i + 1, n) + climb(i + 2, n)
-            return cache[i]
+            memo[i] = helper(i + 1) + helper(i + 2)
+            
+            return memo[i]
         
-        return climb(0, n)
+        return helper(0)
 
 
 class Solution:
     def climbStairs(self, n: int) -> int:
-        cache = {}
+        memo = [None] * (n + 2)
         
-        def helper(n):
-            if n in cache:
-                return cache[n]
+        def helper(i):
+            if memo[i]:
+                return memo[i]
+            if i > n:
+                return 0
+            if i == n:
+                return 1
             
-            if n < 4:
-                result = n
-            else:
-                result = helper(n - 2) + helper(n - 1)
-                
-            cache[n] = result
-            return result
+            memo[i] = helper(i + 1) + helper(i + 2)
+            
+            return memo[i]
         
-        return helper(n)
+        return helper(0)
 
 
-## iterative
-################
+class Solution:
+    def climbStairs(self, n: int) -> int:
+        memo = defaultdict()
+        
+        def helper(i, n):
+            if i in memo:
+                return memo[i]
+            if i > n:
+                return 0
+            if i == n:
+                return 1
+            
+            memo[i] = helper(i + 1, n) + helper(i + 2, n)
+            
+            return memo[i]
+        
+        return helper(0, n)
+
+
+## fibonacci number
+##############################
 class Solution:
     def climbStairs(self, n: int) -> int:
         if n == 1:
             return 1
         
         a, b = 1, 2
+        
         for i in range(3, n + 1):
             c = a + b
             a, b = b, c
@@ -135,33 +162,46 @@ class Solution:
         return b
 
 
-class Solution:
-    def climbStairs(self, n: int) -> int:
-        if n < 4:
-            return n
-        
-        a, b, c = 2, 3, 0
-        for _ in range(4, n + 1):
-            c = a + b
-            a, b = b, c
-            
-        return c
-
-
-## iterative memoized
+## brute force (TLE)
 ##############################
 class Solution:
-    def __init__(self):
-        self.cache = {1: 1, 2: 2, 3: 3}
-        
     def climbStairs(self, n: int) -> int:
-        if n in self.cache:
-            return self.cache[n]
-        
-        for i in range(3, n + 1):
-            self.cache[i] = self.cache[i - 2] + self.cache[i - 1]
+        def helper(i):
+            if i > n:
+                return 0
+            if i == n:
+                return 1
             
-        return self.cache[n]
+            return helper(i + 1) + helper(i + 2)
+        
+        return helper(0)
+
+
+class Solution:
+    def climbStairs(self, n: int) -> int:
+        def helper(i, n):
+            if i > n:
+                return 0
+            if i == n:
+                return 1
+            
+            return helper(i + 1, n) + helper(i + 2, n)
+        
+        return helper(0, n)
+
+
+## fibonacci formula
+##############################
+class Solution:
+    def climbStairs(self, n: int) -> int:
+        pass
+
+
+## binets method
+##############################
+class Solution:
+    def climbStairs(self, n: int) -> int:
+        pass
 
 
 ## Tests
@@ -175,6 +215,10 @@ class Test(unittest.TestCase):
         solution = Solution()
         self.assertEqual(solution.climbStairs(2), 2)
         self.assertEqual(solution.climbStairs(3), 3)
+
+        self.assertEqual(solution.climbStairs(4), 5)
+        self.assertEqual(solution.climbStairs(10), 89)
+        self.assertEqual(solution.climbStairs(20), 10946)
 
 
 if __name__ == "__main__":

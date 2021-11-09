@@ -49,8 +49,96 @@
 
 ################################################################################
 
+
 ## bitmasking
 ##############################
+class Solution:
+    def isValidSudoku(self, board: list[list[str]]) -> bool:
+        N = 9
+        rows = [0] * N
+        cols = [0] * N
+        subs = [0] * N
+        
+        for row in range(N):
+            for col in range(N):
+                if board[row][col] == '.':
+                    continue
+                    
+                num = int(board[row][col]) - 1
+                sub = row // 3 * 3 + col // 3
+                check_rows = rows[row] & (1 << num)
+                check_cols = cols[col] & (1 << num)
+                check_subs = subs[sub] & (1 << num)
+                
+                if check_rows or check_cols or check_subs:
+                    return False
+                
+                rows[row] |= 1 << num
+                cols[col] |= 1 << num
+                subs[sub] |= 1 << num
+                
+        return True
+
+
+class Solution:
+    def isValidSudoku(self, board: list[list[str]]) -> bool:
+        N = 9
+        rows = [0] * N
+        cols = [0] * N
+        subs = [0] * N
+        
+        for row in range(N):
+            for col in range(N):
+                if board[row][col] == '.':
+                    continue
+                    
+                num = int(board[row][col]) - 1
+                
+                if rows[row] & (1 << num):
+                    return False
+                rows[row] |= 1 << num
+                
+                if cols[col] & (1 << num):
+                    return False
+                cols[col] |= 1 << num
+                
+                sub = row // 3 * 3 + col // 3
+                if subs[sub] & (1 << num):
+                    return False
+                subs[sub] |= 1 << num
+                
+        return True
+
+
+class Solution:
+    def isValidSudoku(self, board: list[list[str]]) -> bool:
+        N = 9
+        rows = [0] * N
+        cols = [0] * N
+        subs = [0] * N
+        
+        for row in range(N):
+            for col in range(N):
+                if board[row][col] == '.':
+                    continue
+                    
+                num = int(board[row][col])
+                sub = row // 3 * 3 + col // 3
+                
+                check_rows = rows[row] & (1 << num - 1)
+                check_cols = cols[col] & (1 << num - 1)
+                check_subs = subs[sub] & (1 << num - 1)
+                
+                if check_rows or check_cols or check_subs:
+                    return False
+                
+                rows[row] |= 1 << num - 1
+                cols[col] |= 1 << num - 1
+                subs[sub] |= 1 << num - 1
+                
+        return True
+
+
 class Solution:
     def isValidSudoku(self, board: list[list[str]]) -> bool:
         N = 9

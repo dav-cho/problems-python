@@ -44,6 +44,19 @@
 
 ################################################################################
 
+## best*
+##############################
+class Solution:
+    def plusOne(self, digits: list[int]) -> list[int]:
+        digits[-1] += 1
+        carry = 0
+        
+        for i in range(len(digits) - 1, -1, -1):
+            carry, digits[i] = divmod(digits[i] + carry, 10)
+            
+        return [carry] + digits if carry else digits
+
+
 ## attempt 1
 ##############################
 class Solution:
@@ -72,13 +85,6 @@ class Solution:
             digits.insert(0, remainder)
             
         return digits
-
-
-## 
-##############################
-class Solution:
-    def plusOne(self, digits: list[int]) -> list[int]:
-        pass
 
 
 ## 

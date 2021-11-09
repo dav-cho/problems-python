@@ -38,6 +38,46 @@ class Solution:
     def level_order(self, root: TreeNode) -> List[List[int]]:
         res = []
         
+        def bfs(node, level):
+            if not node:
+                return
+            if len(res) == level:
+                res.append([])
+                
+            res[level].append(node.val)
+            bfs(node.left, level + 1)
+            bfs(node.right, level + 1)
+            
+            return res
+            
+        return bfs(root, 0)
+
+
+class Solution:
+    def level_order(self, root: TreeNode) -> List[List[int]]:
+        res = []
+        
+        def bfs(node, level):
+            if not node:
+                return
+            
+            if len(res) == level:
+                res.append([])
+                
+            res[level].append(node.val)
+
+            bfs(node.left, level + 1)
+            bfs(node.right, level + 1)
+            
+        bfs(root, 0)
+            
+        return res
+
+
+class Solution:
+    def level_order(self, root: TreeNode) -> List[List[int]]:
+        res = []
+        
         if not root:
             return res
         
@@ -122,7 +162,57 @@ class Solution:
 
 ## iterative
 ################
+class Solution:
+    def levelOrder(self, root: TreeNode) -> List[List[int]]:
+        res = []
+        
+        if not root:
+            return res
+        
+        queue = [root]
+        level = 0
+        
+        while queue:
+            res.append([])
+            curr_level = []
+            
+            for node in queue:
+                res[level].append(node.val)
+                
+                if node.left:
+                    curr_level.append(node.left)
+                if node.right:
+                    curr_level.append(node.right)
+                
+            queue = curr_level
+            level += 1
+            
+        return res
+
+
 from collections import deque
+
+class Solution:
+    def levelOrder(self, root: TreeNode) -> List[List[int]]:
+        queue = deque([(root, 0)])
+        res = []
+        
+        while queue:
+            node, level = queue.popleft()
+            
+            if not node:
+                continue
+                
+            if len(res) == level:
+                res.append([])
+                
+            res[level].append(node.val)
+            
+            queue.append((node.left, level + 1))
+            queue.append((node.right, level + 1))
+            
+        return res
+
 
 class Solution:
     def levelOrder(self, root: TreeNode) -> List[List[int]]:

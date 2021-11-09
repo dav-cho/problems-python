@@ -37,16 +37,19 @@
 
 ################################################################################
 
+
 ## stack
-############
+##############################
 class Solution:
     def isValid(self, s: str) -> bool:
-        parens = { ')': '(', ']': '[', '}': '{' }
+        table = {')': '(', ']': '[', '}': '{'}
         stack = []
+        
         for char in s:
-            if char in parens:
-                top = stack.pop() if stack else 'meh'
-                if parens[char] != top:
+            if char in table:
+                if stack and stack[-1] == table[char]:
+                    stack.pop()
+                else:
                     return False
             else:
                 stack.append(char)
@@ -54,65 +57,54 @@ class Solution:
         return not stack
 
 
+## first attempt
+##############################
 class Solution:
     def isValid(self, s: str) -> bool:
-        parens = { ')': '(', ']': '[', '}': '{' }
+        table = {')': '(', ']': '[', '}': '{'}
         stack = []
-        for paren in s:
-            if paren in parens and stack and stack[-1] == parens[paren]: 
-                stack.pop()
+        
+        for char in s:
+            if char in table:
+                if stack and stack[-1] == table[char]:
+                    stack.pop()
+                else:
+                    return False
             else:
-                stack.append(paren)
-
-        return len(stack) == 0
+                stack.append(char)
+                
+        return not stack
 
 
 ## Tests
 #############
 
-test1 = "()"            # True
-test2 = "()[]{}"        # True
-test3 = "(]"            # False
-test4 = "([)]"          # False
-test5 = "{[]}"          # True
-
-tests = {
-    test1,
-    test2,
-    test3,
-    test4,
-    test5
-}
+import unittest
 
 
-def test(*args):
-    count = 1
-
-    def run():
-        for test in args:
-            nonlocal count
-            print(f"~ test{count}")
-            count += 1
-
-            solution = Solution()
-            result = solution.isValid(test)
-            print("result:", result)
-
-    return run()
+class Test(unittest.TestCase):
+    def test_cases(self):
+        self.assertEqual(Solution().isValid("()"), True)
+        self.assertEqual(Solution().isValid("()[]{}"), True)
+        self.assertEqual(Solution().isValid("(]"), False)
+        self.assertEqual(Solution().isValid("([)]"), False)
+        self.assertEqual(Solution().isValid("{[]}"), True)
 
 
-test(*tests)
+if __name__ == "__main__":
+    unittest.main()
+
 
 ## LeetCode Solutions
 #########################
 
 ## Approach 1: Stacks
-#########################
-# Time: O(n) -  because we simply traverse the given string one character at a
-#               time and push and pop operations on a stack take O(1) time.
-# Space: O(n) - as we push all opening brackets onto the stack and in the worst
+##############################
+# Time: O(n) - Because we simply traverse the given string one character at a
+#              time and push and pop operations on a stack take O(1) time.
+# Space: O(n) - As we push all opening brackets onto the stack and in the worst
 #               case, we will end up pushing all the brackets onto the stack.
-#               e.g. ((((((((((
+#               e.g. ((((((((((.
 class Solution(object):
     def isValid(self, s):
         """
@@ -148,17 +140,5 @@ class Solution(object):
         # In the end, if the stack is empty, then we have a valid expression.
         # The stack won't be empty for cases like ((()
         return not stack
-
-
-## Approach 2: 
-###################
-# Time: 
-# Space: 
-
-
-## Approach 3: 
-###################
-# Time: 
-# Space: 
 
 

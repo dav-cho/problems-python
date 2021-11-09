@@ -28,6 +28,25 @@
 ##############################
 class Solution:
     def permute(self, nums: list[int]) -> list[list[int]]:
+        N = len(nums)
+        res = []
+        
+        def backtrack(first=0):
+            if first == N:
+                res.append(nums[:])
+            
+            for i in range(first, N):
+                nums[first], nums[i] = nums[i], nums[first]
+                backtrack(first + 1)
+                nums[first], nums[i] = nums[i], nums[first]
+                
+            return res
+        
+        return backtrack()
+
+
+class Solution:
+    def permute(self, nums: list[int]) -> list[list[int]]:
         def backtrack(first=0):
             if first == n:
                 res.append(nums[:])
@@ -41,6 +60,35 @@ class Solution:
         res = []
         backtrack()
         
+        return res
+
+## iterative
+##############################
+from collections import deque
+
+
+class Solution:
+    def permute(self, nums: list[int]) -> list[list[int]]:
+        N = len(nums)
+        
+        if N == 1:
+            return [nums]
+        if N == 2:
+            return [list(nums), list(nums)[::-1]]
+        
+        nums = deque(nums)
+        res = deque()
+        
+        for _ in range(N):
+            num = nums.popleft()
+            perms = self.permute(nums)
+            
+            for perm in perms:
+                perm.append(num)
+                
+            res += perms
+            nums.append(num)
+            
         return res
 
 

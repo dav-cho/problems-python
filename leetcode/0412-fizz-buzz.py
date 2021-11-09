@@ -27,67 +27,51 @@
 
 #################################################################
 
-## Approach 1: Naive Approach
-#################################
-# time: O(n)
-# space: O(1)
+## hash table
+##############################
 class Solution:
-    def fizzBuzz(self, n: int) -> list[str]:
-        pass
-
-
-## Approach 2: String Concatenation
-#######################################
-# time: O(n)
-# space: O(1)
-class Solution:
-    def fizzBuzz(self, n: int) -> list[str]:
-        pass
-
-
-## Approach 3: Hash it!
-###########################
-# time: O(n)
-# space: O(1)
-class Solution:
-    def fizzBuzz(self, n: int) -> list[str]:
-        pass
+    def fizzBuzz(self, n: int) -> List[str]:
+        res = []
+        table = { 3: 'Fizz', 5: 'Buzz' }
+        
+        for i in range(1, n + 1):
+            curr = ''
+            
+            for num in table:
+                if not i % num:
+                    curr += table[num]
+                    
+            if not curr:
+                curr = str(i)
+                
+            res.append(curr)
+            
+        return res
 
 
 ## Tests
-############
-def test(arr):
-    solution = Solution()
-    count = 0
+#############
 
-    def run():
-        for test in arr:
-            nonlocal count
-            count += 1
-            result = solution.fizzBuzz(test)
-            print(f"test: {count}")
-            print(f"result {count}: {result}")
-
-    return run()
+import unittest
 
 
-tests = [3, 5, 15]
-# 3: ["1","2","Fizz"]
-# 5: ["1","2","Fizz","4","Buzz"]
-# 15: ["1","2","Fizz","4","Buzz","Fizz","7","8",
-#      "Fizz","Buzz","11","Fizz","13","14","FizzBuzz"]
+class Test(unittest.TestCase):
+    def test_cases(self):
+        solution = Solution()
+        self.assertEqual(solution. , )
 
-test(tests)
+
+if __name__ == "__main__":
+    unittest.main()
 
 
 ## LeetCode Solutions
 #########################
 
-
 ## Approach 1: Naive Approach
-#################################
-# time: O(n)
-# space: O(1)
+##############################
+# Time: O(N)
+# Space: O(1)
 class Solution:
     def fizzBuzz(self, n):
         """
@@ -97,10 +81,10 @@ class Solution:
         # ans list
         ans = []
 
-        for num in range(1, n + 1):
+        for num in range(1,n+1):
 
-            divisible_by_3 = num % 3 == 0
-            divisible_by_5 = num % 5 == 0
+            divisible_by_3 = (num % 3 == 0)
+            divisible_by_5 = (num % 5 == 0)
 
             if divisible_by_3 and divisible_by_5:
                 # Divides by both 3 and 5, add FizzBuzz
@@ -120,8 +104,8 @@ class Solution:
 
 ## Approach 2: String Concatenation
 #######################################
-# time: O(n)
-# space: O(1)
+# Time: O(N)
+# Space: O(1)
 class Solution:
     def fizzBuzz(self, n):
         """
@@ -131,10 +115,10 @@ class Solution:
         # ans list
         ans = []
 
-        for num in range(1, n + 1):
+        for num in range(1,n+1):
 
-            divisible_by_3 = num % 3 == 0
-            divisible_by_5 = num % 5 == 0
+            divisible_by_3 = (num % 3 == 0)
+            divisible_by_5 = (num % 5 == 0)
 
             num_ans_str = ""
 
@@ -149,15 +133,15 @@ class Solution:
                 num_ans_str = str(num)
 
             # Append the current answer str to the ans list
-            ans.append(num_ans_str)
+            ans.append(num_ans_str)  
 
         return ans
 
 
-## Approach 3: Hash it!
-###########################
-# time: O(n)
-# space: O(1)
+## Approach 3: Hash It!
+##############################
+# Time: O(N)
+# Space: O(1)
 class Solution:
     def fizzBuzz(self, n):
         """
@@ -168,9 +152,9 @@ class Solution:
         ans = []
 
         # Dictionary to store all fizzbuzz mappings
-        fizz_buzz_dict = {3: "Fizz", 5: "Buzz"}
+        fizz_buzz_dict = {3 : "Fizz", 5 : "Buzz"}
 
-        for num in range(1, n + 1):
+        for num in range(1,n+1):
 
             num_ans_str = ""
 
@@ -185,6 +169,8 @@ class Solution:
                 num_ans_str = str(num)
 
             # Append the current answer str to the ans list
-            ans.append(num_ans_str)
+            ans.append(num_ans_str)  
 
         return ans
+
+

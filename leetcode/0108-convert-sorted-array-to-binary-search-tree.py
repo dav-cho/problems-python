@@ -28,88 +28,221 @@
 # -104 <= nums[i] <= 104
 # nums is sorted in a strictly increasing order.
 
-##############################################################################
+################################################################################
+
+## Definition for a binary tree node.
 class TreeNode:
-    def __init__(self, val=0, left=None, right=None) -> None:
+    def __init__(self, val=0, left=None, right=None):
         self.val = val
         self.left = left
         self.right = right
 
-
-## Approach 1: Preorder Traversal - Always Choose Left Middle Node as a Root
-################################################################################
+        
+## dfs preorder - choose left as root - recursive
+#####################################################
 class Solution:
-    def sortedArrayToBST(self, nums: list[int]) -> TreeNode:
+    def sortedArrayToBST(self, nums: list[int]) -> Optional[TreeNode]:
+        def helper(left, right):
+            if left > right:
+                return
+            
+            mid = (left + right) // 2
+            root = TreeNode(nums[mid])
+            root.left = helper(left, mid - 1)
+            root.right = helper(mid + 1, right)
+            
+            return root
+        
+        return helper(0, len(nums) - 1)
+
+
+## dfs preorder - choose left as root - iterative
+#####################################################
+class Solution:
+    def sortedArrayToBST(self, nums: list[int]) -> Optional[TreeNode]:
+        left = 0
+        right = len(nums) - 1
+        root = TreeNode(nums[right // 2])
+        stack = [(root, left, right)]
+        
+        while stack:
+            node, left, right = stack.pop()
+            mid = (left + right) // 2
+            
+            if left < mid:
+                left_mid = (left + mid - 1) // 2
+                node.left = TreeNode(nums[left_mid])
+                stack.append((node.left, left, mid - 1))
+            if right > mid:
+                right_mid = (mid + 1 + right) // 2
+                node.right = TreeNode(nums[right_mid])
+                stack.append((node.right, mid + 1, right))
+                
+        return root
+
+
+class Solution:
+    def sortedArrayToBST(self, nums: list[int]) -> Optional[TreeNode]:
+        left = 0
+        right = len(nums) - 1
+        root = TreeNode(nums[right // 2])
+        stack = [(root, left, right)]
+        
+        while stack:
+            node, left, right = stack.pop()
+            if not node:
+                continue
+                
+            mid = (left + right) // 2
+            if left < mid:
+                node.left = TreeNode(nums[(left + mid - 1) // 2])
+                stack.append((node.left, left, mid - 1))
+            if right > mid:
+                node.right = TreeNode(nums[(mid + 1 + right) // 2])
+                stack.append((node.right, mid + 1, right))
+                
+        return root
+
+
+class Solution:
+    def sortedArrayToBST(self, nums: list[int]) -> Optional[TreeNode]:
+        left = 0
+        right = len(nums) - 1
+        root = TreeNode(nums[right // 2])
+        stack = [(root, left, right)]
+        
+        while stack:
+            node, left, right = stack.pop()
+            mid = (left + right) // 2
+            
+            if left > right:
+                continue
+            
+            if left < mid:
+                left_mid = (left + mid - 1) // 2
+                node.left = TreeNode(nums[left_mid])
+                stack.append((node.left, left, mid - 1))
+            if right > mid:
+                right_mid = (mid + 1 + right) // 2
+                node.right = TreeNode(nums[right_mid])
+                stack.append((node.right, mid + 1, right))
+                
+        return root
+
+
+class Solution:
+    def sortedArrayToBST(self, nums: list[int]) -> Optional[TreeNode]:
+        left = 0
+        right = len(nums) - 1
+        root = TreeNode(nums[right // 2])
+        queue = deque([(root, left, right)])
+        
+        while queue:
+            node, left, right = queue.popleft()
+            
+            if left > right:
+                continue
+
+            mid = (left + right) // 2
+            
+            if left < mid:
+                left_mid = (left + mid - 1) // 2
+                node.left = TreeNode(nums[left_mid])
+                queue.append((node.left, left, mid - 1))
+            if right > mid:
+                right_mid = (mid + 1 + right) // 2
+                node.right = TreeNode(nums[right_mid])
+                queue.append((node.right, mid + 1, right))
+                
+        return root
+
+
+## dfs preorder - choose right as root - recursive
+######################################################
+class Solution:
+    def sortedArrayToBST(self, nums: list[int]) -> Optional[TreeNode]:
+        def helper(left, right):
+            if left > right:
+                return
+            
+            mid = (left + right) // 2
+            
+            if (left + right) % 2:
+                mid += 1
+            
+            root = TreeNode(nums[mid])
+            root.left = helper(left, mid - 1)
+            root.right = helper(mid + 1, right)
+            
+            return root
+        
+        return helper(0, len(nums) - 1)
+
+
+## dfs preorder - choose right as root - iterative
+######################################################
+class Solution:
+    def sortedArrayToBST(self, nums: list[int]) -> Optional[TreeNode]:
         pass
 
 
-## Approach 2: Preorder Traversal - Always Choose Right Middle Node as a Root
-#################################################################################
+## dfs preorder - choose random middle node as root - recursive
+###################################################################
 class Solution:
-    def sortedArrayToBST(self, nums: list[int]) -> TreeNode:
+    def sortedArrayToBST(self, nums: list[int]) -> Optional[TreeNode]:
+        def helper(left, right):
+            if left > right:
+                return
+            
+            mid = (left + right) // 2
+            
+            if (left + right) % 2:
+                mid += randint(0, 1)
+            
+            root = TreeNode(nums[mid])
+            root.left = helper(left, mid - 1)
+            root.right = helper(mid + 1, right)
+            
+            return root
+        
+        return helper(0, len(nums) - 1)
+
+
+## dfs preorder - choose random middle node as root - iterative
+###################################################################
+class Solution:
+    def sortedArrayToBST(self, nums: list[int]) -> Optional[TreeNode]:
         pass
 
 
-## Approach 3: Preorder Traversal - Choose Random Middle Node as a Root
-###########################################################################
-class Solution:
-    def sortedArrayToBST(self, nums: list[int]) -> TreeNode:
-        pass
+## Tests
+#############
+
+import unittest
 
 
-def sortedArrayToBST(nums: list[int]) -> TreeNode:
-    mid = len(nums) // 2
-    left = nums[:mid]
-    right = nums[mid + 1 :]
-
-    root = TreeNode(nums[mid])
-    root.left = TreeNode(left[0])
-    root.right = TreeNode(right[-1])
-
-    current = root.left
-    for i in range(1, len(left)):
-        if not current.left:
-            current.left = TreeNode(left[i])
-        elif not current.right:
-            current.right = TreeNode(left[i])
-
-    current = root.right
-    for i in range(len(right), -1, -1):
-        if not current.left:
-            current.left = TreeNode(right[i])
-        elif not current.right:
-            current.right = TreeNode(right[i])
+class Test(unittest.TestCase):
+    def test_cases(self):
+        solution = Solution()
+        self.assertEqual(solution. , )
 
 
-test1 = [-10, -3, 0, 5, 9]  # [0,-3,9,-10,null,5]
-test2 = [1, 3]  # [3, 1]
-
-
-def test(*args):
-    count = 1
-
-    def run():
-        for test in args:
-            result = sortedArrayToBST(test)
-            nonlocal count
-            print(f"~ test {count}")
-            print(f"{test} --> {result}")
-
-    return run()
-
-
-test(test1, test2)
+if __name__ == "__main__":
+    unittest.main()
 
 
 ## LeetCode Solutions
 #########################
 
-## Approach 1: Preorder Traversal - Always Choose Left Middle Node as a Root
-################################################################################
-# time: O(n) - visit each node exactly once
-# space: O(n) - to keep the output and O(log(n)) for the recursion stack
+## Approach 1: Preorder Traversal: Always Choose Left Middle Node as a Root
+###############################################################################
+# Time: O(N) - Since we visit each node exactly once.
+# Space: O(logN) - The recursion stack requires O(logN) space because the tree
+#                  is height-balanced. Note that the O(N) space used to store
+#                  the output does not count as auxiliary space, so it is not
+#                  included in the space complexity.
 class Solution:
-    def sortedArrayToBST(self, nums: list[int]) -> TreeNode:
+    def sortedArrayToBST(self, nums: List[int]) -> TreeNode:        
         def helper(left, right):
             if left > right:
                 return None
@@ -122,56 +255,65 @@ class Solution:
             root.left = helper(left, p - 1)
             root.right = helper(p + 1, right)
             return root
-
+        
         return helper(0, len(nums) - 1)
 
 
-## Approach 2: Preorder Traversal - Always Choose Right Middle Node as a Root
-#################################################################################
-# time: O(n) - same as Approach 1
-# space: O(n) - same as Approach 1
+## Approach 2: Preorder Traversal: Always Choose Right Middle Node as a Root
+###############################################################################
+# Time: O(N)- Since we visit each node exactly once.
+# Space: O(logN) - The recursion stack requires O(logN) space because the tree
+#                  is height-balanced. Note that the O(N) space used to store
+#                  the output does not count as auxiliary space, so it is not
+#                  included in the space complexity.
 class Solution:
-    def sortedArrayToBST(self, nums: list[int]) -> TreeNode:
+    def sortedArrayToBST(self, nums: List[int]) -> TreeNode:        
         def helper(left, right):
             if left > right:
                 return None
-
+            
             # always choose right middle node as a root
-            p = (left + right) // 2
+            p = (left + right) // 2 
             if (left + right) % 2:
-                p += 1
+                p += 1 
 
             # preorder traversal: node -> left -> right
             root = TreeNode(nums[p])
             root.left = helper(left, p - 1)
             root.right = helper(p + 1, right)
             return root
-
+        
         return helper(0, len(nums) - 1)
 
 
-## Approach 3: Preorder Traversal - Choose Random Middle Node as a Root
-###########################################################################
-# time: O(n) - same as Approach 1
-# space: O(n) - same as Approach 1
+## Approach 3: Preorder Traversal: Choose Random Middle Node as a Root
+##########################################################################
+# Time: O(N) - Since we visit each node exactly once.
+# Space: O(logN) - The recursion stack requires O(logN) space because the tree
+#                  is height-balanced. Note that the O(N) space used to store
+#                  the output does not count as auxiliary space, so it is not
+#                  included in the space complexity.
+
 from random import randint
 
 
 class Solution:
-    def sortedArrayToBST(self, nums: List[int]) -> TreeNode:
+    def sortedArrayToBST(self, nums: List[int]) -> TreeNode:        
         def helper(left, right):
             if left > right:
                 return None
-
+            
             # choose random middle node as a root
-            p = (left + right) // 2
+            p = (left + right) // 2 
             if (left + right) % 2:
-                p += randint(0, 1)
+                p += randint(0, 1) 
 
             # preorder traversal: node -> left -> right
             root = TreeNode(nums[p])
             root.left = helper(left, p - 1)
             root.right = helper(p + 1, right)
             return root
-
+        
         return helper(0, len(nums) - 1)
+
+

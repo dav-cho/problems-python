@@ -25,24 +25,39 @@
 
 ################################################################################
 
-## first attempt - best
+## best
 ##############################
 class Solution:
     def isPalindrome(self, s: str) -> bool:
         left = 0
         right = len(s) - 1
-
+        
         while left < right:
-            while left < right and not s[left].isalnum():
+            if not s[left].isalnum():
                 left += 1
-            while left < right and not s[right].isalnum():
+                continue
+            if not s[right].isalnum():
                 right -= 1
+                continue
                 
             if s[left].lower() != s[right].lower():
                 return False
             
             left += 1
             right -= 1
+            
+        return True
+
+
+## filter
+##############################
+class Solution:
+    def isPalindrome(self, s: str) -> bool:
+        s = list(filter(lambda x: x.isalnum(), [*s.lower()]))
+        
+        for i in range(len(s)):
+            if s[i] != s[~i]:
+                return False
             
         return True
 
@@ -86,6 +101,28 @@ class Solution:
                 chars.append(char.lower())
                 
         return chars == chars[::-1]
+
+
+## first attempt
+##############################
+class Solution:
+    def isPalindrome(self, s: str) -> bool:
+        left = 0
+        right = len(s) - 1
+
+        while left < right:
+            while left < right and not s[left].isalnum():
+                left += 1
+            while left < right and not s[right].isalnum():
+                right -= 1
+                
+            if s[left].lower() != s[right].lower():
+                return False
+            
+            left += 1
+            right -= 1
+            
+        return True
 
 
 ## Tests

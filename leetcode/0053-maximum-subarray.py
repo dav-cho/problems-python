@@ -1,10 +1,11 @@
 ##
 #### Maximum Subarray (easy)
-#########################
+########################################
 
-# Given an integer array nums, find the contiguous
-# subarray (containing at least one number) which has
-# the largest sum and return its sum.
+# Given an integer array nums, find the contiguous subarray (containing at
+# least one number) which has the largest sum and return its sum.
+
+# A subarray is a contiguous part of an array.
 
 # Example 1:
 # Input: nums = [-2,1,-3,4,-1,2,1,-5,4]
@@ -18,109 +19,249 @@
 # Example 3:
 # Input: nums = [5,4,-1,7,8]
 # Output: 23
-
+ 
 # Constraints:
-# 1 <= nums.length <= 3 * 104
-# -105 <= nums[i] <= 105
+# 1 <= nums.length <= 105
+# -104 <= nums[i] <= 104
+ 
+# Follow up: If you have figured out the O(n) solution, try coding another
+# solution using the divide and conquer approach, which is more subtle.
 
-# Follow up: If you have figured out the O(n) solution,
-# try coding another solution using the divide and conquer approach,
-# which is more subtle.
+################################################################################
 
-##########################################################################
+## dynamic programming / kidane's algorithm
+###############################################
+class Solution:
+    def maxSubArray(self, nums: list[int]) -> int:
+        curr = res = nums[0]
+        
+        for num in nums[1:]:
+            curr = max(num, curr + num)
+            res = max(res, curr)
+            
+        return res
 
 
 class Solution:
-    def maxSubArray(nums: list[int]) -> int:
-        pass
+    def maxSubArray(self, nums: list[int]) -> int:
+        res = float('-inf')
+        curr = 0
+        
+        for num in nums:
+            curr = max(num, curr + num)
+            res = max(res, curr)
+            
+        return res
+
+
+class Solution:
+    def maxSubArray(self, nums: list[int]) -> int:
+        res = float('-inf')
+        curr = 0
+        
+        for num in nums:
+            if curr < 0:
+                curr = 0
+                
+            curr += num
+            res = max(res, curr)
+            
+        return res
+
+
+class Solution:
+    def maxSubArray(self, nums: list[int]) -> int:
+        curr = res = float('-inf')
+        
+        for num in nums:
+            curr = max(num, curr + num)
+            res = max(res, curr)
+            
+        return res
+
+
+class Solution:
+    def maxSubArray(self, nums: list[int]) -> int:
+        for i in range(1, len(nums)):
+            nums[i] = max(nums[i], nums[i - 1] + nums[i])
+            
+        return max(nums)
+
+
+class Solution:
+    def maxSubArray(self, nums: list[int]) -> int:
+        res = nums[0]
+        
+        for i in range(1, len(nums)):
+            nums[i] = max(nums[i], nums[i - 1] + nums[i])
+            res = max(res, nums[i])
+            
+        return res
+
+
+## divide and conquer
+##############################
+class Solution:
+    def maxSubArray(self, nums: list[int]) -> int:
+        def helper(left, right):
+            if left > right:
+                return float('-inf')
+            
+            mid = (left + right) // 2
+            curr = max_left = max_right = 0
+            
+            for i in range(mid - 1, left - 1, -1):
+                curr += nums[i]
+                max_left = max(max_left, curr)
+                
+            curr = 0
+            
+            for i in range(mid + 1, right + 1):
+                curr += nums[i]
+                max_right= max(max_right, curr)
+                
+            res = nums[mid] + max_left + max_right
+            
+            left_res = helper(left, mid - 1)
+            right_res = helper(mid + 1, right)
+            
+            return max(res, left_res, right_res)
+        
+        return helper(0, len(nums) - 1)
+
+
+## optimized brute force (TLE)
+##################################
+class Solution:
+    def maxSubArray(self, nums: list[int]) -> int:
+        res = float('-inf')
+        
+        for i in range(len(nums)):
+            curr = 0
+            
+            for j in range(i, len(nums)):
+                curr += nums[j]
+                res = max(res, curr)
+                
+        return res
+
+
+## first attempt
+##############################
+class Solution:
+    def maxSubArray(self, nums: list[int]) -> int:
+        N = len(nums)
+        res = 0
+        
+        for i in range(1, N):
+            for j in range(N - i):
+                res = max(res, sum(nums[i:i + j]))
+                
+        return res
+
+    
+class Solution:
+    def maxSubArray(self, nums: list[int]) -> int:
+        N = len(nums)
+        left, right = 0, 1
+        res = sum(nums[left:right])
+        
+        while right < N:
+            while right < N and nums[right] < 0:
+                right += 1
+            
+            res = max(res, sum(nums[left:right + 1]))
+            
+            while right < N and left < right:
+                left += 1
+                res = max(res, res - nums[left])
+                
+            right += 1
+            
+        return res
+
+
+## Tests
+#############
+
+import unittest
+
+
+class Test(unittest.TestCase):
+    def test_cases(self):
+        solution = Solution()
+        self.assertEqual(solution.maxSubArray([-2,1,-3,4,-1,2,1,-5,4]), 6)
+        self.assertEqual(solution.maxSubArray([1]), 1)
+        self.assertEqual(solution.maxSubArray([5,4,-1,7,8]), 23)
+
+
+if __name__ == "__main__":
+    unittest.main()
 
 
 ## LeetCode Solutions
 #########################
 
-import math
-
 ## Approach 1: Optimized Brute Force
 ########################################
-# time: O(n) --> because of nested loop
-# space: O(1) --> no additional memory needed
-# find all possible subarrays and compare the sums of each subarray
-
-## Intuition
-
-# This algorithm doesn't reliably run under the time limit here on LeetCode.
-# We'll still look briefly at it though, as in an interview scenario it would
-# be a great start if you're struggling to come up with a better approach.
-
-# Calculate the sum of all subarrays, and keep track of the best one.
-# To actually generate all subarrays would take O(N^3) time, but with a
-# little optimization, we can achieve brute force in O(N^2) time.
-# The trick is to recognize that all of the subarrays starting at a
-# particular value will share a common prefix.
-
-## Algorithm
-
-# 1. Initialize a variable maxSubarray = -infinity to keep track of
-#    the best subarray. We need to use negative infinity, not 0, because
-#    it is possible that there are only negative numbers in the array.
-# 2. Use a for loop that considers each index of the array as a starting point.
-# 3. For each starting point, create a variable currentSubarray = 0.
-#    Then, loop through the array from the starting index, adding each
-#    element to currentSubarray. Every time we add an element it represents
-#    a possible subarray - so continuously update maxSubarray to contain
-#    the maximum out of the currentSubarray and itself.
-# 4. Return maxSubarray.
+# Time: O(N^2) - Where N is the length of nums. We use 2 nested for loops, with
+#                each loop iterating through nums.
+# Space: O(1) - No matter how big the input is, we are only ever using 2
+#               variables: ans and currentSubarray.
 class Solution:
-    def maxSubArray(self, nums: list[int]) -> int:
+    def maxSubArray(self, nums: List[int]) -> int:
         max_subarray = -math.inf
         for i in range(len(nums)):
             current_subarray = 0
             for j in range(i, len(nums)):
                 current_subarray += nums[j]
                 max_subarray = max(max_subarray, current_subarray)
-
+        
         return max_subarray
 
 
-## Approach 2: Dynamic Programming
-######################################
-# time: O(n) --> where N is length of nums - we iterate through nums exactly once
-# space: O(1) --> onlyever use 2 variables: current_subarray and max_subarray
-# - whenever asked to find the max or min of something, consider dynamic programming
-# - this particular solution uses Kadane's Algorithm
+## Approach 2: Dynamic Programming, Kadane's Algorithm
+##########################################################
+# Time: O(N) - Where N is the length of nums. We iterate through every element
+#              of nums exactly once.
+# Space: O(1) - No matter how long the input is, we are only ever using 2
+#               variables: currentSubarray and maxSubarray
 class Solution:
-    def maxSubArray(self, nums: list[int]) -> int:
+    def maxSubArray(self, nums: List[int]) -> int:
         # Initialize our variables using the first element.
         current_subarray = max_subarray = nums[0]
-
+        
         # Start with the 2nd element since we already used the first one.
         for num in nums[1:]:
             # If current_subarray is negative, throw it away. Otherwise, keep adding to it.
             current_subarray = max(num, current_subarray + num)
             max_subarray = max(max_subarray, current_subarray)
-
+        
         return max_subarray
 
 
 ## Approach 3: Divide and Conquer (Advanced)
 ################################################
-# time: O(n log(n)) --> where N is length of nums - first call of helper function loops
-# through entire array splits the array in half with each recursive call
-# space: O(log(n)) --> extra space needed for the recursive stack - base case
-# (empty array) occurs after log N calls
-# - takes more time and space, but is good to know as divide and conquer is
-# an extremely common type of algorithm.
-# - uses recursion
-# - if we split input in half, the max subarray would use:
-#    - elements from just the left side
-#    - elements from just the right side
-#    - elements from both sides
-# - thus, the answer is simply the largest of:
-#    - max subarray from left side
-#    - max subarray from the right side
-#    - max subarray that can use elements both sides
+# Time: O(N⋅logN) - where N is the length of nums.
+# - On our first call to findBestSubarray, we use for loops to visit every
+#   element of nums. Then, we split the array in half and call findBestSubarray
+#   with each half. Both those calls will then iterate through every element in
+#   that half, which combined is every element of nums again. Then, both those
+#   halves will be split in half, and 4 more calls to findBestSubarray will
+#   happen, each with a quarter of nums. As you can see, every time the array
+#   is split, we still need to handle every element of the original input nums.
+#   We have to do this logN times since that's how many times an array can be
+#   split in half.
+
+# Space: O(logN) - where N is the length of nums.
+# - The extra space we use relative to input size is solely occupied by the
+#   recursion stack. Each time the array gets split in half, another call of
+#   findBestSubarray will be added to the recursion stack, until calls start to
+#   get resolved by the base case - remember, the base case happens at an empty
+#   array, which occurs after logN calls.
+
 class Solution:
-    def maxSubArray(self, nums: list[int]) -> int:
+    def maxSubArray(self, nums: List[int]) -> int:
         def findBestSubarray(nums, left, right):
             # Base case - empty array.
             if left > right:
@@ -150,16 +291,10 @@ class Solution:
 
             # The largest of the 3 is the answer for any given input array.
             return max(best_combined_sum, left_half, right_half)
-
+        
         # Our helper function is designed to solve this problem for
         # any array - so just call it using the entire input!
         return findBestSubarray(nums, 0, len(nums) - 1)
 
 
-test = Solution()
-maxSubArray1 = test.maxSubArray([-2, 1, -3, 4, -1, 2, 1, -5, 4])  # 6
-maxSubArray2 = test.maxSubArray([1])  # 1
-maxSubArray3 = test.maxSubArray([5, 4, -1, 7, 8])  # 23
-print("~ maxSubArray1", maxSubArray1)
-print("~ maxSubArray2", maxSubArray2)
-print("~ maxSubArray3", maxSubArray3)
+

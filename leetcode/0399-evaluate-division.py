@@ -51,90 +51,212 @@
 
 ################################################################################
 
-## path search graph
-##############################
+
+## path search in graph (backtracking w/ dfs)
+#################################################
 from collections import defaultdict
+
 
 class Solution:
     def calcEquation(self, equations: list[list[str]], values: list[float], queries: list[list[str]]) -> list[float]:
-        graph = defaultdict(defaultdict)
-        
-        def backtrack(curr_node, target_node, acc_product, seen):
-            seen.add(curr_node)
-            ret = -1
-            neighbors = graph[curr_node]
-            if target_node in neighbors:
-                ret = acc_product * neighbors[target_node]
+        def backtrack(curr, target, products, seen):
+            seen.add(curr)
+            ans = -1
+            neighbors = graph[curr]
+            if target in neighbors:
+                ans = products * neighbors[target]
             else:
                 for neighbor, val in neighbors.items():
                     if neighbor in seen:
                         continue
-                    ret = backtrack(neighbor, target_node, acc_product * val, seen)
-                    if ret != -1:
+                    ans = backtrack(neighbor, target, products * val, seen)
+                    if ans != -1:
                         break
-                        
-            seen.remove(curr_node)
-            return ret
+            seen.remove(curr)
+            return ans
         
+        graph = defaultdict(defaultdict)
         for (dividend, divisor), val in zip(equations, values):
             graph[dividend][divisor] = val
             graph[divisor][dividend] = 1 / val
             
-        results = []
+        res = []
         for dividend, divisor in queries:
             if dividend not in graph or divisor not in graph:
-                ret = -1
+                res.append(-1)
             elif dividend == divisor:
-                ret = 1
+                res.append(1)
+            else:
+                res.append(backtrack(dividend, divisor, 1, set()))
+                
+        return res
+
+
+class Solution:
+    def calcEquation(self, equations: list[list[str]], values: list[float], queries: list[list[str]]) -> list[float]:
+        def backtrack(curr, target, products, seen):
+            seen.add(curr)
+            ans = -1
+            neighbors = graph[curr]
+            if target in neighbors:
+                ans = products * neighbors[target]
+            else:
+                for neighbor, val in neighbors.items():
+                    if neighbor in seen:
+                        continue
+                    ans = backtrack(neighbor, target, products * val, seen)
+                    if ans != -1:
+                        break
+            seen.remove(curr)
+            return ans
+        
+        graph = defaultdict(defaultdict)
+        for (dividend, divisor), val in zip(equations, values):
+            graph[dividend][divisor] = val
+            graph[divisor][dividend] = 1 / val
+            
+        res = []
+        for dividend, divisor in queries:
+            if dividend not in graph or divisor not in graph:
+                ans = -1
+            elif dividend == divisor:
+                ans = 1
             else:
                 seen = set()
-                ret = backtrack(dividend, divisor, 1, seen)
-            results.append(ret)
-        
-        return results
+                ans = backtrack(dividend, divisor, 1, seen)
+            res.append(ans)
+            
+        return res
 
 
-## union find (disjoing set)
+## union find - disjoint set
 ##############################
 class Solution:
     def calcEquation(self, equations: list[list[str]], values: list[float], queries: list[list[str]]) -> list[float]:
-        gid_weight = {}
-        
-        def find(node_id):
-            if node_id not in gid_weight:
-                gid_weight[node_id] = (node_id, 1)
-            group_id, node_weight = gid_weight[node_id]
-            
-            if group_id != node_id:
-                new_group_id, group_weight = find(group_id)
-                gid_weight[node_id] = \
-                    (new_group_id, node_weight * group_weight)
-                
-            return gid_weight[node_id]
+        def find(node):
+            #if node not in weights:
+            #    weights[node] = (node, 1)
+            #group, weight = weights[node]
+            group, weight = weights.setdefault(node, (node, 1))
+            if node != group:
+                new_group, group_weight = find(group)
+                weights[node] = (new_group, weight * group_weight)
+            return weights[node]
         
         def union(dividend, divisor, val):
-            dividend_gid, dividend_weight = find(dividend)
-            divisor_gid, divisor_weight = find(divisor)
-            if dividend_gid != divisor_gid:
-                gid_weight[dividend_gid] = \
-                    (divisor_gid, divisor_weight * val / dividend_weight)
-        
+            num, num_weight = find(dividend)
+            denom, denom_weight = find(divisor)
+            if num != denom:
+                weights[num] = (denom, denom_weight * val / num_weight)
+                
+        weights = {}
         for (dividend, divisor), val in zip(equations, values):
             union(dividend, divisor, val)
             
         res = []
         for dividend, divisor in queries:
-            if dividend not in gid_weight or divisor not in gid_weight:
+            if dividend not in weights or divisor not in weights:
                 res.append(-1)
             else:
-                dividend_gid, dividend_weight = find(dividend)
-                divisor_gid, divisor_weight = find(divisor)
-                if dividend_gid != divisor_gid:
+                num, num_weight = find(dividend)
+                denom, denom_weight = find(divisor)
+                if num != denom:
+                    res.append(-1)
+                else:
+                    res.append(num_weight / denom_weight)
+                    
+        return res
+
+
+class Solution:
+    def calcEquation(self, equations: list[list[str]], values: list[float], queries: list[list[str]]) -> list[float]:
+        weights = {}
+
+        def find(node):
+            #if node not in weights:
+            #    weights[node] = (node, 1)
+            #group, weight = weights[node]
+            group, weight = weights.setdefault(node, (node, 1))
+            if group != node:
+                new_group, group_weight = find(group)
+                weights[node] = (new_group, weight * group_weight)
+            return weights[node]
+
+        def union(dividend, divisor, val):
+            dividend_group, dividend_weight = find(dividend)
+            divisor_group, divisor_weight = find(divisor)
+            if dividend_group != divisor_group:
+                weights[dividend_group] = (divisor_group, divisor_weight * val / dividend_weight)
+
+        for (dividend, divisor), val in zip(equations, values):
+            union(dividend, divisor, val)
+
+        res = []
+        for dividend, divisor in queries:
+            if dividend not in weights or divisor not in weights:
+                res.append(-1)
+            else:
+                dividend_group, dividend_weight = find(dividend)
+                divisor_group, divisor_weight = find(divisor)
+                if dividend_group != divisor_group:
                     res.append(-1)
                 else:
                     res.append(dividend_weight / divisor_weight)
                     
         return res
+
+
+class Solution:
+    def calcEquation(self, equations: list[list[str]], values: list[float], queries: list[list[str]]) -> list[float]:
+        weights = {}
+        
+        def find(node):
+            group, weight = weights.setdefault(node, (node, 1))
+            
+            if group != node:
+                new_group, group_weight = find(group)
+                weights[node] = (new_group, weight * group_weight)
+                
+            return weights[node]
+        
+        def union(dividend, divisor, val):
+            dividend_group, dividend_weight = find(dividend)
+            divisor_group, divisor_weight = find(divisor)
+            
+            if dividend_group != divisor_group:
+                weights[dividend_group] = (divisor_group, divisor_weight * val / dividend_weight)
+                
+        for (dividend, divisor), val in zip(equations, values):
+            union(dividend, divisor, val)
+            
+        res = []
+        for dividend, divisor in queries:
+            if dividend not in weights or divisor not in weights:
+                res.append(-1)
+            else:
+                dividend_group, dividend_weight = find(dividend)
+                divisor_group, divisor_weight = find(divisor)
+                
+                if dividend_group != divisor_group:
+                    res.append(-1)
+                else:
+                    res.append(dividend_weight / divisor_weight)
+                    
+        return res
+
+
+##
+##############################
+class Solution:
+    def calcEquation(self, equations: list[list[str]], values: list[float], queries: list[list[str]]) -> list[float]:
+        pass
+
+
+##
+##############################
+class Solution:
+    def calcEquation(self, equations: list[list[str]], values: list[float], queries: list[list[str]]) -> list[float]:
+        pass
 
 
 ## Tests
