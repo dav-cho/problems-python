@@ -8,33 +8,33 @@
 # same or another computer environment.
 
 # Design an algorithm to serialize and deserialize a binary tree. There is no
-# restriction on how your serialization/deserialization algorithm should
-# work. You just need to ensure that a binary tree can be serialized to a string# and this string can be deserialized to the original tree structure.
+# restriction on how your serialization/deserialization algorithm should work.
+# You just need to ensure that a binary tree can be serialized to a string and
+# this string can be deserialized to the original tree structure.
 
 # Clarification: The input/output format is the same as how LeetCode serializes
 # a binary tree. You do not necessarily need to follow this format, so please
-# be creative and come up with different approahes yourself.
+# be creative and come up with different approaches yourself.
 
 # Example 1:
+#       1
+#    2     3
+#        4   5
 # Input: root = [1,2,3,null,null,4,5]
 # Output: [1,2,3,null,null,4,5]
 
 # Example 2:
 # Input: root = []
 # Output: []
-
-# Example 3:
-# Input: root = [1]
-# Output: [1]
-
-# Example 4:
-# Input: root = [1,2]
-# Output: [1,2]
  
 # Constraints:
- 
 # The number of nodes in the tree is in the range [0, 104].
-# -1000 <= Node.val <= 1000c
+# -1000 <= Node.val <= 1000
+
+# Your Codec object will be instantiated and called as such:
+# ser = Codec()
+# deser = Codec()
+# ans = deser.deserialize(ser.serialize(root))
 
 # Your Codec object will be instantiated and called as such:
 # ser = Codec()
@@ -43,6 +43,7 @@
 
 ################################################################################
 
+
 ## Definition for a binary tree node.
 class TreeNode(object):
     def __init__(self, x):
@@ -50,169 +51,354 @@ class TreeNode(object):
         self.left = None
         self.right = None
 
-## recursive
-################
+
+## recursive preorder dfs *best
+##################################
 class Codec:
     def serialize(self, root):
-        def helper(node, result):
-            if not node:
-                result.append(None)
+        def dfs_preorder(node, vals):
+            if node:
+                vals.append(str(node.val))
+                dfs_preorder(node.left, vals)
+                dfs_preorder(node.right, vals)
             else:
-                result = helper(node.left, result)
-                result = helper(node.right, result)
-                result.append(node.val)
-            return result
-        
-        return helper(root, [])
-        
-
-    def deserialize(self, data):
-        def helper(arr):
-            if arr[-1] is None:
-                return arr.pop()
-            
-            root = TreeNode(arr.pop())
-            root.right = helper(arr)
-            root.left = helper(arr)
-            return root
-        
-        return helper(data)
-
-
-class Codec:
-    def serialize(self, root):
-        def serialize_recursive_helper(node, result):
-            if node is None:
-                result.append(None)
-            else:
-                result = serialize_recursive_helper(node.left, result)
-                result = serialize_recursive_helper(node.right, result)
-                result.append(node.val)
-            return result
-
-        return serialize_recursive_helper(root, [])
-
-    def deserialize(self, data):
-        def deserialize_recursive_helper(arr):
-            if arr[-1] is None:
-                return arr.pop()
-
-            root = TreeNode(arr.pop())
-            root.right = deserialize_recursive_helper(arr)
-            root.left = deserialize_recursive_helper(arr)
-            return root
-
-        return deserialize_recursive_helper(data)
-
-
-class Codec:
-    def serialize(self, root):
-        def serialize_recursive_helper(node, result):
-            if node is None:
-                result.append(None)
-            else:
-                result.append(node.val)
-                result = serialize_recursive_helper(node.left, result)
-                result = serialize_recursive_helper(node.right, result)
-            return result
-
-        return serialize_recursive_helper(root, [])
-
-    def deserialize(self, data):
-        def deserialize_recursive_helper(arr):
-            if arr[-1] is None:
-                return arr.pop()
-
-            root = TreeNode(arr.pop())
-            root.left = deserialize_recursive_helper(arr)
-            root.right = deserialize_recursive_helper(arr)
-            return root
-
-        data.reverse()
-        return deserialize_recursive_helper(data) 
-
-
-class Codec:
-    def serialize(self, root):
-        def serialize_recursive_helper(node, result):
-            if node is None:
-                result.append(None)
-            else:
-                result.append(node.val)
-                result = serialize_recursive_helper(node.left, result)
-                result = serialize_recursive_helper(node.right, result)
-            return result
-        
-        return serialize_recursive_helper(root, [])
-
-    def deserialize(self, data):
-        def deserialize_recursive_helper(arr):
-            if arr[0] is None:
-                return arr.pop(0)
+                vals.append('None')
                 
-            root = TreeNode(arr[0])
-            arr.pop(0)
-            root.left = deserialize_recursive_helper(arr)
-            root.right = deserialize_recursive_helper(arr)
-            return root
+            return vals
+        
+        return ','.join(dfs_preorder(root, []))
 
-        return deserialize_recursive_helper(data)
+    def deserialize(self, data):
+        def dfs_preorder(queue):
+            val = next(queue)
+            
+            if val == 'None':
+                return
+            
+            root = TreeNode(int(val))
+            root.left = dfs_preorder(queue)
+            root.right = dfs_preorder(queue)
+            
+            return root
+        
+        return dfs_preorder(iter(data.split(',')))
 
 
 class Codec:
     def serialize(self, root):
-        def serialize_recursive_helper(node, string):
-            if node is None:
+        def helper(node, vals):
+            if node:
+                vals.append(str(node.val))
+                helper(node.left, vals)
+                helper(node.right, vals)
+            else:
+                vals.append('None')
+            
+            return vals
+        
+        return ','.join(helper(root, []))
+
+    def deserialize(self, data):
+        def helper(queue):
+            val = next(queue)
+            if val == 'None':
+                return
+            
+            node = TreeNode(int(val))
+            node.left = helper(queue)
+            node.right = helper(queue)
+            return node
+        
+        return helper(iter(data.split(',')))
+
+
+class Codec:
+    def serialize(self, root):
+        vals = []
+        
+        def helper(node):
+            if node:
+                vals.append(str(node.val))
+                helper(node.left)
+                helper(node.right)
+            else:
+                vals.append('None')
+            
+            return vals
+        
+        return ','.join(helper(root))
+
+    def deserialize(self, data):
+        vals = iter(data.split(','))
+        
+        def helper():
+            val = next(vals)
+            if val == 'None':
+                return
+            
+            node = TreeNode(int(val))
+            node.left = helper()
+            node.right = helper()
+            
+            return node
+        
+        return helper()
+
+
+## dfs
+##############################
+class Codec:
+    def serialize(self, root):
+        def dfs_preorder(node, string):
+            if node:
+                string += str(node.val) + ','
+                string = dfs_preorder(node.left, string)
+                string = dfs_preorder(node.right, string)
+            else:
+                string += 'None,'
+                
+            return string
+        
+        return dfs_preorder(root, '')
+
+    def deserialize(self, data):
+        def dfs_preorder(queue):
+            if queue[0] == 'None':
+                queue.popleft()
+                return
+            
+            root = TreeNode(queue.popleft())
+            root.left = dfs_preorder(queue)
+            root.right = dfs_preorder(queue)
+            
+            return root
+        
+        return dfs_preorder(deque(data.split(',')))
+
+
+class Codec:
+    def serialize(self, root):
+        def helper(node, string):
+            if not node:
                 string += 'None,'
             else:
                 string += str(node.val) + ','
-                string = serialize_recursive_helper(node.left, string)
-                string = serialize_recursive_helper(node.right, string)
+                string = helper(node.left, string)
+                string = helper(node.right, string)
             return string
-        
-        return serialize_recursive_helper(root, '')
+        return helper(root, '')
 
     def deserialize(self, data):
-        def deserialize_recursive_helper(arr):
-            if arr[0] == 'None':
-                return arr.pop(0)
-                
-            root = TreeNode(arr[0])
-            arr.pop(0)
-            root.left = deserialize_recursive_helper(arr)
-            root.right = deserialize_recursive_helper(arr)
+        def helper(queue):
+            if queue[0] == 'None':
+                queue.popleft()
+                return
+            
+            root = TreeNode(queue.popleft())
+            root.left = helper(queue)
+            root.right = helper(queue)
             return root
+        return helper(deque(data.split(',')))
 
+
+class Codec:
+    def serialize(self, root):
+        def helper(node, string):
+            if not node:
+                string += 'None,'
+            else:
+                string += f"{str(node.val)},"
+                string = helper(node.left, string)
+                string = helper(node.right, string)
+            return string
+        return helper(root, '')
+            
+
+    def deserialize(self, data):
+        def helper(lst):
+            if lst[0] == 'None':
+                lst.pop(0)
+                return None
+            
+            root = TreeNode(lst.pop(0))
+            root.left = helper(lst)
+            root.right = helper(lst)
+            return root
+        return helper(data.split(','))
+
+
+class Codec:
+    def serialize(self, root):
+        def helper(root, string):
+            if not root:
+                string += 'None,'
+            else:
+                string += str(root.val) + ','
+                string = helper(root.left, string)
+                string = helper(root.right, string)
+            return string
+        return helper(root, '')
+            
+
+    def deserialize(self, data):
+        def helper(lst):
+            if lst[0] == 'None':
+                lst.pop(0)
+                return None
+            
+            root = TreeNode(lst.pop(0))
+            root.left = helper(lst)
+            root.right = helper(lst)
+            return root
+        
         data_list = data.split(',')
-        root = deserialize_recursive_helper(data_list)
+        root = helper(data_list)
         return root
 
 
-## Tests
-############
+## discuss solutions
+##############################
 
-test1 = [1,2,3,null,null,4,5]   # [1,2,3,null,null,4,5]
-test2 = []                      # []
-test3 = [1]                     # [1]
-test4 = [1,2]                   # [1,2]
-test5 = [1,2,2]                 # [1,2,2]
-test6 = [1,2,3,null,null,4,5]   # [1,2,3,null,null,4,5]
+## recursive preorder dfs
+##############################
+class Codec:
+    def serialize(self, root):
+        vals = []
+        
+        def helper(node):
+            if node:
+                vals.append(str(node.val))
+                helper(node.left)
+                helper(node.right)
+            else:
+                vals.append('None')
+                
+            return vals
+        
+        return ','.join(helper(root))
+
+    def deserialize(self, data):
+        def helper():
+            val = next(vals)
+            if val == 'None':
+                return
+            
+            node = TreeNode(int(val))
+            node.left = helper()
+            node.right = helper()
+            
+            return node
+        
+        vals = iter(data.split(','))
+        return helper()
+
+
+## hybrid solutions (LC + Discuss)
+######################################
+class Codec:
+    def serialize(self, root):
+        def helper(node, string):
+            if not node:
+                string += 'None,'
+            else:
+                string += str(node.val) + ','
+                string = helper(node.left, string)
+                string = helper(node.right, string)
+            return string
+        
+        return helper(root, '')
+
+    def deserialize(self, data):
+        lst = iter(data.split(','))
+        
+        def helper():
+            val = next(lst)
+            if val == 'None':
+                return
+            
+            node = TreeNode(int(val))
+            node.left = helper()
+            node.right = helper()
+            return node
+        
+        return helper()
+
+
+class Codec:
+    def serialize(self, root):
+        def helper(node, string):
+            if not node:
+                string += 'None,'
+            else:
+                string += str(node.val) + ','
+                string = helper(node.left, string)
+                string = helper(node.right, string)
+            return string
+        return helper(root, '')
+
+    def deserialize(self, data):
+        lst = iter(data.split(','))
+        
+        def helper():
+            val = next(lst)
+            if val == 'None':
+                return
+            
+            node = TreeNode(int(val))
+            node.left = helper()
+            node.right = helper()
+            
+            return node
+        
+        return helper()
+
+
+## 
+##############################
+class Codec:
+    def serialize(self, root):
+        """Encodes a tree to a single string.
+        
+        :type root: TreeNode
+        :rtype: str
+        """
+
+    def deserialize(self, data):
+        """Decodes your encoded data to tree.
+        
+        :type data: str
+        :rtype: TreeNode
+        """
+
+
+## Tests
+#############
+
+import unittest
+
+
+class Test(unittest.TestCase):
+    def test_cases(self):
+        solution = Solution()
+        self.assertEqual(solution. , )
+        self.assertCountEqual()
+
+
+if __name__ == "__main__":
+    unittest.main()
 
 
 ## LeetCode Solutions
 #########################
 
-
 ## Approach 1: Depth First Search (DFS)
 ###########################################
-# Time: O(N)
-# in both serialization and deserialization functions, we visit each node
-# exactly once, thus the time complexity is O(N), where NN is the number of
-# nodes, i.e. the size of tree.
-
-# Space: O(N)
-# In both serialization and deserialization functions, we keep the entire tree,
-# either at the beginning or at the end.
+# Time: O(N) - In both serialization and deserialization functions, we visit
+#              each node exactly once, thus the time complexity is O(N), where
+#              N is the number of nodes, i.e. the size of tree.
+# Space: O(N) - In both serialization and deserialization functions, we keep
+#               the entire tree, either at the beginning or at the end,
+#               therefore, the space complexity is O(N).
 class Codec:
 
     def serialize(self, root):

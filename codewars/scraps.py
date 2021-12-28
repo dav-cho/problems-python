@@ -473,7 +473,47 @@ a = 1
 
 ######################################################################
 
-print(tuple('hello'))
+#print(tuple('hello'))
+
+######################################################################
+
+def add(n):
+    n += 1
+    count = 1
+    while n > 2:
+        count += 1
+        n //= 2
+    return count if n == 1 else count + 1
+
+def subtract(n):
+    n -= 1
+    count = 1
+    while n > 2:
+        count += 1
+        n //= 2
+    return count if n == 1 else count + 1
+
+#for n in range(1, 22, 2):
+#    print('------------------------------')
+#    print('n:', n)
+#    add_one = add(n)
+#    subtract_one = subtract(n)
+#    print('count:', min(add_one, subtract_one))
+
+def halve(n):
+    count = 0
+    while n % 2 == 0:
+        count += 1
+        n //= 2
+
+    print('final n:', n)
+    return count
+
+for n in range(2, 31, 2):
+    count = halve(n)
+    print('------------------------------')
+    print('n:', n)
+    print('count:', count)
 
 ######################################################################
 

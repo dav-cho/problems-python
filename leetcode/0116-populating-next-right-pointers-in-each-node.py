@@ -18,28 +18,31 @@
 
 # Initially, all next pointers are set to NULL.
 
-# Follow up:
-# You may only use constant extra space.
-# Recursive approach is fine, you may assume implicit stack space does not
-# count as extra space for this problem.
- 
 # Example 1:
-#        Figure A               Figure B
-#           1                      1 -> null        
-#       2       3             2 -------> 3 -> null     
-#     4   5   6   7         4 -> 5 -> 6 -> 7 -> null
+#          1                  1-->NULL     
+#      2       3          2------>3-->NULL  
+#    4   5   6   7      4-->5-->6-->7-->NULL
 # Input: root = [1,2,3,4,5,6,7]
 # Output: [1,#,2,3,#,4,5,6,7,#]
-# Explanation: Given the above perfect binary tree (Figure A), your function
-# should populate each next pointer t point to its next right node, just like
-# in Figure B. The serialized output is in level order as connected by the
-# next pointers, with '#' signifying the end of each level.
-#
+# Explanation: Given the above perfect binary tree (Figure A), your function should populate each next pointer to point to its next right node, just like in Figure B. The serialized output is in level order as connected by the next pointers, with '#' signifying the end of each level.
+
+# Example 2:
+# Input: root = []
+# Output: []
+ 
 # Constraints:
-# The number of nodes in the given tree is less than 4096.
-# -1000 <= node.val <= 1000o
+# The number of nodes in the tree is in the range [0, 212 - 1].
+# -1000 <= Node.val <= 1000
+ 
+# Follow-up:
+# You may only use constant extra space.
+# The recursive approach is fine. You may assume implicit stack space does not
+# count as extra space for this problem.
 
 ################################################################################
+
+from collections import deque
+
 
 ## Definition for a Node.
 class Node:
@@ -49,50 +52,42 @@ class Node:
         self.right = right
         self.next = next
 
-## attempt 1
-################
+
+## using previously established next pointers
+#################################################
 class Solution:
     def connect(self, root: 'Node') -> 'Node':
         if not root:
             return
         
-        levels = []
-        def helper(node, level):
-            if len(levels) == level:
-                levels.append([])
-                
-            levels[level].append(node)
+        leftmost = root
+        while leftmost.left:
+            head = leftmost
+            while head:
+                head.left.next = head.right
+                if head.next:
+                    head.right.next = head.next.left
+                head = head.next
+            leftmost = leftmost.left
             
-            if node.left:
-                helper(node.left, level + 1)
-            if node.right:
-                helper(node.right, level + 1)
-        
-        helper(root, 0)
-        for level in levels:
-            for i in range(len(level) - 1):
-                level[i].next = level[i + 1]
-        
         return root
 
 
 ## level order traversal
-############################
-from collections import deque
-
+##############################
 class Solution:
     def connect(self, root: 'Node') -> 'Node':
         if not root:
             return
         
-        queue = deque([root])
+        queue = collections.deque([root])
         while queue:
             size = len(queue)
             for i in range(size):
                 node = queue.popleft()
-                
                 if i < size - 1:
                     node.next = queue[0]
+                
                 if node.left:
                     queue.append(node.left)
                 if node.right:
@@ -101,81 +96,54 @@ class Solution:
         return root
 
 
-## using next pointers
-##########################
+## first attempt
+##############################
 class Solution:
     def connect(self, root: 'Node') -> 'Node':
         if not root:
-            return
+            return root
         
-        leftmost = root
-        while leftmost.left:
-            node = leftmost
-            while node:
-                node.left.next = node.right
-                if node.next:
-                    node.right.next = node.next.left
-                node = node.next
-            
-            leftmost = leftmost.left
+        queue = [root]
+        while queue:
+            level = []
+            for i, node in enumerate(queue):
+                if i < len(queue) - 1:
+                    node.next = queue[i + 1]
+                else:
+                    node.next = None
+                    
+                if node.left:
+                    level.append(node.left)
+                if node.right:
+                    level.append(node.right)
+                    
+            queue = level
             
         return root
 
 
+## 
+##############################
 class Solution:
     def connect(self, root: 'Node') -> 'Node':
-        if not root:
-            return
-        
-        curr = root
-        next_curr = root.left
-        while curr.left:
-            curr.left.next = curr.right
-            if curr.next:
-                curr.right.next = curr.next.left
-                curr = curr.next
-            else:
-                curr = next_curr
-                next_curr = curr.left
-        
-        return root
-
-
-class Solution:
-    def connect(self, root: 'Node') -> 'Node':
-        curr = root
-        while curr and curr.left:
-            next_left = curr.left
-            while curr:
-                curr.left.next = curr.right
-                curr.right.next = curr.next and curr.next.left
-                curr = curr.next
-            curr = next_left
-            
-        return root
-
-
-## recursive
-################
-class Solution:
-    def connect(self, root: 'Node') -> 'Node':
-        if not root:
-            return
-        
-        curr = root
-        if curr and curr.left and curr.right:
-            curr.left.next = curr.right
-            if curr.next:
-                curr.right.next = curr.next.left
-            
-            self.connect(root.left)
-            self.connect(root.right)
-        
-        return root
+        pass
 
 
 ## Tests
-############
+#############
+
+import unittest
+
+
+class Test(unittest.TestCase):
+    def test_cases(self):
+        solution = Solution()
+        self.assertEqual(solution. , )
+        self.assertCountEqual()
+
+
+if __name__ == "__main__":
+    unittest.main()
 
 
 ## LeetCode Solutions
@@ -183,17 +151,14 @@ class Solution:
 
 ## Approach 1: Level Order Traversal
 ########################################
-# Time: O(N)
-# Since we process each node exactly once. Note that processing a node in this
-# context means popping the node from the queue and then establishing the next
-# pointers.
-
-# Space: O(N)
-# This is a perfect binary tree which means the last level contains N / 2 nodes.# The space complexity for breadth first traversal is the space occupied by the
-# queue which is dependent upon the maximum number of nodes in particular level.
-# So, in this case, the space complexity would be O(N).
-import collections 
-
+# Time: O(N) - Since we process each node exactly once. Note that processing a
+#              node in this context means popping the node from the queue and
+#              then establishing the next pointers.
+# Space: O(N) - This is a perfect binary tree which means the last level
+#               contains N/2 nodes. The space complexity for breadth first
+#               traversal is the space occupied by the queue which is dependent
+#               upon the maximum number of nodes in particular level. So, in
+#               this case, the space complexity would be O(N).
 class Solution:
     def connect(self, root: 'Node') -> 'Node':
         
@@ -276,4 +241,5 @@ class Solution:
             leftmost = leftmost.left
         
         return root
+
 

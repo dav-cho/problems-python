@@ -6,6 +6,9 @@
 # nodes' values.
 
 # Example 1:
+#   1
+#     2
+#   3
 # Input: root = [1,null,2,3]
 # Output: [3,2,1]
 
@@ -16,14 +19,6 @@
 # Example 3:
 # Input: root = [1]
 # Output: [1]
-
-# Example 4:
-# Input: root = [1,2]
-# Output: [2,1]
-
-# Example 5:
-# Input: root = [1,null,2]
-# Output: [2,1]
  
 # Constraints:
 # The number of the nodes in the tree is in the range [0, 100].
@@ -32,6 +27,7 @@
 # Follow up: Recursive solution is trivial, could you do it iteratively?
 
 ################################################################################
+
 
 ## Definition for a binary tree node.
 class TreeNode:
@@ -43,6 +39,38 @@ class TreeNode:
 
 ## recursive
 ################
+class Solution:
+    def postorder_traversal(self, root: TreeNode) -> list[int]:
+        res = []
+        
+        def dfs_postorder(node):
+            if not node:
+                return
+            
+            dfs_postorder(node.left)
+            dfs_postorder(node.right)
+            res.append(node.val)
+            
+            return res
+        
+        return dfs_postorder(root)
+
+
+class Solution:
+    def postorder_traversal(self, root: TreeNode) -> list[int]:
+        return self.dfs_postorder(root, [])
+    
+    def dfs_postorder(self, node, res):
+        if not node:
+            return
+        
+        self.dfs_postorder(node.left, res)
+        self.dfs_postorder(node.right, res)
+        res.append(node.val)
+        
+        return res
+
+
 class Solution:
     def postorder_traversal(self, root: TreeNode) -> list[int]:
         result = []
@@ -58,49 +86,57 @@ class Solution:
         result.append(node.val)
 
 
-class Solution:
-    def postorder_traversal(self, root: TreeNode) -> list[int]:
-        def helper(node, result):
-            if not node:
-                return
-            
-            helper(node.left, result)
-            helper(node.right, result)
-            result.append(node.val)
-            
-            return result
-        
-        return helper(root, [])
-
-
-class Solution:
-    def postorder_traversal(self, root: TreeNode) -> list[int]:
-        if not root:
-            return
-
-        left = self.postorderTraversal(root.left)
-        right = self.postorderTraversal(root.right)
-        left = left if left else []
-        right = right if right else []
-
-        return left + right + [root.val]
-
-
 ## iterative
 ################
 class Solution:
     def postorder_traversal(self, root: TreeNode) -> list[int]:
-        result, stack = [], []
+        res = []
+        stack = [root]
+        while stack:
+            node = stack.pop()
+            if not node:
+                continue
+                
+            res.append(node.val)
+            stack.append(node.left)
+            stack.append(node.right)
+            
+        return res[::-1]
+
+
+class Solution:
+    def postorder_traversal(self, root: TreeNode) -> list[int]:
+        res = []
+        stack = [(root, False)]
+        while stack:
+            node, seen = stack.pop()
+            if not node:
+                continue
+                
+            if seen:
+                res.append(node.val)
+            else:
+                stack.append((node, True))
+                stack.append((node.right, False))
+                stack.append((node.left, False))
+            
+        return res
+
+
+class Solution:
+    def postorder_traversal(self, root: TreeNode) -> list[int]:
+        res = []
+        stack = []
         while stack or root:
             while root:
-                result.append(root.val)
+                res.append(root.val)
                 stack.append(root)
                 root = root.right
                 
             root = stack.pop()
             root = root.left
             
-        return reversed(result)
+        return reversed(res)
 
 
 from collections import deque

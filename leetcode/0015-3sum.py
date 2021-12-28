@@ -31,6 +31,36 @@
 ##############################
 class Solution:
     def threeSum(self, nums: list[int]) -> list[list[int]]:
+        def twoSumII(i):
+            left = i + 1
+            right = N - 1
+            while left < right:
+                curr_sum = nums[i] + nums[left] + nums[right]
+                if curr_sum < 0:
+                    left += 1
+                elif curr_sum > 0:
+                    right -= 1
+                else:
+                    res.append((nums[i], nums[left], nums[right]))
+                    left += 1
+                    right -= 1
+                    while left < right and nums[left - 1] == nums[left]:
+                        left += 1
+            
+        nums.sort()
+        N = len(nums)
+        res = []
+        for i in range(len(nums)):
+            if nums[i] > 0:
+                break
+            elif i == 0 or nums[i - 1] != nums[i]:
+                twoSumII(i)
+
+        return res
+
+
+class Solution:
+    def threeSum(self, nums: list[int]) -> list[list[int]]:
         def find_triplet(i):
             lo, hi = i + 1, len(nums) - 1
             while lo < hi:

@@ -6,24 +6,31 @@
 # in the tree.
 
 # According to the definition of LCA on Wikipedia: “The lowest common ancestor
-# is defined between two nodes p and q as the lowest node in T that has both
-# p and q as descendants (where we allow a node to be a descendant of itself).”
+# is defined between two nodes p and q as the lowest node in T that has both p
+# and q as descendants (where we allow a node to be a descendant of itself).”
 
 # Example 1:
+#           3
+#       5       1
+#     6   2   0   8
+#        7 4 
 # Input: root = [3,5,1,6,2,0,8,null,null,7,4], p = 5, q = 1
 # Output: 3
 # Explanation: The LCA of nodes 5 and 1 is 3.
 
 # Example 2:
+#           3
+#       5       1
+#     6   2   0   8
+#        7 4 
 # Input: root = [3,5,1,6,2,0,8,null,null,7,4], p = 5, q = 4
 # Output: 5
-# Explanation: The LCA of nodes 5 and 4 is 5, since a node can be a descendant
-# of itself according to the LCA definition.
+# Explanation: The LCA of nodes 5 and 4 is 5, since a node can be a descendant of itself according to the LCA definition.
 
 # Example 3:
 # Input: root = [1,2], p = 1, q = 2
 # Output: 1
-#
+ 
 # Constraints:
 # The number of nodes in the tree is in the range [2, 105].
 # -109 <= Node.val <= 109
@@ -33,6 +40,7 @@
 
 ################################################################################
 
+
 ## Definition for a binary tree node.
 class TreeNode:
     def __init__(self, x):
@@ -40,32 +48,11 @@ class TreeNode:
         self.left = None
         self.right = None
 
+
 ## recursive
-################
+##############################
 class Solution:
     def lowestCommonAncestor(self, root: 'TreeNode', p: 'TreeNode', q: 'TreeNode') -> 'TreeNode':
-        self.result = None
-        
-        def helper(node):
-            if not node:
-                return False
-            
-            left = helper(node.left)
-            right = helper(node.right)
-            mid = node == p or node == q
-            if mid + left + right >= 2:
-                self.result = node
-                
-            return mid or left or right
-        
-        helper(root)
-        return self.result
-
-
-class Solution:
-        def lowestCommonAncestor(self, root: 'TreeNode', p: 'TreeNode', q: 'TreeNode') -> 'TreeNode':
-        self.lca = None
-        
         def dfs(node):
             if not node:
                 return False
@@ -73,35 +60,39 @@ class Solution:
             left = dfs(node.left)
             right = dfs(node.right)
             mid = node == p or node == q
-            if left + right + mid >= 2:
-                self.lca = node
+            if mid + left + right >= 2:
+                self.res = node
                 
             return left or right or mid
         
         dfs(root)
-        return self.lca
+        return self.res
 
 
 class Solution:
-        def lowestCommonAncestor(self, root: 'TreeNode', p: 'TreeNode', q: 'TreeNode') -> 'TreeNode':
-        self.lca = None
-        self.dfs(root, p, q)
-        return self.lca
-    
-    def dfs(self, node, p, q):
-        if not node:
-            return False
+    def lowestCommonAncestor(self, root: 'TreeNode', p: 'TreeNode', q: 'TreeNode') -> 'TreeNode':
+        res = None;
+        
+        def dfs(node):
+            nonlocal res
+            
+            if not node:
+                return False
+            
+            left = dfs(node.left)
+            right = dfs(node.right)
+            mid = node == p or node == q
+            if left + right + mid >= 2:
+                res = node
+                
+            return left or right or mid
+        
+        dfs(root)
+        return res
 
-        left = self.dfs(node.left, p, q)
-        right = self.dfs(node.right, p, q)
-        mid = node == p or node == q
-        if left + right + mid >= 2:
-            self.lca = node
 
-        return left or right or mid
-
-## iterative with parent pointers
-#####################################
+## iterative w/ parent pointers
+###################################
 class Solution:
     def lowestCommonAncestor(self, root: 'TreeNode', p: 'TreeNode', q: 'TreeNode') -> 'TreeNode':
         stack = [root]
@@ -114,7 +105,7 @@ class Solution:
             if node.right:
                 parents[node.right] = node
                 stack.append(node.right)
-        
+                
         ancestors = set()
         while p:
             ancestors.add(p)
@@ -125,23 +116,55 @@ class Solution:
         return q
 
 
-## iterative without parent pointers
-########################################
+## iterative w/o parent pointers
+####################################
 class Solution:
-    def lowestCommonAncestor(self, root: 'TreeNode', p: 'TreeNode', q: 'TreeNode') -> 'TreeNode':
-        self.both_pending = 2
-        self.left_done = 1
-        self.both_done = 0
+    BOTH_PENDING = 2
+    LEFT_DONE = 1
+    BOTH_DONE = 0
     
-        stack = [(root, self.both_pending)]
+    def lowestCommonAncestor(self, root: 'TreeNode', p: 'TreeNode', q: 'TreeNode') -> 'TreeNode':
+        stack = [(root, Solution.BOTH_PENDING)]
         one_node_found = False
-        lca_idx = -1
-        
+        LCA_index = -1
         while stack:
             parent_node, parent_state = stack[-1]
-            
-            if parent_state != self.both_done:
-                if parent_state == self.both_pending:
+            if parent_state != Solution.BOTH_DONE:
+                if parent_state == Solution.BOTH_PENDING:
+                    if parent_node == p or parent_node == q:
+                        if one_node_found:
+                            return stack[LCA_index][0]
+                        else:
+                            one_node_found = True
+                            LCA_index = len(stack) - 1
+                    child_node = parent_node.left
+                else:
+                    child_node = parent_node.right
+                stack.pop()
+                stack.append((parent_node, parent_state - 1))
+                if child_node:
+                    stack.append((child_node, Solution.BOTH_PENDING))
+            else:
+                if one_node_found and LCA_index == len(stack) - 1:
+                    LCA_index -= 1
+                stack.pop()
+
+        return None                
+
+
+class Solution:
+    def lowestCommonAncestor(self, root: 'TreeNode', p: 'TreeNode', q: 'TreeNode') -> 'TreeNode':
+        self.BOTH_PENDING = 2
+        self.LEFT_PENDING = 1
+        self.BOTH_DONE = 0
+    
+        stack = [(root, self.BOTH_PENDING)]
+        one_node_found = False
+        lca_idx = -1
+        while stack:
+            parent_node, parent_state = stack[-1]
+            if parent_state != self.BOTH_DONE:
+                if parent_state == self.BOTH_PENDING:
                     if parent_node == p or parent_node == q:
                         if one_node_found:
                             return stack[lca_idx][0]
@@ -151,12 +174,10 @@ class Solution:
                     child_node = parent_node.left
                 else:
                     child_node = parent_node.right
-                
                 stack.pop()
                 stack.append((parent_node, parent_state - 1))
-                
                 if child_node:
-                    stack.append((child_node, self.both_pending))
+                    stack.append((child_node, self.BOTH_PENDING))
             else:
                 if one_node_found and lca_idx == len(stack) - 1:
                     lca_idx -= 1
@@ -165,8 +186,28 @@ class Solution:
         return None
 
 
+## 
+##############################
+class Solution:
+    def lowestCommonAncestor(self, root: 'TreeNode', p: 'TreeNode', q: 'TreeNode') -> 'TreeNode':
+        pass
+
+
 ## Tests
-############
+#############
+
+import unittest
+
+
+class Test(unittest.TestCase):
+    def test_cases(self):
+        solution = Solution()
+        self.assertEqual(solution. , )
+        self.assertCountEqual()
+
+
+if __name__ == "__main__":
+    unittest.main()
 
 
 ## LeetCode Solutions
@@ -174,7 +215,7 @@ class Solution:
 
 ## Approach 1: Recursive Approach
 #####################################
-# Time: O(N) - where N is the number of nodes in the binary tree. In the worst
+# Time: O(N) - Where N is the number of nodes in the binary tree. In the worst
 #              case we might be visiting all the nodes of the binary tree.
 # Space: O(N) - This is because the maximum amount of space utilized by the
 #               recursion stack would be NN since the height of a skewed binary
@@ -221,14 +262,11 @@ class Solution:
 
 ## Approach 2: Iterative using parent pointers
 ##################################################
-# Time: O(N)
-# Where N is the number of nodes in the binary tree. In the worst case we might
-# be visiting all the nodes of the binary tree.
-
-# Space: O(N)
-# In the worst case space utilized by the stack, the parent pointer dictionary
-# and the ancestor set, would be N each, since the height of a skewed binary
-# tree could be N.
+# Time: O(N) - Where N is the number of nodes in the binary tree. In the worst
+#              case we might be visiting all the nodes of the binary tree.
+# Space: O(N) - In the worst case space utilized by the stack, the parent
+#               pointer dictionary and the ancestor set, would be N each, since
+#               the height of a skewed binary tree could be N.
 class Solution:
 
     def lowestCommonAncestor(self, root, p, q):
@@ -275,15 +313,12 @@ class Solution:
 
 ## Approach 3: Iterative without parent pointers
 ####################################################
-# Time: O(N)
-# Where N is the number of nodes in the binary tree. In the worst case we might
-# be visiting all the nodes of the binary tree. The advantage of this approach
-# is that we can prune backtracking. We simply return once both the nodes are
-# found.
-
-# Space: O(N)
-# In the worst case the space utilized by stack would be NN since the height of
-# a skewed binary tree could be N.
+# Time: O(N) - Where N is the number of nodes in the binary tree. In the worst
+#              case we might be visiting all the nodes of the binary tree. The
+#              advantage of this approach is that we can prune backtracking. We
+#              simply return once both the nodes are found.
+# Space: O(N) - In the worst case the space utilized by stack would be N since
+#               the height of a skewed binary tree could be N.
 class Solution:
 
     # Three static flags to keep track of post-order traversal.

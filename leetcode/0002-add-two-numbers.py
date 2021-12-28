@@ -44,6 +44,65 @@ class ListNode:
         self.next = next
 
 
+## simple math
+##################
+class Solution:
+    def add_two_numbers(self, l1: ListNode, l2: ListNode) -> ListNode:
+        sentinel = curr = ListNode(None)
+        carry = 0
+        while l1 or l2 or carry:
+            if l1:
+                carry += l1.val
+                l1 = l1.next
+            if l2:
+                carry += l2.val
+                l2 = l2.next
+
+            carry, val = divmod(carry, 10)
+            curr.next = ListNode(val)
+            curr = curr.next
+
+        return sentinel.next
+
+class Solution:
+    def add_two_numbers(self, l1: ListNode, l2: ListNode) -> ListNode:
+        sentinel = curr = ListNode(None)
+        carry = 0
+        while l1 or l2 or carry:
+            val = carry
+            if l1:
+                val += l1.val
+                l1 = l1.next
+            if l2:
+                val += l2.val
+                l2 = l2.next
+            carry, val = divmod(val, 10)
+            curr.next = ListNode(val)
+            curr = curr.next
+            
+        return sentinel.next
+
+
+class Solution:
+    def add_two_numbers(self, l1: ListNode, l2: ListNode) -> ListNode:
+        sentinel = curr = ListNode(None)
+        carry = 0
+        while l1 or l2 or carry:
+            x = y = 0
+            if l1:
+                x = l1.val
+                l1 = l1.next
+            if l2:
+                y = l2.val
+                l2 = l2.next
+
+            carry, val = divmod(x + y + carry, 10)
+            curr.next = ListNode(val)
+            curr = curr.next
+
+        return sentinel.next
+
+
 ## convert to string
 ########################
 class Solution:
@@ -66,48 +125,6 @@ class Solution:
 
         return head
 
-
-## simple math
-##################
-class Solution:
-    def add_two_numbers(self, l1: ListNode, l2: ListNode) -> ListNode:
-        sentinel = curr = ListNode(None)
-        carry = 0
-        while l1 or l2 or carry:
-            x = y = 0
-            if l1:
-                x = l1.val
-                l1 = l1.next
-            if l2:
-                y = l2.val
-                l2 = l2.next
-
-            carry, val = divmod(x + y + carry, 10)
-            curr.next = ListNode(val)
-            curr = curr.next
-
-        return sentinel.next
-
-
-## simple math 2
-####################
-class Solution:
-    def add_two_numbers(self, l1: ListNode, l2: ListNode) -> ListNode:
-        sentinel = curr = ListNode(None)
-        carry = 0
-        while l1 or l2 or carry:
-            if l1:
-                carry += l1.val
-                l1 = l1.next
-            if l2:
-                carry += l2.val
-                l2 = l2.next
-
-            carry, val = divmod(carry, 10)
-            curr.next = ListNode(val)
-            curr = curr.next
-
-        return sentinel.next
 
 ## Tests
 ############

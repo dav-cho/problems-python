@@ -42,6 +42,7 @@ class Solution:
             return False
         
         targetSum -= root.val
+
         if not root.left and not root.right:
             return targetSum == 0
 
@@ -53,6 +54,26 @@ class Solution:
 
 ## iterative
 ################
+class Solution:
+    def hasPathSum(self, root: TreeNode, targetSum: int) -> bool:
+        if not root:
+            return False
+        
+        stack = [(root, targetSum - root.val)]
+        while stack:
+            node, curr_sum = stack.pop()
+            
+            if not node.left and not node.right and curr_sum == 0:
+                return True
+            
+            if node.left:
+                stack.append((node.left, curr_sum - node.left.val))
+            if node.right:
+                stack.append((node.right, curr_sum - node.right.val))
+                
+        return False
+
+
 class Solution:
     def hasPathSum(self, root: TreeNode, targetSum: int) -> bool:
         if not root:

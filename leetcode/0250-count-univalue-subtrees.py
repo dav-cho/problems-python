@@ -7,6 +7,9 @@
 # A uni-value subtree means all nodes of the subtree have the same value.
 
 # Example 1:
+#        5
+#     1     5
+#   5   5     5
 # Input: root = [5,1,5,5,5,null,5]
 # Output: 4
 
@@ -19,10 +22,13 @@
 # Output: 6
  
 # Constraints:
-# The numbrt of the node in the tree will be in the range [0, 1000].
+# The number of the node in the tree will be in the range [0, 1000].
 # -1000 <= Node.val <= 1000
 
 ################################################################################
+
+from typing import Optional
+
 
 ## Definition for a binary tree node.
 class TreeNode:
@@ -32,93 +38,61 @@ class TreeNode:
         self.right = right
 
 
-## dfs recursive
-####################
+## dfs - passing parent values
+##################################
 class Solution:
-    def countUnivalSubtrees(self, root: TreeNode) -> int:
-        if not root:
-            return 0
-        
+    def countUnivalSubtrees(self, root: Optional[TreeNode]) -> int:
         self.count = 0
-        self.check_uni(root)
+        self.is_valid_part(root, 0)
         return self.count
     
-    def check_uni(self, node):
-        if not node.left and not node.right:
-            self.count += 1
+    def is_valid_part(self, node, val):
+        if not node:
             return True
         
-        is_uni = True
+        left = self.is_valid_part(node.left, node.val)
+        right = self.is_valid_part(node.right, node.val)
+        if not all((left, right)):
+            return False
         
-        if node.left:
-            is_uni = self.check_uni(node.left) and is_uni and node.left.val == node.val
-        if  node.right:
-            is_uni = self.check_uni(node.right) and is_uni and node.right.val == node.val
+        self.count += 1
+        return node.val == val
+
+
+class Solution:
+    def countUnivalSubtrees(self, root: Optional[TreeNode]) -> int:
+        def is_valid_part(node, val):
+            if not node:
+                return True
             
-        self.count += is_uni
-        return is_uni
-
-
-class Solution:
-    def countUnivalSubtrees(self, root: TreeNode) -> int:
-        self.count = 0
-        self.check_uni(root)
-        return self.count
-    
-    def check_uni(self, node):
-        if not node:
-            return True
-        
-        left = self.check_uni(node.left)
-        right = self.check_uni(node.right)
-        left_check = not node.left or node.left.val == node.val
-        right_check = not node.right or node.right.val == node.val
-        
-        if left and right and left_check and right_check:
+            left = is_valid_part(node.left, node.val)
+            right = is_valid_part(node.right, node.val)
+            if not (left and right):
+                return False
+            
             self.count += 1
-            return True
+            
+            return node.val == val
         
-        return False
+        self.count = 0
+        is_valid_part(root, 0)
+        
+        return self.count
 
 
 class Solution:
-    def countUnivalSubtrees(self, root: TreeNode) -> int:
+    def countUnivalSubtrees(self, root: Optional[TreeNode]) -> int:
         self.count = 0
-        self.check_uni(root)
-        
+        self.is_valid_part(root, 0)
         return self.count
     
-    def check_unival(self, node):
+    def is_valid_part(self, node, val):
         if not node:
             return True
         
-        left = self.check_unival(node.left)
-        right = self.check_unival(node.right)
-        left_check = not node.left or node.left.val == node.val
-        right_check = not node.right or node.right.val == node.val
-
-        if all([left, right, left_check, right_check]):
-            self.count += 1
-            return True
-        
-        return False
-
-
-## dfs passing parent values
-################################
-class Solution:
-    def countUnivalSubtrees(self, root: TreeNode) -> int:
-        self.count = 0
-        self.check_unival(root, None)
-        return self.count
-    
-    def check_unival(self, node, val):
-        if not node:
-            return True
-        
-        left = self.check_unival(node.left, node.val)
-        right = self.check_unival(node.right, node.val)
-        if not left or not right:
+        left = self.is_valid_part(node.left, node.val)
+        right = self.is_valid_part(node.right, node.val)
+        if not (left and right):
             return False
         
         self.count += 1
@@ -127,30 +101,99 @@ class Solution:
 
 
 class Solution:
-    def countUnivalSubtrees(self, root: TreeNode) -> int:
+    def countUnivalSubtrees(self, root: Optional[TreeNode]) -> int:
         self.count = 0
+        self.is_valid_part(root, 0)
+        return self.count
+    
+    def is_valid_part(self, node, val):
+        if not node:
+            return True
         
-        def helper(node):
-            if not node:
-                return
-            
-            left = helper(node.left)
-            right = helper(node.right)
-            left_check = not left or left == node.val
-            right_check = not right or right == node.val
-            
-            if left_check and right_check:
+        left = self.is_valid_part(node.left, node.val)
+        right = self.is_valid_part(node.right, node.val)
+        if not left or not right:
+            return False
+        
+        self.count += 1
+        
+        return node.val == val
+
+
+## dfs
+##############################
+class Solution:
+    def countUnivalSubtrees(self, root: Optional[TreeNode]) -> int:
+        if not root:
+            return 0
+        
+        self.count = 0
+        self.is_uni(root)
+        
+        return self.count
+    
+    def is_uni(self, node):
+        if not node.left and not node.right:
+            self.count += 1
+            return True
+        
+        is_uni = True
+        if node.left:
+            is_uni = self.is_uni(node.left) and is_uni and node.left.val == node.val
+        if node.right:
+            is_uni = self.is_uni(node.right) and is_uni and node.right.val == node.val
+        
+        self.count += is_uni
+        return is_uni
+
+
+class Solution:
+    def countUnivalSubtrees(self, root: Optional[TreeNode]) -> int:
+        if not root:
+            return 0
+        
+        def is_uni(node):
+            if not node.left and not node.right:
                 self.count += 1
-                return node.val
-            
-            return "dav"
+                return True
+
+            ans = True
+            if node.left:
+                ans = is_uni(node.left) and ans and node.left.val == node.val
+            if node.right:
+                ans = is_uni(node.right) and ans and node.right.val == node.val
+
+            self.count += ans
+            return ans
         
-        helper(root)
+        self.count = 0
+        is_uni(root)
+        
         return self.count
 
 
+## 
+##############################
+class Solution:
+    def countUnivalSubtrees(self, root: Optional[TreeNode]) -> int:
+        pass
+
+
 ## Tests
-############
+#############
+
+import unittest
+
+
+class Test(unittest.TestCase):
+    def test_cases(self):
+        self.assertEqual(Solution().countUnivalSubtrees([5,1,5,5,5,None,5]), 4)
+        self.assertEqual(Solution().countUnivalSubtrees([]), 0)
+        self.assertEqual(Solution().countUnivalSubtrees([5,5,5,5,5,None,5]), 6)
+
+
+if __name__ == "__main__":
+    unittest.main()
 
 
 ## LeetCode Solutions
@@ -159,18 +202,17 @@ class Solution:
 ## Approach 1: Depth First Search
 #####################################
 # Time: O(n)
-# Due to the algorithm's depth-first nature, the is_uni status of each node is
-# computed from bottom up. When given the is_uni status of its children,
-# computing the is_uni status of a node occurs in O(1).
+# - Due to the algorithm's depth-first nature, the is_uni status of each node
+#   is computed from bottom up. When given the is_uni status of its children,
+#   computing the is_uni status of a node occurs in O(1).
+# - This gives us O(1) time for each node in the tree with O(N) total nodes for
+#   a time complexity of O(N).
 
-# This gives us O(1) time for each node in the tree with O(N) total nodes for a
-# time complexity of O(N).
-
-# Space: O(H)
-# With H being the height of the tree. Each recursive call of is_uni requires
-# stack space. Since we fully process is_uni(node.left) before calling
-# is_uni(node.right), the recursive stack is bound by the longest path from the
-# root to a leaf - in other words the height of the tree.
+# Space: O(H) - With H being the height of the tree.
+#  - Each recursive call of is_uni requires stack space. Since we fully process
+#   is_uni(node.left) before calling is_uni(node.right), the recursive stack is
+#   bound by the longest path from the root to a leaf - in other words the
+#   height of the tree.
 class Solution:
     def countUnivalSubtrees(self, root):
         if root is None: return 0
@@ -204,8 +246,8 @@ class Solution:
 
 ## Approach 2: Depth First Search - Pass Parent Values
 ##########################################################
-# Time: O(n) - Same as previous approach.
-# Space: O(H) - with H being the height of the tree. Same as previous appraoch.
+# Time: O(N) - Same as previous approach.
+# Space: O(H) - Same as previous approach.
 class Solution:
     def countUnivalSubtrees(self, root):
         self.count = 0
@@ -229,4 +271,5 @@ class Solution:
         # at this point we know that this node is a univalue subtree of value node.val
         # pass a boolean indicating if this is a valid subtree for the parent node
         return node.val == val
+
 

@@ -52,22 +52,78 @@ class Solution:
 
 class Solution:
     def maxDepth(self, root: Optional[TreeNode]) -> int:
-        if not root:
-            return 0
-        else:
-            left = self.maxDepth(root.left)
-            right = self.maxDepth(root.right)
-            
-        return max(left, right) + 1
+        return max(map(self.maxDepth, (root.left, root.right))) + 1 if root else 0
 
 
 class Solution:
     def maxDepth(self, root: Optional[TreeNode]) -> int:
-        return max(map(self.maxDepth, (root.left, root.right))) + 1 if root else 0
+        self.res = 0
+        
+        def dfs(node, depth):
+            if not node:
+                return 0
+            
+            self.res = max(self.res, depth)
+            dfs(node.left, depth + 1)
+            dfs(node.right, depth + 1)
+            
+            return self.res
+            
+        return dfs(root, 1)
+
+
+class Solution:
+    def maxDepth(self, root: Optional[TreeNode]) -> int:
+        res = 0
+        
+        def dfs(node, depth):
+            nonlocal res
+            if not node:
+                return 0
+            
+            res = max(res, depth)
+            dfs(node.left, depth + 1)
+            dfs(node.right, depth + 1)
+            
+            return res
+            
+        return dfs(root, 1)
+
+
+class Solution:
+    def maxDepth(self, root: Optional[TreeNode]) -> int:
+        self.res = 0
+        
+        def dfs(node, depth):
+            if not node:
+                return 0
+            
+            self.res = max(self.res, depth)
+            dfs(node.left, depth + 1)
+            dfs(node.right, depth + 1)
+            
+        dfs(root, 1)
+        return self.res
 
 
 ## tail recursion + bfs
 ##############################
+class Solution:
+    def maxDepth(self, root: Optional[TreeNode]) -> int:
+        def bfs(node, level):
+            if not node:
+                return 0
+                
+            self.res = max(self.res, level)
+            bfs(node.left, level + 1)
+            bfs(node.right, level + 1)
+            
+            return self.res
+        
+        self.res = 0
+        return bfs(root, 1)
+
+
 class Solution:
     def maxDepth(self, root: Optional[TreeNode]) -> int:
         if not root:
@@ -115,8 +171,28 @@ class Solution:
         return depth
 
 
-## bfs
+## iterative bfs
 ##############################
+class Solution:
+    def maxDepth(self, root: Optional[TreeNode]) -> int:
+        res = 0
+        if not root:
+            return res
+        
+        queue = [root]
+        while queue:
+            res += 1
+            level = []
+            for node in queue:
+                if node.left:
+                    level.append(node.left)
+                if node.right:
+                    level.append(node.right)
+            queue = level
+                    
+        return res
+
+
 class Solution:
     def maxDepth(self, root: Optional[TreeNode]) -> int:
         if not root:

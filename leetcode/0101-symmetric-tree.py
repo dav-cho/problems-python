@@ -39,6 +39,22 @@ class TreeNode:
 ################
 class Solution:
     def isSymmetric(self, root: TreeNode) -> bool:
+        def is_mirror(a, b):
+            if not a and not b:
+                return True
+            if not a or not b:
+                return False
+            
+            outside = is_mirror(a.left, b.right)
+            inside = is_mirror(a.right, b.left)
+
+            return a.val == b.val and outside and inside
+        
+        return is_mirror(root, root)
+
+
+class Solution:
+    def isSymmetric(self, root: TreeNode) -> bool:
         def helper(a, b):
             if not a and not b:
                 return True
@@ -123,6 +139,22 @@ class Solution:
 
 ## iterative
 ################
+class Solution:
+    def isSymmetric(self, root: TreeNode) -> bool:
+        stack = [(root, root)]
+        while stack:
+            a, b = stack.pop()
+            if not a and not b:
+                continue
+            if not a or not b or a.val != b.val:
+                return False
+
+            stack.append((a.left, b.right))
+            stack.append((a.right, b.left))
+            
+        return True
+
+
 class Solution:
     def isSymmetric(self, root: TreeNode) -> bool:
         stack = [(root, root)]

@@ -16,15 +16,10 @@
 
 # Initially, all next pointers are set to NULL.
 
-# Follow up:
-# You may only use constant extra space.
-# Recursive approach is fine, you may assume implicit stack space does not
-# count as extra space for this problem.
- 
 # Example 1:
-#           1                      1 -> null        
-#       2       3             2 -------> 3 -> null     
-#     4   5       7         4 -> 5 ------> 7 -> null
+#          1                  1-->NULL     
+#      2       3          2------>3-->NULL  
+#    4   5       7      4-->5------>7-->NULL
 # Input: root = [1,2,3,4,5,null,7]
 # Output: [1,#,2,3,#,4,5,7,#]
 # Explanation: Given the above binary tree (Figure A), your function should
@@ -32,11 +27,21 @@
 # Figure B. The serialized output is in level order as connected by the next
 # pointers, with '#' signifying the end of each level.
 
+# Example 2:
+# Input: root = []
+# Output: []
+ 
 # Constraints:
-# The number of nodes in the given tree is less than 6000.
-# -100 <= node.val <= 100
+# The number of nodes in the tree is in the range [0, 6000].
+# -100 <= Node.val <= 100
+ 
+# Follow-up:
+# You may only use constant extra space.
+# The recursive approach is fine. You may assume implicit stack space does not
+# count as extra space for this problem.
 
 ################################################################################
+
 
 ## Definition for a Node.
 class Node:
@@ -46,8 +51,39 @@ class Node:
         self.right = right
         self.next = next
 
-## level order traversal
-############################
+
+## using populated next pointers
+####################################
+class Solution:
+    def connect(self, root: 'Node') -> 'Node':
+        if not root:
+            return
+        
+        leftmost = root
+        while leftmost:
+            prev = None
+            curr = leftmost
+            leftmost = None
+            while curr:
+                prev, leftmost = self.process_child(curr.left, prev, leftmost)
+                prev, leftmost = self.process_child(curr.right, prev, leftmost)
+                curr = curr.next
+                
+        return root
+    
+    def process_child(self, child, prev, leftmost):
+        if child:
+            if prev:
+                prev.next = child
+            else:
+                leftmost = child
+            prev = child
+        
+        return prev, leftmost
+
+
+## level order
+##############################
 class Solution:
     def connect(self, root: 'Node') -> 'Node':
         if not root:
@@ -56,12 +92,11 @@ class Solution:
         queue = deque([root])
         while queue:
             size = len(queue)
-            
             for i in range(size):
                 node = queue.popleft()
-                
                 if i < size - 1:
                     node.next = queue[0]
+                
                 if node.left:
                     queue.append(node.left)
                 if node.right:
@@ -70,126 +105,69 @@ class Solution:
         return root
 
 
-## using next pointers
-##########################
+## first attempt using populated next pointers
+##################################################
 class Solution:
-    def process_child(self, child_node, prev, leftmost):
-        if not child_node:
-            return prev, leftmost
-        
-        if prev:
-            prev.next = child_node
-        else:
-            leftmost = child_node
-            
-        prev = child_node
-        return prev, leftmost
-    
+    def connect(self, root: 'Node') -> 'Node':
+        pass
+
+
+## first attempt level order (bfs)
+######################################
+class Solution:
     def connect(self, root: 'Node') -> 'Node':
         if not root:
             return
         
-        leftmost = root
-        while leftmost:
-            prev, curr = None, leftmost
-            leftmost = None
-            
-            while curr:
-                prev, leftmost = self.process_child(curr.left, prev, leftmost)
-                prev, leftmost = self.process_child(curr.right, prev, leftmost)
-                curr = curr.next
-               
-        return root 
-
-
-class Solution:
-    def process_child(self, child_node, prev, leftmost):
-        if child_node:
-            if prev:
-                prev.next = child_node
-            else:
-                leftmost = child_node
-            prev = child_node
-            
-        return prev, leftmost
-    
-    def connect(self, root: 'Node') -> 'Node':
-        if not root:
-            return
-        
-        leftmost = root
-        while leftmost:
-            prev, curr = None, leftmost
-            leftmost = None
-            
-            while curr:
-                prev, leftmost = self.process_child(curr.left, prev, leftmost)
-                prev, leftmost = self.process_child(curr.right, prev, leftmost)
-                curr = curr.next
+        queue = deque([root])
+        while queue:
+            size = len(queue)
+            for i in range(size):
+                node = queue.popleft()
+                if i < size - 1:
+                    node.next = queue[0]
                 
-        return root
-
-
-class Solution:
-    def connect(self, root: 'Node') -> 'Node':
-        tail = dummy = Node(0)
-        
-        node = root
-        while node:
-            tail.next = node.left
-            if tail.next:
-                tail = tail.next
-                
-            tail.next = node.right
-            if tail.next:
-                tail = tail.next
-                
-            node = node.next
-            if not node:
-                tail = dummy
-                node = dummy.next
-                
-        return root
-
-
-class Solution:
-    def connect(self, root: 'Node') -> 'Node':
-        pre_child = child = Node(None)
-        curr = root
-        while curr:
-            while curr:
-                child.next = curr.left
-                child = child.next or child
-                
-                child.next = curr.right
-                child = child.next or child
-                
-                curr = curr.next
-            curr, child = pre_child.next, pre_child
-        
+                if node.left:
+                    queue.append(node.left)
+                if node.right:
+                    queue.append(node.right)
+                    
         return root
 
 
 ## Tests
-############
+#############
 
+import unittest
+
+
+class Test(unittest.TestCase):
+    def test_cases(self):
+        solution = Solution()
+        self.assertEqual(solution. , )
+        self.assertCountEqual()
+
+
+if __name__ == "__main__":
+    unittest.main()
+
+
+## LeetCode Solutions
+#########################
 
 ## Approach 1: Level Order Traversal
 ########################################
-# Time: O(N)
-# Since we process each node exactly once. Note that processing a node in this
-# context means popping the node from the queue and then establishing the next
-# pointers.
-
-# Space: O(N)
-# This is a perfect binary tree which means the last level contains N/2 nodes.
-# The space complexity for breadth first traversal is the maximum space occupied# and the space occupied by the queue is dependent upon the maximum number of
-# nodes in particular level. So, in this case, the space complexity would be
-# O(N).
-import collections 
-
+# Time: O(N) - Since we process each node exactly once. Note that processing a
+#              node in this context means popping the node from the queue and
+#              then establishing the next pointers.
+# Space: O(N) - This is a perfect binary tree which means the last level
+#               contains N/2 nodes. The space complexity for breadth first
+#               traversal is the maximum space occupied and the space occupied
+#               by the queue is dependent upon the maximum number of nodes in
+#               particular level. So, in this case, the space complexity would
+#               be O(N).
 class Solution:
-    def connect(self, root: 'Node') -> 'Node':
+    def connect(self, root: Optional['Node']) -> Optional['Node']:
         
         if not root:
             return root
@@ -231,12 +209,10 @@ class Solution:
         return root
 
 
-
-        
 ## Approach 2: Using previously established next pointers
 #############################################################
 # Time: O(N) - Since we process each node exactly once.
-# Space: O(1) - since we don't make use of any additional data structure for
+# Space: O(1) - Since we don't make use of any additional data structure for
 #               traversing nodes on a particular level like the previous
 #               approach does.
 class Solution:
@@ -257,7 +233,7 @@ class Solution:
             prev = childNode 
         return prev, leftmost
     
-    def connect(self, root: 'Node') -> 'Node':
+    def connect(self, root: Optional['Node']) -> Optional['Node']:
         
         if not root:
             return root
@@ -294,4 +270,11 @@ class Solution:
                 curr = curr.next
                 
         return root
+
+
+## Approach 3: 
+##############################
+# Time: 
+# Space: 
+
 

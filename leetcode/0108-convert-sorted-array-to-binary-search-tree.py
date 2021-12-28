@@ -38,26 +38,26 @@ class TreeNode:
         self.right = right
 
         
-## dfs preorder - choose left as root - recursive
-#####################################################
+## dfs preorder - choose left mid as root - recursive
+#########################################################
 class Solution:
     def sortedArrayToBST(self, nums: list[int]) -> Optional[TreeNode]:
-        def helper(left, right):
+        def dfs_preorder(left, right):
             if left > right:
                 return
             
             mid = (left + right) // 2
             root = TreeNode(nums[mid])
-            root.left = helper(left, mid - 1)
-            root.right = helper(mid + 1, right)
+            root.left = dfs_preorder(left, mid - 1)
+            root.right = dfs_preorder(mid + 1, right)
             
             return root
         
-        return helper(0, len(nums) - 1)
+        return dfs_preorder(0, len(nums) - 1)
 
 
-## dfs preorder - choose left as root - iterative
-#####################################################
+## dfs preorder - choose left mid as root - iterative
+#########################################################
 class Solution:
     def sortedArrayToBST(self, nums: list[int]) -> Optional[TreeNode]:
         left = 0
@@ -76,29 +76,6 @@ class Solution:
             if right > mid:
                 right_mid = (mid + 1 + right) // 2
                 node.right = TreeNode(nums[right_mid])
-                stack.append((node.right, mid + 1, right))
-                
-        return root
-
-
-class Solution:
-    def sortedArrayToBST(self, nums: list[int]) -> Optional[TreeNode]:
-        left = 0
-        right = len(nums) - 1
-        root = TreeNode(nums[right // 2])
-        stack = [(root, left, right)]
-        
-        while stack:
-            node, left, right = stack.pop()
-            if not node:
-                continue
-                
-            mid = (left + right) // 2
-            if left < mid:
-                node.left = TreeNode(nums[(left + mid - 1) // 2])
-                stack.append((node.left, left, mid - 1))
-            if right > mid:
-                node.right = TreeNode(nums[(mid + 1 + right) // 2])
                 stack.append((node.right, mid + 1, right))
                 
         return root
@@ -130,38 +107,11 @@ class Solution:
         return root
 
 
+## dfs preorder - choose right mid as root - recursive
+##########################################################
 class Solution:
     def sortedArrayToBST(self, nums: list[int]) -> Optional[TreeNode]:
-        left = 0
-        right = len(nums) - 1
-        root = TreeNode(nums[right // 2])
-        queue = deque([(root, left, right)])
-        
-        while queue:
-            node, left, right = queue.popleft()
-            
-            if left > right:
-                continue
-
-            mid = (left + right) // 2
-            
-            if left < mid:
-                left_mid = (left + mid - 1) // 2
-                node.left = TreeNode(nums[left_mid])
-                queue.append((node.left, left, mid - 1))
-            if right > mid:
-                right_mid = (mid + 1 + right) // 2
-                node.right = TreeNode(nums[right_mid])
-                queue.append((node.right, mid + 1, right))
-                
-        return root
-
-
-## dfs preorder - choose right as root - recursive
-######################################################
-class Solution:
-    def sortedArrayToBST(self, nums: list[int]) -> Optional[TreeNode]:
-        def helper(left, right):
+        def dfs_preorder(left, right):
             if left > right:
                 return
             
@@ -169,28 +119,62 @@ class Solution:
             
             if (left + right) % 2:
                 mid += 1
-            
+                
             root = TreeNode(nums[mid])
-            root.left = helper(left, mid - 1)
-            root.right = helper(mid + 1, right)
+            root.left = dfs_preorder(left, mid - 1)
+            root.right = dfs_preorder(mid + 1, right)
             
             return root
         
-        return helper(0, len(nums) - 1)
+        return dfs_preorder(0, len(nums) - 1)
 
 
-## dfs preorder - choose right as root - iterative
-######################################################
+## dfs preorder - choose right mid as root - iterative
+##########################################################
 class Solution:
     def sortedArrayToBST(self, nums: list[int]) -> Optional[TreeNode]:
-        pass
+        left = 0
+        right = len(nums) - 1
+        mid = right // 2
+        
+        if right % 2:
+            mid += 1
+            
+        root = TreeNode(nums[mid])
+        stack = [(root, left, right)]
+        
+        while stack:
+            node, left, right = stack.pop()
+            mid = (left + right) // 2
+            
+            if (left + right) % 2:
+                mid += 1
+            
+            if left < mid:
+                left_mid = (left + mid - 1) // 2
+                
+                if (left + mid - 1) % 2:
+                    left_mid += 1
+                    
+                node.left = TreeNode(nums[left_mid])
+                stack.append((node.left, left, mid - 1))
+            if right > mid:
+                right_mid = (mid + 1 + right) // 2
+                
+                if (mid + 1 + right) % 2:
+                    right_mid += 1
+                
+                node.right = TreeNode(nums[right_mid])
+                stack.append((node.right, mid + 1, right))
+                
+        return root
 
 
-## dfs preorder - choose random middle node as root - recursive
-###################################################################
+## dfs preorder - choose random mid node as root - recursive
+################################################################
 class Solution:
     def sortedArrayToBST(self, nums: list[int]) -> Optional[TreeNode]:
-        def helper(left, right):
+        def dfs_preorder(left, right):
             if left > right:
                 return
             
@@ -198,18 +182,18 @@ class Solution:
             
             if (left + right) % 2:
                 mid += randint(0, 1)
-            
+                
             root = TreeNode(nums[mid])
-            root.left = helper(left, mid - 1)
-            root.right = helper(mid + 1, right)
+            root.left = dfs_preorder(left, mid - 1)
+            root.right = dfs_preorder(mid + 1, right)
             
             return root
         
-        return helper(0, len(nums) - 1)
+        return dfs_preorder(0, len(nums) - 1)
 
 
-## dfs preorder - choose random middle node as root - iterative
-###################################################################
+## dfs preorder - choose random mid node as root - iterative
+################################################################
 class Solution:
     def sortedArrayToBST(self, nums: list[int]) -> Optional[TreeNode]:
         pass

@@ -7,9 +7,9 @@
 # tree, construct and return the binary tree.
 
 # Example 1:
-#           3
-#       9       20
-#            15    7
+#       3
+#    9     20
+#        15  7
 # Input: preorder = [3,9,20,15,7], inorder = [9,3,15,20,7]
 # Output: [3,9,20,null,null,15,7]
 
@@ -28,6 +28,9 @@
 
 ################################################################################
 
+from typing import Optional
+
+
 ## Definition for a binary tree node.
 class TreeNode:
     def __init__(self, val=0, left=None, right=None):
@@ -35,138 +38,113 @@ class TreeNode:
         self.left = left
         self.right = right
 
+
 ## recursive
-################
+##############################
 class Solution:
-    def buildTree(self, preorder: list[int], inorder: list[int]) -> TreeNode:
-        preorder.reverse()
-        inorder_map = { val: idx for idx, val in enumerate(inorder) }
+    def buildTree(self, preorder: list[int], inorder: list[int]) -> Optional[TreeNode]:
+        inorder_idx_map = {val: i for i, val in enumerate(inorder)}
+        self.preorder_idx = 0
         
-        def helper(preorder_left_bound, preorder_right_bound):
-            if preorder_left_bound > preorder_right_bound:
+        def helper(left, right):
+            if left > right:
                 return
             
-            node = TreeNode(preorder.pop())
-            idx = inorder_map[node.val]
+            root = TreeNode(preorder[self.preorder_idx])
+            self.preorder_idx += 1
+            i = inorder_idx_map[root.val]
             
-            node.left = helper(preorder_left_bound, idx - 1)
-            node.right = helper(idx + 1, preorder_right_bound)
-            
-            return node
+            root.left = helper(left, i - 1)
+            root.right = helper(i + 1, right)
+            return root
         
-        return helper(0, len(preorder) - 1)
+        return helper(0, len(inorder) - 1)
 
 
 class Solution:
-    def buildTree(self, preorder: list[int], inorder: list[int]) -> TreeNode:
+    def buildTree(self, preorder: list[int], inorder: list[int]) -> Optional[TreeNode]:
+        inorder_idx_map = {val: i for i, val in enumerate(inorder)}
         preorder_idx = 0
-        inorder_map = { val: idx for idx, val in enumerate(inorder) }
         
-        def helper(inorder_left_bound, inorder_right_bound):
-            if inorder_left_bound > inorder_right_bound:
+        def helper(left, right):
+            nonlocal preorder_idx
+            
+            if left > right:
                 return
             
-            nonlocal preorder_idx
             root = TreeNode(preorder[preorder_idx])
-            idx = inorder_map[root.val]
             preorder_idx += 1
+            i = inorder_idx_map[root.val]
             
-            root.left = helper(inorder_left_bound, idx - 1)
-            root.right = helper(idx + 1, inorder_right_bound)
-            
+            root.left = helper(left, i - 1)
+            root.right = helper(i + 1, right)
             return root
         
         return helper(0, len(preorder) - 1)
 
 
+## first attempt
+##############################
 class Solution:
-    def buildTree(self, preorder: list[int], inorder: list[int]) -> TreeNode:
-        preorder_idx = 0
-        inorder_map = { val: idx for idx, val in enumerate(inorder) }
-
-        def helper(inorder_left_bound, inorder_right_bound):
-            if inorder_left_bound > inorder_right_bound:
+    def buildTree(self, preorder: list[int], inorder: list[int]) -> Optional[TreeNode]:
+        idx_map = {val: i for i, val in enumerate(inorder)}
+        
+        def helper(left, right):
+            if left > right:
                 return
             
-            nonlocal preorder_idx
-            root = TreeNode(preorder[preorder_idx])
-            idx = inorder_map[root.val]
-            preorder_idx += 1
+            root = ListNode(preorder.pop(0))
+            i = idx_map[root.val]
             
-            root.left = helper(inorder_left_bound, idx - 1)
-            root.right = helper(idx + 1, inorder_right_bound)
-            
+            root.left = helper(left, i - 1)
+            root.right = helper(i + 1, right)
             return root
         
-        return helper(0, len(preorder) - 1)
+        return helper(0, len(inorder) - 1)
 
 
-## O(N ^ 2) (do not use)
-############################
+## 
+##############################
 class Solution:
-    def buildTree(self, preorder: list[int], inorder: list[int]) -> TreeNode:
-        if not inorder:
-            return
-
-        root = TreeNode(preorder.pop(0))
-        idx = inorder.index(root.val)
-
-        root.left = self.buildTree(preorder, inorder[0:idx])
-        root.right = self.buildTree(preorder, inorder[idx + 1:])
-
-        return root
+    def buildTree(self, preorder: list[int], inorder: list[int]) -> Optional[TreeNode]:
+        pass
 
 
 ## Tests
-############
+#############
+
+import unittest
+
+
+class Test(unittest.TestCase):
+    def test_cases(self):
+        solution = Solution()
+        self.assertEqual(solution. , )
+        self.assertCountEqual()
+
+
+if __name__ == "__main__":
+    unittest.main()
 
 
 ## LeetCode Solutions
 #########################
 
-## Approach 1: Recursion
-############################
-# Time: O(N)
-# - Building the hashmap takes O(N) time, as there are N nodes to add, and
-#   adding items to a hashmap has a cost of O(1), so we get N * O(1) = O(N).
-# - Building the tree also takes O(N) time. The recursive helper method has a
-#   cost of O(1) for each call (it has no loops), and it is called once for each
-#   of the N nodes, giving a total of O(N).
-# - Taking both into consideration, the time complexity is O(N).
-# Space: O(N)
-# - Building the hashmap and storing the entire tree each requires O(N) memory.
-#   The size of the implicit system stack used by recursion calls depends on the
-#   height of the tree, which is O(N) in the worst case and O(logN) on average.
-#   Taking both into consideration, the space complexity is O(N).
-class Solution:
-    def buildTree(self, preorder: list[int], inorder: list[int]) -> TreeNode:
-
-        def array_to_tree(left, right):
-            nonlocal preorder_index
-            # if there are no elements to construct the tree
-            if left > right: return None
-
-            # select the preorder_index element as the root and increment it
-            root_value = preorder[preorder_index]
-            root = TreeNode(root_value)
+## Approach 1: 
+##############################
+# Time: 
+# Space: 
 
 
-            preorder_index += 1
+## Approach 2: 
+##############################
+# Time: 
+# Space: 
 
-            # build left and right subtree
-            # excluding inorder_index_map[root_value] element because it's the root
-            root.left = array_to_tree(left, inorder_index_map[root_value] - 1)
-            root.right = array_to_tree(inorder_index_map[root_value] + 1, right)
 
-            return root
-
-        preorder_index = 0
-
-        # build a hashmap to store value -> its index relations
-        inorder_index_map = {}
-        for index, value in enumerate(inorder):
-            inorder_index_map[value] = index
-
-        return array_to_tree(0, len(preorder) - 1)
+## Approach 3: 
+##############################
+# Time: 
+# Space: 
 
 

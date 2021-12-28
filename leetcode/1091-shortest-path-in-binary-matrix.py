@@ -39,6 +39,46 @@ from collections import deque
 
 class Solution:
     def shortestPathBinaryMatrix(self, grid: list[list[int]]) -> int:
+        M = len(grid)
+        N = len(grid[0])
+        dirs = [
+            (1, 0), (-1, 0), (0, 1), (0, -1),
+            (1, 1), (-1, -1), (1, -1), (-1, 1)
+        ]
+        
+        def get_neighbors(row, col):
+            for y, x in dirs:
+                r = row + y
+                c = col + x
+                
+                if not (0 <= r < M and 0 <= c < N):
+                    continue
+                if grid[r][c] != 0:
+                    continue
+                    
+                yield (r, c)
+                
+        if grid[0][0] != 0 or grid[M - 1][N - 1] != 0:
+            return -1
+        
+        queue = deque([(0, 0)])
+        grid[0][0] = 1
+        
+        while queue:
+            row, col = queue.popleft()
+            distance = grid[row][col]
+            if (row, col) == (M - 1, N - 1):
+                return distance
+            
+            for r, c in get_neighbors(row, col):
+                grid[r][c] = distance + 1
+                queue.append((r, c))
+                
+        return -1
+
+
+class Solution:
+    def shortestPathBinaryMatrix(self, grid: list[list[int]]) -> int:
         N = len(grid)
         M = len(grid[0])
         dirs = [

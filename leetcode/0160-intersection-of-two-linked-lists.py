@@ -7,90 +7,65 @@
 # intersection at all, return null.
 
 # For example, the following two linked lists begin to intersect at node c1:
-# A:       a1 -> a2 \
-#                    c1 -> c2 -> c3  
-# B: b1 -> b2 -> b3 /
-
+#         a1 -> a2
+#                  -> c2 -> c2 -> c3
+#   b1 -> b2 -> b3
 # The test cases are generated such that there are no cycles anywhere in the
 # entire linked structure.
 
-# Note that the linked lists must retain their original structure after
-# the function returns.
+# Note that the linked lists must retain their original structure after the
+# function returns.
 
 # Custom Judge:
-# The inputs to the judge are given as
-# follows (your program is not given these inputs):
-# - intersectVal - The value of the node where the intersection occurs.
+# The inputs to the judge are given as follows (your program is not given
+# these inputs):
+#   intersectVal - The value of the node where the intersection occurs.
 #                  This is 0 if there is no intersected node.
-# - listA - The first linked list.
-# - listB - The second linked list.
-# - skipA - The number of nodes to skip head in listA (starting from the head)
+#   listA - The first linked list.
+#   listB - The second linked list.
+#   skipA - The number of nodes to skip ahead in listA (starting from the head)
 #           to get to the intersected node.
-# - skipB - The number of nodes to skip ahead in listB (starting from the head)
+#   skipB - The number of nodes to skip ahead in listB (starting from the head)
 #           to get to the intersected node.
-
-# The judge will then create the linked structure based on these inputs
-# and pass the two heads, headA and headB to your program. If you correctly
-# return the intersected node, then your solution will be accepted.
+# The judge will then create the linked structure based on these inputs and
+# pass the two heads, headA and headB to your program. If you correctly return
+# the intersected node, then your solution will be accepted.
 
 # Example 1:
-# A:      4 -> 1 \
-#                 8 -> 4 -> 5
-# B: 5 -> 6 -> 1 /
-# Input: intersectVal = 8
-#        listA = [4,1,8,4,5]
-#        listB = [5,6,1,8,4,5]
-#        skipA = 2
-#        skipB = 3
+# Input: intersectVal = 8, listA = [4,1,8,4,5], listB = [5,6,1,8,4,5], skipA = 2, skipB = 3
 # Output: Intersected at '8'
-# Explanation: The intersected node's value is 8 (note that this must not
-# be 0 if the two lists intersect).
-# From the head of A, it reads as [4,1,8,4,5]. From the head of B, it reads
-# as [5,6,1,8,4,5]. There are 2 nodes before the intersected node in A;
-# There are 3 nodes before the intersected node in B.
+# Explanation: The intersected node's value is 8 (note that this must not be 0 if the two lists intersect).
+# From the head of A, it reads as [4,1,8,4,5]. From the head of B, it reads as [5,6,1,8,4,5]. There are 2 nodes before the intersected node in A; There are 3 nodes before the intersected node in B.
 
 # Example 2:
-# A: 1 -> 9 -> 1 \
-#                 2 -> 4
-# B:           3 /
-# Input: intersectVal = 2
-#        listA = [1,9,1,2,4]
-#        listB = [3,2,4]
-#        skipA = 3
-#        skipB = 1
+# Input: intersectVal = 2, listA = [1,9,1,2,4], listB = [3,2,4], skipA = 3, skipB = 1
 # Output: Intersected at '2'
-# Explanation: The intersected node's value is 2 (note that this must not
-# be 0 if the two lists intersect).
-# From the head of A, it reads as [1,9,1,2,4]. From the head of B, it reads
-# as [3,2,4]. There are 3 nodes before the intersected node in A;
-# There are 1 node before the intersected node in B.
+# Explanation: The intersected node's value is 2 (note that this must not be 0 if the two lists intersect).
+# From the head of A, it reads as [1,9,1,2,4]. From the head of B, it reads as [3,2,4]. There are 3 nodes before the intersected node in A; There are 1 node before the intersected node in B.
 
 # Example 3:
-# Input: intersectVal = 0
-#        listA = [2,6,4]
-#        listB = [1,5]
-#        skipA = 3
-#        skipB = 2
+# Input: intersectVal = 0, listA = [2,6,4], listB = [1,5], skipA = 3, skipB = 2
 # Output: No intersection
-# Explanation: From the head of A, it reads as [2,6,4]. From the head of B,
-# it reads as [1,5]. Since the two lists do not intersect, intersectVal must
-# be 0, while skipA and skipB can be arbitrary values.
+# Explanation: From the head of A, it reads as [2,6,4]. From the head of B, it reads as [1,5]. Since the two lists do not intersect, intersectVal must be 0, while skipA and skipB can be arbitrary values.
 # Explanation: The two lists do not intersect, so return null.
-
+  
 # Constraints:
 # The number of nodes of listA is in the m.
 # The number of nodes of listB is in the n.
-# 0 <= m, n <= 3 * 104
+# 1 <= m, n <= 3 * 104
 # 1 <= Node.val <= 105
-# 0 <= skipA <= m
-# 0 <= skipB <= n
+# 0 <= skipA < m
+# 0 <= skipB < n
 # intersectVal is 0 if listA and listB do not intersect.
 # intersectVal == listA[skipA] == listB[skipB] if listA and listB intersect.
 
-# Follow up: Could you write a solution that runs in O(n) time
-# and use only O(1) memory?
+# Follow up: Could you write a solution that runs in O(m + n) time
+#            and use only O(1) memory?
 
 ################################################################################
+
+from typing import Optional
+
 
 ## Definition for singly-linked list.
 class ListNode:
@@ -98,134 +73,93 @@ class ListNode:
         self.val = x
         self.next = None
 
-
-## brute force
-##################
+## two-pointer
+##############################
 class Solution:
-    def getIntersectionNode(self, headA: ListNode, headB: ListNode) -> ListNode:
-        while headA is not None:
+    def getIntersectionNode(self, headA: ListNode, headB: ListNode) -> Optional[ListNode]:
+        a = headA
+        b = headB
+        while a != b:
+            a = a.next if a else headB
+            b = b.next if b else headA
+            
+        return a
+
+
+class Solution:
+    def getIntersectionNode(self, headA: ListNode, headB: ListNode) -> Optional[ListNode]:
+        a = headA
+        b = headB
+        while a != b:
+            a = headB if not a else a.next
+            b = headA if not b else b.next
+            
+        return a
+
+
+## hash table
+##############################
+class Solution:
+    def getIntersectionNode(self, headA: ListNode, headB: ListNode) -> Optional[ListNode]:
+        seen = set()
+        while headA:
+            seen.add(headA)
+            headA = headA.next
+        while headB:
+            if headB in seen:
+                return headB
+            headB = headB.next
+
+        return
+
+
+## brute force (TLE)
+##############################
+class Solution:
+    def getIntersectionNode(self, headA: ListNode, headB: ListNode) -> Optional[ListNode]:
+        while headA:
             b = headB
-            while b is not None:
+            while b:
                 if headA == b:
                     return headA
                 b = b.next
             headA = headA.next
-
-        return None
-
-
-## hash table
-#################
-class Solution:
-    def getIntersectionNode(self, headA: ListNode, headB: ListNode) -> ListNode:
-        visited = set()
-
-        while headA is not None:
-            visited.add(headA)
-            headA = headA.next
-
-        while headB is not None:
-            if headB in visited:
-                return headB
-            headB = headB.next
-
-        return None
-
-
-## two pointers with 4 loops
-################################
-# 1. calculate N, length of listA
-# 2. calculate M, length of listB
-# 3. set start pointer for the longer list (|M - N|)
-# 4. step the pointers through the list together
-class Solution:
-    def getIntersectionNode(self, headA: ListNode, headB: ListNode) -> ListNode:
-        N, currA = 0, headA
-        while currA is not None:
-            N += 1
-            currA = currA.next
-
-        M, currB = 0, headB
-        while currB is not None:
-            M += 1
-            currB = currB.next
-        
-        a, b = headA, headB
-        if M > N:
-            for _ in range(M - N):
-                b = b.next
-        if N > M:
-            for _ in range(N - M):
-                a = a.next
-
-        while a is not b:
-            a = a.next
-            b = b.next
-
-        return a
-
-
-
-## two pointers simplified
-##############################
-# - Set pointer pA to point at headA.
-# - Set pointer pB to point at headB.
-# - While pA and pB are not pointing at the same node:
-# - If pA is pointing to a null, set pA to point to headB.
-# - Else, set pA to point at pA.next.
-# - If pB is pointing to a null, set pB to point to headA.
-# - Else, set pB to point at pB.next.
-# - return the value pointed to by pA (or by pB; they're the same now).
-class Solution:
-    def getIntersectionNode(self, headA: ListNode, headB: ListNode) -> ListNode:
-        a, b = headA, headB
-
-        while a is not b:
-            a = headB if a is None else a.next
-            b = headA if b is None else b.next
-
-        return a
+            
+        return
 
 
 ## Tests
-############
+#############
+
+import unittest
+
+
+class Test(unittest.TestCase):
+    def test_cases(self):
+        self.assertEqual(Solution().getIntersectionNode([4,1,8,4,5], [5,6,1,8,4,5]), 8)
+        self.assertEqual(Solution().getIntersectionNode([1,9,1,2,4], [3,2,4]), 2)
+        self.assertEqual(Solution().getIntersectionNode([2,6,4], [1,5]), None)
+
+
+if __name__ == "__main__":
+    unittest.main()
 
 
 ## LeetCode Solutions
 #########################
 
-## Approach 1: Brute Force (Time Limit Exceeded)
-####################################################
-# time: O(n x m) - For each of the n nodes in list A, we are traversing over
-#                  each of the nodes in list B. In the worst case, we won't
-#                  find a match, and so will need to do this until reaching
-#                  the end of list B, giving a worst-case time complexity
-#                  of O(n * m).
-# space: O(1) - We aren't allocating any additional data structures, so the
-#               amount of extra space used does not grow with the size of
-#               the input.
+## Approach 1: Brute Force
+##############################
+# Let N be the length of list A and M be the length of list B.
 
-# Intuition and Algorithm:
-# The brute force solution is often a good starting point in an interview.
-# While you shouldn't actually code up this approach (it's not a good use of
-# time to do so), you should briefly explain it to your interviewer.
-# Once you've done that, you'll then be analyzing inefficiencies and
-# coming up with ways to optimize it.
-
-# The brute force solution here is nothing too special: For each node in
-# list A, traverse over list B and check whether or not the node is
-# present in list B.
-
-# The one thing we need to be careful of is that we're comparing objects
-# of type Node. We don't want to compare the values within the nodes;
-# doing this would cause our code to break when two different nodes have
-# the same value.
-
-# Implementation:
-# Note that we're only showing this code for your reference. This is not
-# a good approach for an interview, and the only reason we discussed it
-# at all as we will be optimizing it in Approach 2. For this reason,
-# we aren't guaranteeing that the code will pass our judge in every language.
+# Time: O(N × M)
+# - For each of the N nodes in list A, we are traversing over each of the nodes
+#   in list B. In the worst case, we won't find a match, and so will need to do
+#   this until reaching the end of list B, giving a worst-case time complexity
+#   of O(N × M).
+# Space: O(1)
+# - We aren't allocating any additional data structures, so the amount of extra
+#   space used does not grow with the size of the input.
 class Solution:
     def getIntersectionNode(self, headA: ListNode, headB: ListNode) -> ListNode:
         while headA is not None:
@@ -238,51 +172,25 @@ class Solution:
 
         return None
 
+
 ## Approach 2: Hash Table
-#############################
-# time: O(n + m) - Firstly, we need to build up the hash table.
-#                  It costs O(1) to insert an item into a hash table, and we
-#                  need to do this for each of the MM nodes in list B.
-#                  This gives a cost of O(m) for building the hash table.
-
-#                - Secondly, we need to traverse list A, and for each node,
-#                  we need to check whether or not it is in the hash table.
-#                  In the worst case, there will not be a match, requiring us
-#                  to check all n nodes in list A. As it is also O(1) to check
-#                  whether or not an item is in a hash table, this checking
-#                  has a total cost of O(N).
-
-#                - Finally, combining the two parts, we get
-#                  O(m) + O(n) = O(m + n)
-
-# space: O(m) - As we are storing each of the nodes from list B into a
-#               hash table, the hash table will require O(M) space. Note
-#               that we could have instead stored the nodes of list A into
-#               the hash table, this would have been a space complexity of
-#               O(N). Unless we know which list is longer though, it doesn't
-#               make any real difference.
-
-# Intuition:
-# Approach 1 is inefficient because we repeatedly traverse over list B to
-# check whether or not any of the nodes in list B were equal to the current
-# one we were looking at in list A. Instead of repeatedly traversing through
-# list B though, we could simply traverse it once and store each node in a
-# hash table. We could then traverse through list A once, each time checking
-# whether the current node exists in the hash table.
-
-# Algorithm:
-# Traverse list B and store the address/reference of each node in a hash table.
-# Then for each node in list A, check whether or not that node exists in the
-# hash table. If it does, return it as it must be the intersection node.
-# If we get to the end of list A without finding an intersection node,
-# return null.
-
-# The one thing we need to be careful of is that we're comparing objects of
-# type Node. We don't want to compare the values within the nodes;
-# doing this would cause our code to break when two different nodes have the
-# same value.
-
-# Implementation
+##############################
+# Time: O(N + M)
+# - Firstly, we need to build up the hash table. It costs O(1) to insert an
+#   item into a hash table, and we need to do this for each of the M nodes in
+#   list B. This gives a cost of O(M) for building the hash table.
+# - Secondly, we need to traverse list A, and for each node, we need to check
+#   whether or not it is in the hash table. In the worst case, there will not
+#   be a match, requiring us to check all N nodes in list A. As it is also
+#   O(1) to check whether or not an item is in a hash table, this checking has
+#   a total cost of O(N).
+# - Finally, combining the two parts, we get O(M) + O(N) = O(M + N).
+# Space: O(M)
+# - As we are storing each of the nodes from list B into a hash table, the hash
+#   table will require O(M) space. Note that we could have instead stored the
+#   nodes of list A into the hash table, this would have been a space
+#   complexity of O(N). Unless we know which list is longer though, it doesn't
+#   make any real difference.
 class Solution:
     def getIntersectionNode(self, headA: ListNode, headB: ListNode) -> ListNode:
         nodes_in_B = set()
@@ -302,113 +210,21 @@ class Solution:
 
 
 ## Approach 3: Two Pointers
-###############################
-# time: O(n + m) - In the worst case, each list is traversed twice giving
-#                  2 * m + 2 * n, which is equivalent to O(N + M). This is
-#                  because the pointers firstly go down each list so that they
-#                  can be "lined up" and then in the second iteration, the
-#                  intersection node is searched for.
-
-#                  An interesting observation you might have made is that when
-#                  the lists are of the same length, this algorithm only
-#                  traverses each list once. This is because the pointers are
-#                  already "lined up" from the start, so the additional pass
-#                  is unnecessary.
-
-# space: O(1) - We aren't allocating any additional data structures, so the
-#               amount of extra space used does not grow with the size of the
-#               input. For this reason, Approach 3 is better than Approach 2.
-
-# Interview Tip:
-# Approach 3 is essentially a "medium" solution to an "easy" problem.
-# Note that approach 2 is probably sufficient for an interview if you are
-# fairly new to programming (for example, you're applying for an internship
-# during your early years of college). If you're more experienced, it might
-# also be sufficient, but your safest bet would be to also know Approach 3,
-# and to be able to apply the intuition behind it to similar problems. While
-# it might initially look scary, you'll be fine with it once you have a think
-# about it and try and draw a few examples.
-
-# Intuition:
-# We know that we've now fully optimized the time complexity: it's impossible
-# to do better than O(N + M) as, in the worst case, we'll need to look at
-# every node at least once. But, is there a way we can get the space complexity
-# down to O(1) while maintaining that awesome O(N + M) time complexity that we
-# just achieved? It turns out that there is!
-
-# Observe that while list A and list B could be different lengths, that the
-# shared "tail" following the intersection has to be the same length.
-
-# Imagine that we have two linked lists, A and B, and we know that their
-# lengths are N and M respectively (these can be calculated with O(1) space and
-# in time proportional to the length of the list).
-# We'll imagine that N = 5 and M = 8.
-
-#                      [?] -> [?] -> [?] -> [?] -> [?]
-# [?] -> [?] -> [?] -> [?] -> [?] -> [?] -> [?] -> [?]
-
-# Because the "tails" must be the same length, we can conclude that if there
-# is an intersection, then the intersection node will be one of these
-# 5 possibilities.
-
-#                      [?] -> [?] -> [?] -> [?] -> [?]
-#                      (1)    (2)    (3)    (4)    (5)
-# [?] -> [?] -> [?] -> [?] -> [?] -> [?] -> [?] -> [?]
-
-# So, to check for each of these pairs, we would start by setting a pointer at
-# the start of the shorter list, and a pointer at the first possible matching
-# node of the longer list. The position of this node is simply the difference
-# between the two lengths, that is, |M - N|.
-
-#                       p1
-#                      [?] -> [?] -> [?] -> [?] -> [?]
-# [?] -> [?] -> [?] -> [?] -> [?] -> [?] -> [?] -> [?]
-#                       p2
-
-# The two linked lists from above with a p1 pointer at the head of the first,
-# and a p2 pointer at the 4th node of the second.
-
-# Then, we just need to step the two pointers through the list, each time
-# checking whether or not the nodes are the same.
-
-# In code, we could write this algorithm with 4 loops, one after the other,
-# each doing the following:
-# - Calculate N; the length of list A.
-# - Calculate M; the length of list B.
-# - Set the start pointer for the longer list.
-# - Step the pointers through the list together.
-
-# While this would have a time complexity of O(N + M) and a space complexity
-# of O(1) and would be fine for an interview, we can still simplify the code
-# a bit! As some quick reassurance, most people will struggle to come up with
-# this next part by themselves. It takes practice and seeing lots of linked
-# list and other math problems.
-
-# If we say that cc is the shared part, aa is exclusive part of list A and
-# b is exclusive part of list B, then we can have one pointer that goes over
-# a + c + b and the other that goes over b + c + a. Have a look at the diagram
-# below, and this should be fairly intuitive.
-
-# Diagram showing that one pointer could go over a + c + b while the other
-# goes over b + c + a, and then both will end up on the intersection node.
-
-# This is the above algorithm in disguise - one pointer is essentially
-# measuring the length of the longer list, and the other is measuring the
-# length of the shorter list, and then placing the start pointer for the
-# longer list. Then both are stepping through the list together. By seeing
-# the solution in this way though, we can now implement it as a single loop.
-
-# Algorithm:
-# - Set pointer pA to point at headA.
-# - Set pointer pB to point at headB.
-# - While pA and pB are not pointing at the same node:
-#   - If pA is pointing to a null, set pA to point to headB.
-#   - Else, set pA to point at pA.next.
-#   - If pB is pointing to a null, set pB to point to headA.
-#   - Else, set pB to point at pB.next.
-#   - return the value pointed to by pA (or by pB; they're the same now).
-
-# Implementation:
+##############################
+# Let N be the length of list A and M be the length of list B.
+# Time: O(N + M)
+# - In the worst case, each list is traversed twice giving 2⋅M + 2⋅N, which is
+#   equivalent to O(N + M). This is because the pointers firstly go down each
+#   list so that they can be "lined up" and then in the second iteration, the
+#   intersection node is searched for.
+# - An interesting observation you might have made is that when the lists are
+#   of the same length, this algorithm only traverses each list once. This is
+#   because the pointers are already "lined up" from the start, so the
+#   additional pass is unnecessary.
+# Space: O(1)
+# - We aren't allocating any additional data structures, so the amount of extra
+#   space used does not grow with the size of the input. For this reason,
+#   Approach 3 is better than Approach 2.
 class Solution:
     def getIntersectionNode(self, headA: ListNode, headB: ListNode) -> ListNode:
         pA = headA
