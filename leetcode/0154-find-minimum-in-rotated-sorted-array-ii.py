@@ -39,6 +39,10 @@
 
 ## modified binary search
 ##############################
+# case 1: nums[mid] < nums[right] -> target is to left of mid
+# case 2: nums[mid] > nums[right] -> target is to right of mid
+# case 3: nums[mid] == nums[right] -> decrement right by one
+
 class Solution:
     def findMin(self, nums: list[int]) -> int:
         left, right = 0, len(nums) - 1

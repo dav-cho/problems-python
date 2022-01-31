@@ -500,20 +500,55 @@ def subtract(n):
 #    subtract_one = subtract(n)
 #    print('count:', min(add_one, subtract_one))
 
-def halve(n):
-    count = 0
-    while n % 2 == 0:
-        count += 1
-        n //= 2
+#def halve(n):
+#    count = 0
+#    while n % 2 == 0:
+#        count += 1
+#        n //= 2
+#
+#    print('final n:', n)
+#    return count
+#
+#for n in range(2, 31, 2):
+#    count = halve(n)
+#    print('------------------------------')
+#    print('n:', n)
+#    print('count:', count)
 
-    print('final n:', n)
-    return count
+######################################################################
 
-for n in range(2, 31, 2):
-    count = halve(n)
-    print('------------------------------')
-    print('n:', n)
-    print('count:', count)
+a = 138
+b = int('0101', 2)
+
+#print(bin(a))
+#print(bin(b))
+#print(bin(a & b))
+#print(bin(a | b))
+#print(bin(a ^ b))
+
+#print(bin(a - 1))
+#print(bin(a & (a - 1)))
+
+c = int('0000000001000000', 2)
+#print(bin(c))
+#print(bin(c - 1))
+#print(bin(c & (c - 1)))
+
+count = 0
+
+while c & 1 == 0:
+    count += 1
+    c >>= 1
+
+#print('count:', count + 1)
+
+
+######################################################################
+
+count_0a = Counter('zero')
+count_0b = Counter('zero')
+
+print(count_0a == count_0b)
 
 ######################################################################
 
