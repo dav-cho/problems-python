@@ -548,7 +548,12 @@ while c & 1 == 0:
 count_0a = Counter('zero')
 count_0b = Counter('zero')
 
-print(count_0a == count_0b)
+#print(count_0a == count_0b)
+
+######################################################################
+
+for i in range(11):
+    print(i, i & 1)     # evens = 0, odds = 1
 
 ######################################################################
 
