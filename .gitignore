@@ -1,3 +1,12 @@
-.vscode/
+*
+**/
+!.gitignore
+!codewars/
+codewars/template.py
+codewars/scraps.py
+!hackerrank/
+!leetcode/
+leetcode/notes/
+leetcode/solutions/
+leetcode/template.py
 
-test.py

@@ -43,14 +43,16 @@
 ################################################################################
 
 
-## brute force
-##################
+## prefix sum
+#####################
 class Solution:
     def pivot_index(self, nums: list[int]) -> int:
-        for i in range(len(nums)):
-            if sum(nums[:i]) == sum(nums[i + 1:]):
+        left, right = 0, sum(nums)
+        for i, num in enumerate(nums):
+            if left == right - left - num:
                 return i
-
+            left += num
+            
         return -1
 
 
@@ -70,6 +72,16 @@ class Solution:
 
         return -1
 
+
+## brute force
+##################
+class Solution:
+    def pivot_index(self, nums: list[int]) -> int:
+        for i in range(len(nums)):
+            if sum(nums[:i]) == sum(nums[i + 1:]):
+                return i
+
+        return -1
 
 
 ## Tests

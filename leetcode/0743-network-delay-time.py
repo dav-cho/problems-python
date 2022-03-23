@@ -116,8 +116,8 @@ class Solution:
             graph[u].append((v, w))
             
         dist = {node: float('inf') for node in range(1, n + 1)}
-        seen = set()
         dist[k] = 0
+        seen = set()
         
         while True:
             cand_node = -1

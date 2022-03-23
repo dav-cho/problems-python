@@ -43,6 +43,42 @@ class Solution:
         return curr
 
 
+## top-down to bottom-up
+############################################
+class Solution:
+    def rob(self, nums: list[int]) -> int:
+        def dp(i):
+            if i == 0:
+                return nums[0]
+            elif i == 1:
+                return max(nums[0], nums[1])
+
+            if i not in memo:
+                memo[i] = max(dp(i - 1), dp(i - 2) + nums[i])
+
+            return memo[i]
+
+        memo = {}
+        return dp(len(nums) - 1)
+
+
+class Solution:
+    def rob(self, nums: list[int]) -> int:
+        N = len(nums)
+
+        if N == 0:
+            return nums[0]
+
+        dp = [0] * N
+        dp[0] = nums[0]
+        dp[1] = max(nums[0], nums[1])
+
+        for i in range(2, N):
+            dp[i] = max(dp[i - 1], dp[i - 2] + nums[i])
+
+        return dp[N - 1]
+
+
 ## optimized dynamic programming - bottom up
 ################################################
 class Solution:
@@ -108,8 +144,8 @@ class Solution:
         return next_house
 
 
-## dynamic programming - top down
-#####################################
+## dp bottom-up iterative (tabulation)
+##########################################
 class Solution:
     def rob(self, nums: list[int]) -> int:
         N = len(nums)
@@ -145,8 +181,6 @@ class Solution:
         return memo[0]
 
 
-## dynamic programming - bottom up
-######################################
 class Solution:
     def rob(self, nums: list[int]) -> int:
         N = len(nums)
@@ -204,8 +238,20 @@ class Solution:
         return memo[-1]
 
 
-## recursion with memoization - bottom up
-#############################################
+## dp top-down recursive (memoization)
+##########################################
+class Solution:
+    def rob(self, nums: list[int]) -> int:
+        @lru_cache(None)
+        def dp(i):
+            if i >= len(nums):
+                return 0
+            
+            return max(dp(i + 1), dp(i + 2) + nums[i])
+        
+        return dp(0)
+
+
 class Solution:
     def rob(self, nums: list[int]) -> int:
         memo = {}
@@ -223,8 +269,6 @@ class Solution:
         return helper(0)
 
 
-## recursion with memoization - top down
-############################################
 class Solution:
     def rob(self, nums: list[int]) -> int:
         memo = {}
