@@ -6,7 +6,7 @@
 def next_bigger(n):
     n = str(n)
 
-    if ''.join(sorted(n, reverse=True)) == n:
+    if "".join(sorted(n, reverse=True)) == n:
         return -1
 
     i = len(n) - 1
@@ -18,10 +18,8 @@ def next_bigger(n):
         if digit > n[i - 1]:
             sub = digit
             back[j] = n[i - 1]
-            return int(n[:i - 1] + sub + ''.join(back))
+            return int(n[: i - 1] + sub + "".join(back))
 
-
-#print(next_bigger(21581957621))
 
 ## Tests
 #############
@@ -31,15 +29,14 @@ import unittest
 
 class Test(unittest.TestCase):
     def test_cases(self):
-        self.assertEqual(next_bigger(12),21)
-        self.assertEqual(next_bigger(513),531)
-        self.assertEqual(next_bigger(2017),2071)
-        self.assertEqual(next_bigger(414),441)
-        self.assertEqual(next_bigger(144),414)
+        self.assertEqual(next_bigger(12), 21)
+        self.assertEqual(next_bigger(513), 531)
+        self.assertEqual(next_bigger(2017), 2071)
+        self.assertEqual(next_bigger(414), 441)
+        self.assertEqual(next_bigger(144), 414)
 
-        self.assertEqual(next_bigger(9876543210),-1)
+        self.assertEqual(next_bigger(9876543210), -1)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()
-

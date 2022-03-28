@@ -1,32 +1,7 @@
 ##
-#### Construct Binary Tree from Inorder and Postorder Traversal (medium)
-############################################################################
+#### 106. Construct Binary Tree from Inorder and Postorder Traversal (medium)
+#################################################################################
 
-# Given two integer arrays inorder and postorder where inorder is the inorder
-# traversal of a binary tree and postorder is the postorder traversal of the
-# same tree, construct and return the binary tree.
-
-# Example 1:
-#       3
-#    9     20
-#        15  7
-# Input: inorder = [9,3,15,20,7], postorder = [9,15,7,20,3]
-# Output: [3,9,20,null,null,15,7]
-
-# Example 2:
-# Input: inorder = [-1], postorder = [-1]
-# Output: [-1]
- 
-# Constraints:
-# 1 <= inorder.length <= 3000
-# postorder.length == inorder.length
-# -3000 <= inorder[i], postorder[i] <= 3000
-# inorder and postorder consist of unique values.
-# Each value of postorder also appears in inorder.
-# inorder is guaranteed to be the inorder traversal of the tree.
-# postorder is guaranteed to be the postorder traversal of the tree.
-
-################################################################################
 
 from typing import Optional
 
@@ -132,14 +107,6 @@ class Solution:
 
 
 
-## 
-##############################
-class Solution:
-    def buildTree(self, inorder: list[int], postorder: list[int]) -> Optional[TreeNode]:
-        pass
-
-
-
 ## Tests
 #############
 
@@ -155,45 +122,4 @@ class Test(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
-
-
-## LeetCode Solutions
-#########################
-
-## Approach 1: Recursion
-##############################
-# Time: O(N)
-# - Let's compute the solution with the help of master theorem
-#   T(N) = aT(b/N) + Θ(N^d). The equation represents dividing the problem up
-#   into a subproblems of size (N/b) in Θ(N^d) time. Here one divides the
-#   problem in two subproblemes a = 2, the size of each subproblem (to compute
-#   left and right subtree) is a half of initial problem b = 2, and all this
-#   happens in a constant time d = 0. That means that log_b(a) > d and hence
-#   we're dealing with case 1 that means O(N^(log_b(a))) = O(N) time complexity.
-# Space: O(N) - Since we store the entire tree.
-class Solution:
-    def buildTree(self, inorder: List[int], postorder: List[int]) -> TreeNode:
-        def helper(in_left, in_right):
-            # if there is no elements to construct subtrees
-            if in_left > in_right:
-                return None
-            
-            # pick up the last element as a root
-            val = postorder.pop()
-            root = TreeNode(val)
-
-            # root splits inorder list
-            # into left and right subtrees
-            index = idx_map[val]
- 
-            # build right subtree
-            root.right = helper(index + 1, in_right)
-            # build left subtree
-            root.left = helper(in_left, index - 1)
-            return root
-        
-        # build a hashmap value -> its index
-        idx_map = {val:idx for idx, val in enumerate(inorder)} 
-        return helper(0, len(inorder) - 1)
-
 

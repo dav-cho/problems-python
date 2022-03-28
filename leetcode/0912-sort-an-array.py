@@ -1,22 +1,7 @@
 ##
-#### Sort an Array
+#### 912. Sort an Array (medium)
 ########################################
 
-# Given an array of integers nums, sort the array in ascending order.
-
-# Example 1:
-# Input: nums = [5,2,3,1]
-# Output: [1,2,3,5]
-
-# Example 2:
-# Input: nums = [5,1,1,2,0,0]
-# Output: [0,0,1,1,2,5]
- 
-# Constraints:
-# 1 <= nums.length <= 5 * 104
-# -5 * 104 <= nums[i] <= 5 * 104
-
-################################################################################
 
 ## merge sort
 ##############################
@@ -48,13 +33,6 @@ class Solution:
         return res
 
 
-## merge sort
-##############################
-class Solution:
-    def sortArray(self, nums: list[int]) -> list[int]:
-        pass
-
-
 ## Tests
 #############
 
@@ -64,11 +42,9 @@ import unittest
 class Test(unittest.TestCase):
     def test_cases(self):
         solution = Solution()
-        self.assertEqual(solution.sortArray([5,2,3,1]), [1,2,3,5])
-        self.assertEqual(solution.sortArray([5,1,1,2,0,0]), [0,0,1,1,2,5])
+        self.assertEqual(solution.sortArray([5, 2, 3, 1]), [1, 2, 3, 5])
+        self.assertEqual(solution.sortArray([5, 1, 1, 2, 0, 0]), [0, 0, 1, 1, 2, 5])
 
 
 if __name__ == "__main__":
     unittest.main()
-
-

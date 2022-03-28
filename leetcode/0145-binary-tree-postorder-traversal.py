@@ -1,32 +1,6 @@
 ##
-#### Binary Tree Postorder Traversal (easy)
-###############################################
-
-# Given the root of a binary tree, return the postorder traversal of its
-# nodes' values.
-
-# Example 1:
-#   1
-#     2
-#   3
-# Input: root = [1,null,2,3]
-# Output: [3,2,1]
-
-# Example 2:
-# Input: root = []
-# Output: []
-
-# Example 3:
-# Input: root = [1]
-# Output: [1]
- 
-# Constraints:
-# The number of the nodes in the tree is in the range [0, 100].
-# -100 <= Node.val <= 100
- 
-# Follow up: Recursive solution is trivial, could you do it iteratively?
-
-################################################################################
+#### 145. Binary Tree Postorder Traversal (easy)
+####################################################
 
 
 ## Definition for a binary tree node.
@@ -42,32 +16,32 @@ class TreeNode:
 class Solution:
     def postorder_traversal(self, root: TreeNode) -> list[int]:
         res = []
-        
+
         def dfs_postorder(node):
             if not node:
                 return
-            
+
             dfs_postorder(node.left)
             dfs_postorder(node.right)
             res.append(node.val)
-            
+
             return res
-        
+
         return dfs_postorder(root)
 
 
 class Solution:
     def postorder_traversal(self, root: TreeNode) -> list[int]:
         return self.dfs_postorder(root, [])
-    
+
     def dfs_postorder(self, node, res):
         if not node:
             return
-        
+
         self.dfs_postorder(node.left, res)
         self.dfs_postorder(node.right, res)
         res.append(node.val)
-        
+
         return res
 
 
@@ -76,11 +50,11 @@ class Solution:
         result = []
         self.helper(root, result)
         return result
-    
+
     def helper(self, node, result):
         if not node:
             return
-        
+
         self.helper(node.left, result)
         self.helper(node.right, result)
         result.append(node.val)
@@ -96,11 +70,11 @@ class Solution:
             node = stack.pop()
             if not node:
                 continue
-                
+
             res.append(node.val)
             stack.append(node.left)
             stack.append(node.right)
-            
+
         return res[::-1]
 
 
@@ -112,14 +86,14 @@ class Solution:
             node, seen = stack.pop()
             if not node:
                 continue
-                
+
             if seen:
                 res.append(node.val)
             else:
                 stack.append((node, True))
                 stack.append((node.right, False))
                 stack.append((node.left, False))
-            
+
         return res
 
 
@@ -132,14 +106,15 @@ class Solution:
                 res.append(root.val)
                 stack.append(root)
                 root = root.right
-                
+
             root = stack.pop()
             root = root.left
-            
+
         return reversed(res)
 
 
 from collections import deque
+
 
 class Solution:
     def postorder_traversal(self, root: TreeNode) -> list[int]:
@@ -149,10 +124,10 @@ class Solution:
                 result.appendleft(root.val)
                 stack.append(root)
                 root = root.right
-            
+
             root = stack.pop()
             root = root.left
-            
+
         return result
 
 
@@ -167,10 +142,10 @@ class Solution:
                 root = root.left
             else:
                 pred = root.right
-                
+
                 while pred.left and pred.left is not root:
                     pred = pred.left
-                
+
                 if not pred.left:
                     result.append(root.val)
                     pred.left = root
@@ -178,32 +153,5 @@ class Solution:
                 else:
                     pred.left = None
                     root = root.left
-        
+
         return reversed(result)
-
-
-## Tests
-############
-
-
-## LeetCode Solutions
-#########################
-
-## Approach 1: Rescursive
-#############################
-# time: 
-# space: 
-
-
-## Approach 2: Iterative
-############################
-# time: 
-# space: 
-
-
-## Approach 3: Morris Traversal
-###################################
-# time: 
-# space: 
-
-

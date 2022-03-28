@@ -1,30 +1,7 @@
 ##
-#### Binary Tree Level Order Traversal (medium)
-###################################################
+#### 102. Binary Tree Level Order Traversal (medium)
+########################################################
 
-# Given the root of a binary tree, return the level order traversal of its
-# nodes' values. (i.e., from left to right, level by level).
-
-# Example 1:
-#      3
-#   9    20
-#      15  7
-# Input: root = [3,9,20,null,null,15,7]
-# Output: [[3],[9,20],[15,7]]
-
-# Example 2:
-# Input: root = [1]
-# Output: [[1]]
-
-# Example 3:
-# Input: root = []
-# Output: []
- 
-# Constraints:
-# The number of nodes in the tree is in the range [0, 2000].
-# -1000 <= Node.val <= 1000
-
-################################################################################
 
 
 ## Definition for a binary tree node.
@@ -144,21 +121,6 @@ class Solution:
             
         return res
 
-
-## 
-##############################
-class Solution:
-    def levelOrder(self, root: Optional[TreeNode]) -> List[List[int]]:
-        pass
-
-
-## 
-##############################
-class Solution:
-    def levelOrder(self, root: Optional[TreeNode]) -> List[List[int]]:
-        pass
-
-
 ## Tests
 #############
 
@@ -174,81 +136,3 @@ class Test(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
-
-
-## LeetCode Solutions
-#########################
-
-## Approach 1: Recursion
-##############################
-# Time: O(N) - Since each node is processed exactly once.
-# Space: O(N) - To keep the output structure which contains N node values.
-class Solution:
-    def levelOrder(self, root):
-        """
-        :type root: TreeNode
-        :rtype: List[List[int]]
-        """
-        levels = []
-        if not root:
-            return levels
-        
-        def helper(node, level):
-            # start the current level
-            if len(levels) == level:
-                levels.append([])
-
-            # append the current node value
-            levels[level].append(node.val)
-
-            # process child nodes for the next level
-            if node.left:
-                helper(node.left, level + 1)
-            if node.right:
-                helper(node.right, level + 1)
-            
-        helper(root, 0)
-        return levels
-
-
-## Approach 2: Iteration
-##############################
-# Time: O(N) - Since each node is processed exactly once.
-# Space: O(N) - To keep the output structure which contains N node values.
-from collections import deque
-class Solution:
-    def levelOrder(self, root):
-        """
-        :type root: TreeNode
-        :rtype: List[List[int]]
-        """
-        levels = []
-        if not root:
-            return levels
-        
-        level = 0
-        queue = deque([root,])
-        while queue:
-            # start the current level
-            levels.append([])
-            # number of elements in the current level 
-            level_length = len(queue)
-            
-            for i in range(level_length):
-                node = queue.popleft()
-                # fulfill the current level
-                levels[level].append(node.val)
-                
-                # add child nodes of the current level
-                # in the queue for the next level
-                if node.left:
-                    queue.append(node.left)
-                if node.right:
-                    queue.append(node.right)
-            
-            # go to next level
-            level += 1
-        
-        return levels
-
-

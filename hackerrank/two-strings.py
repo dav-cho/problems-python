@@ -2,9 +2,6 @@
 #### Two Strings (easy)
 ############################
 
-# Given two strings, determine if they share a common substring.
-# A substring may be as small as one character.
-
 
 def twoStrings(s1: str, s2: str) -> str:
     # a = s1 if len(s1) < len(s2) else s2
