@@ -68,7 +68,7 @@ class DoublyLinkedList:
         self.head.next = self.tail
         self.tail.prev = self.head
 
-    def get_node(self, index: int) -> DoublyLinkedNode:
+    def _get_node(self, index: int) -> DoublyLinkedNode:
         if index + 1 < self.size - index:
             node = self.head
             for _ in range(index + 1):
@@ -82,7 +82,7 @@ class DoublyLinkedList:
     def get(self, index: int) -> int:
         if not (0 <= index < self.size):
             return -1
-        curr = self.get_node(index)
+        curr = self._get_node(index)
         return curr.val
 
     def addAtHead(self, val: int) -> None:
@@ -100,7 +100,7 @@ class DoublyLinkedList:
     def addAtIndex(self, index: int, val: int) -> None:
         if index > self.size:
             return
-        curr = self.get_node(index)
+        curr = self._get_node(index)
         node = DoublyLinkedNode(val, curr, curr.prev)
         curr.prev = node
         node.prev.next = node
@@ -109,10 +109,20 @@ class DoublyLinkedList:
     def deleteAtIndex(self, index: int) -> None:
         if not (0 <= index < self.size):
             return
-        curr = self.get_node(index)
+        curr = self._get_node(index)
         curr.prev.next = curr.next
-        curr.next.prev = curr.prev
+        if curr.next:
+            curr.next.prev = curr.prev
         self.size -= 1
+
+
+# Your MyLinkedList object will be instantiated and called as such:
+# obj = MyLinkedList()
+# param_1 = obj.get(index)
+# obj.addAtHead(val)
+# obj.addAtTail(val)
+# obj.addAtIndex(index,val)
+# obj.deleteAtIndex(index)
 
 
 def test1() -> None:
