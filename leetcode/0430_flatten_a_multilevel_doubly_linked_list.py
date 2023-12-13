@@ -15,7 +15,7 @@ class Node:
 
 
 class Iterative:
-    def flatten(self, head: Optional[Node]) -> Optional[Node]:
+    def flatten(self, head: "Optional[Node]") -> "Optional[Node]":
         curr = head
         while curr:
             if not curr.child:
@@ -25,10 +25,10 @@ class Iterative:
             while tail.next:
                 tail = tail.next
             tail.next = curr.next
+            curr.child.prev = curr
             if curr.next:
                 curr.next.prev = tail
             curr.next = curr.child
-            curr.child.prev = curr
             curr.child = None
         return head
 
