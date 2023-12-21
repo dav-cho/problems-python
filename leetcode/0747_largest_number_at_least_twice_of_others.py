@@ -1,32 +1,42 @@
-##
-#### 747. Largest Number At Least Twice of Others (easy)
-############################################################
+"""
+747. Largest Number At Least Twice of Others (easy)
+"""
+
+from typing import List
 
 
-## two pass
-###############
-class Solution:
-    def dominant_index(self, nums: list[int]) -> int:
-        mx = max(nums)
-
-        for i in range(len(nums)):
-            if nums[i] == mx:
+class OnePass:
+    def dominantIndex(self, nums: List[int]) -> int:
+        first = second = float("-inf")
+        idx = 0
+        for i, num in enumerate(nums):
+            if num > first:
+                first, second = num, first
                 idx = i
-            else:
-                if mx < nums[i] * 2:
-                    return -1
+            elif num > second:
+                second = num
+        if first >= second * 2:
+            return idx
+        return -1
 
-        return idx
+
+class TwoPass:
+    def dominantIndex(self, nums: List[int]) -> int:
+        largest = max(nums)
+        for num in nums:
+            if num == largest:
+                continue
+            if num * 2 > largest:
+                return -1
+        return nums.index(largest)
 
 
-## Tests
-############
-
-test1 = [3, 6, 1, 0]  # 1
-test2 = [1, 2, 3, 4]  # -1
-test3 = [1]  # 0
-
-solution = Solution()
-print(solution.dominant_index(test1))
-print(solution.dominant_index(test2))
-print(solution.dominant_index(test3))
+class FirstAttempt:
+    def dominantIndex(self, nums: List[int]) -> int:
+        largest = max(nums)
+        for num in nums:
+            if num == largest:
+                continue
+            if num * 2 > largest:
+                return -1
+        return nums.index(largest)
