@@ -1,13 +1,48 @@
-##
-#### 67. Add Binary (easy)
-########################################
+"""
+67. Add Binary (easy)
+"""
 
 
-## built-in methods
-##############################
-class Solution:
+class Builtin1:
     def addBinary(self, a: str, b: str) -> str:
         return bin(int(a, 2) + int(b, 2))[2:]
+
+
+class Builtin2:
+    def addBinary(self, a: str, b: str) -> str:
+        return f"{int(a, 2) + int(b, 2):b}"
+
+
+class BitByBit:
+    def addBinary(self, a: str, b: str) -> str:
+        n = max(map(len, [a, b]))
+        a = a.zfill(n)
+        b = b.zfill(n)
+
+        res = []
+        carry = 0
+        for i in range(n - 1, -1, -1):
+            if a[i] == "1":
+                carry += 1
+            if b[i] == "1":
+                carry += 1
+            if carry % 2:
+                res.append("1")
+            else:
+                res.append("0")
+            carry //= 2
+        if carry:
+            res.append("1")
+        return "".join(res[::-1])
+
+
+class BitManipulation:
+    def addBinary(self, a: str, b: str) -> str:
+        res = int(a, 2)
+        carry = int(b, 2)
+        while carry:
+            res, carry = res ^ carry, (res & carry) << 1
+        return bin(res)[2:]
 
 
 ##
@@ -22,60 +57,3 @@ class Solution:
         res = 0
         for i in range(N - 1, -1, -1):
             res = (res << 1) + (a[i] + b[i])
-
-
-## bit by bit
-##############################
-class Solution:
-    def addBinary(self, a: str, b: str) -> str:
-        N = max(len(a), len(b))
-        a, b = a.zfill(N), b.zfill(N)
-
-        carry = 0
-        res = []
-        for i in range(N - 1, -1, -1):
-            if a[i] == "1":
-                carry += 1
-            if b[i] == "1":
-                carry += 1
-
-            if carry % 2:
-                res.append("1")
-            else:
-                res.append("0")
-
-            carry //= 2
-
-        if carry:
-            res.append("1")
-
-        return "".join(reversed(res))
-
-
-## bit manipulation
-##############################
-class Solution:
-    def addBinary(self, a: str, b: str) -> str:
-        x, y = map(lambda x: int(x, 2), (a, b))
-        while y:
-            res = x ^ y
-            carry = (x & y) << 1
-            x, y = res, carry
-
-        return bin(x)[2:]
-
-
-## Tests
-#############
-
-import unittest
-
-
-class Test(unittest.TestCase):
-    def test_cases(self):
-        self.assertEqual(Solution().addBinary("11", "1"), "100")
-        self.assertEqual(Solution().addBinary("1010", "1011"), "10101")
-
-
-if __name__ == "__main__":
-    unittest.main()
