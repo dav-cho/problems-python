@@ -5,6 +5,53 @@
 from typing import List
 
 
+class BestHelper:
+    def replaceWords(self, dictionary: List[str], sentence: str) -> str:
+        trie = {}
+        for word in dictionary:
+            node = trie
+            for char in word:
+                node = node.setdefault(char, {})
+            node["word"] = word
+
+        def replace(word: str) -> str:
+            node = trie
+            for char in word:
+                node = node.get(char)
+                if not node:
+                    break
+                if "word" in node:
+                    return node["word"]
+            return word
+
+        return " ".join(map(replace, sentence.split()))
+
+
+class BestIterative:
+    def replaceWords(self, dictionary: List[str], sentence: str) -> str:
+        trie = {}
+        for word in dictionary:
+            node = trie
+            for char in word:
+                node = node.setdefault(char, {})
+            node["word"] = word
+
+        words = []
+        for word in sentence.split():
+            node = trie
+            for char in word:
+                if char not in node:
+                    break
+                node = node[char]
+                if "word" in node:
+                    words.append(node["word"])
+                    break
+            if "word" not in node:
+                words.append(word)
+
+        return " ".join(words)
+
+
 class Solution:
     def replaceWords(self, dictionary: List[str], sentence: str) -> str:
         trie = {}

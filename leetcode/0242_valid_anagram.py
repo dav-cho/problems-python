@@ -1,100 +1,54 @@
-##
-#### 242. Valid Anagram (easy)
-########################################
+"""
+242. Valid Anagram (easy)
+"""
 
-
-## first attempt
-##############################
 from collections import Counter
 
 
-class Solution:
+class LoopOnce:
     def isAnagram(self, s: str, t: str) -> bool:
-        return Counter(s) == Counter(t)
+        n = len(s)
+        if n != len(t):
+            return False
+
+        counts = {}
+        for i in range(n):
+            counts[s[i]] = counts.setdefault(s[i], 0) + 1
+            counts[t[i]] = counts.setdefault(t[i], 0) - 1
+
+        return all(v == 0 for v in counts.values())
 
 
-class Solution:
-    def isAnagram(self, s: str, t: str) -> bool:
-        counts_s = Counter(s)
-        counts_t = Counter(t)
-
-        return counts_s == counts_t
-
-
-## sorting
-##############################
-class Solution:
-    def isAnagram(self, s: str, t: str) -> bool:
-        return sorted(s) == sorted(t)
-
-
-class Solution:
-    def isAnagram(self, s: str, t: str) -> bool:
-        s = sorted(s)
-        t = sorted(t)
-
-        return s == t
-
-
-## hash table
-##############################
-class Solution:
-    def isAnagram(self, s: str, t: str) -> bool:
-        return Counter(s) == Counter(t)
-
-
-from collections import defaultdict
-
-
-class Solution:
+class NoCounter:
     def isAnagram(self, s: str, t: str) -> bool:
         if len(s) != len(t):
             return False
 
-        counts = defaultdict(int)
+        counts = {}
+        for char in s:
+            counts[char] = counts.setdefault(char, 0) + 1
 
-        for i in range(len(s)):
-            counts[s[i]] += 1
-            counts[t[i]] -= 1
-
-        for count in counts.values():
-            if count != 0:
+        for char in t:
+            if char not in counts:
                 return False
+            counts[char] -= 1
+            if counts[char] == 0:
+                del counts[char]
 
         return True
 
 
-class Solution:
+class WithCounter:
     def isAnagram(self, s: str, t: str) -> bool:
         if len(s) != len(t):
             return False
 
-        counts = [0] * 26
-
-        for i in range(len(s)):
-            counts[ord(s[i]) - 97] += 1
-            counts[ord(t[i]) - 97] -= 1
-
-        for count in counts:
-            if count != 0:
+        counts = Counter(s)
+        for char in t:
+            if char not in counts:
                 return False
+            counts[char] -= 1
+            if counts[char] == 0:
+                del counts[char]
 
         return True
-
-
-## Tests
-#############
-
-import unittest
-
-
-class Test(unittest.TestCase):
-    def test_cases(self):
-        solution = Solution()
-        self.assertEqual(solution.isAnagram("anagram", "nagaram"), True)
-        self.assertEqual(solution.isAnagram("rat", "car"), False)
-        self.assertEqual(solution.isAnagram("a", "ab"), False)
-
-
-if __name__ == "__main__":
-    unittest.main()

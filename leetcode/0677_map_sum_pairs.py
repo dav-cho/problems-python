@@ -11,7 +11,6 @@ class Node:
     score: int = 0
 
 
-# class MapSum:
 class WithNode:
     def __init__(self):
         self.root = Node()
@@ -35,25 +34,53 @@ class WithNode:
         return node.score
 
 
-# class MapSum:
 class WithDict:
     def __init__(self):
-        self.root = {"children": {}, "score": 0}
-        self.map = {}
+        self.root = {}
+        self.keys = {}
 
     def insert(self, key: str, val: int) -> None:
-        delta = val - self.map.get(key, 0)
-        self.map[key] = val
+        diff = val - self.keys.get(key, 0)
+        self.keys[key] = val
         node = self.root
-        node["score"] += delta
+        node["score"] = node.get("score", 0) + diff
         for char in key:
-            node = node["children"].setdefault(char, {"children": {}, "score": 0})
-            node["score"] += delta
+            node = node.setdefault(char, {})
+            node["score"] = node.get("score", 0) + diff
 
     def sum(self, prefix: str) -> int:
         node = self.root
         for char in prefix:
-            if char not in node["children"]:
+            if char not in node:
                 return 0
-            node = node["children"][char]
+            node = node[char]
         return node["score"]
+
+
+class WithDict2:
+    def __init__(self):
+        self.trie = {}
+        self.keys = {}
+
+    def insert(self, key: str, val: int) -> None:
+        diff = val - self.keys.get(key, 0)
+        self.keys[key] = val
+        node = self.trie
+        node["score"] = node.get("score", 0) + diff
+        for char in key:
+            node = node.setdefault(char, {"score": 0})
+            node["score"] += diff
+
+    def sum(self, prefix: str) -> int:
+        node = self.trie
+        for char in prefix:
+            node = node.get(char)
+            if not node:
+                return 0
+        return node["score"]
+
+
+# Your MapSum object will be instantiated and called as such:
+# obj = MapSum()
+# obj.insert(key,val)
+# param_2 = obj.sum(prefix)

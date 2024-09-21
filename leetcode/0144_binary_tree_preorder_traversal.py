@@ -1,12 +1,11 @@
-##
-#### 144. Binary Tree Preorde Traversal (easy)
-###################################################
+"""
+144. Binary Tree Preorde Traversal (easy)
+"""
+
+from typing import List, Optional
 
 
-from typing import Optional
-
-
-## Definition for a binary tree node.
+# Definition for a binary tree node.
 class TreeNode:
     def __init__(self, val=0, left=None, right=None):
         self.val = val
@@ -14,65 +13,39 @@ class TreeNode:
         self.right = right
 
 
-## recursive
-##############################
-class Solution:
-    def preorderTraversal(self, root: Optional[TreeNode]) -> list[int]:
+class Recursive:
+    def preorderTraversal(self, root: Optional[TreeNode]) -> List[int]:
         res = []
 
-        def dfs_preorder(node):
+        def dfs(node: Optional[TreeNode]) -> List[int]:
             if not node:
-                return
-
+                return res
             res.append(node.val)
-            dfs_preorder(node.left)
-            dfs_preorder(node.right)
-
+            dfs(node.left)
+            dfs(node.right)
             return res
 
-        return dfs_preorder(root)
+        return dfs(root)
 
 
-## iterative
-##############################
-class Solution:
-    def preorderTraversal(self, root: Optional[TreeNode]) -> list[int]:
+class Iteative:
+    def preorderTraversal(self, root: Optional[TreeNode]) -> List[int]:
         res = []
+        if not root:
+            return res
         stack = [root]
         while stack:
             node = stack.pop()
-            if not node:
-                continue
-
-            res.append(node.val)
-            stack.append(node.right)
-            stack.append(node.left)
-
-        return res
-
-
-class Solution:
-    def preorderTraversal(self, root: Optional[TreeNode]) -> list[int]:
-        res = []
-        stack = [root]
-        while stack:
-            node = stack.pop()
-            if not node:
-                continue
-
             res.append(node.val)
             if node.right:
                 stack.append(node.right)
             if node.left:
                 stack.append(node.left)
-
         return res
 
 
-## morris traversal
-##############################
-class Solution:
-    def preorderTraversal(self, root: Optional[TreeNode]) -> list[int]:
+class MorrisTraversal:
+    def preorderTraversal(self, root: Optional[TreeNode]) -> List[int]:
         res = []
         node = root
         while node:
@@ -80,57 +53,56 @@ class Solution:
                 res.append(node.val)
                 node = node.right
             else:
-                leaf = node.left
-
-                while leaf.right and leaf.right is not node:
-                    leaf = leaf.right
-
-                if not leaf.right:
+                pred = node.left
+                while pred.right and pred.right is not node:
+                    pred = pred.right
+                if not pred.right:
                     res.append(node.val)
-                    leaf.right = node
+                    pred.right = node
                     node = node.left
+                else:
+                    pred.right = None
+                    node = node.right
+        return res
+
+
+class MorrisTraversal2:
+    def preorderTraversal(self, root: Optional[TreeNode]) -> List[int]:
+        res = []
+        while root:
+            if not root.left:
+                res.append(root.val)
+                root = root.right
+                continue
+            leaf = root.left
+            while leaf.right and leaf.right is not root:
+                leaf = leaf.right
+            if not leaf.right:
+                res.append(root.val)
+                leaf.right = root
+                root = root.left
+                continue
+            leaf.right = None
+            root = root.right
+        return res
+
+
+class MorrisTraversal3:
+    def preorderTraversal(self, root: Optional[TreeNode]) -> List[int]:
+        res = []
+        while root:
+            if not root.left:
+                res.append(root.val)
+                root = root.right
+            else:
+                leaf = root.left
+                while leaf.right and leaf.right is not root:
+                    leaf = leaf.right
+                if not leaf.right:
+                    res.append(root.val)
+                    leaf.right = root
+                    root = root.left
                 else:
                     leaf.right = None
-                    node = node.right
+                    root = root.right
         return res
-
-
-class Solution:
-    def preorderTraversal(self, root: Optional[TreeNode]) -> list[int]:
-        res = []
-        node = root
-        while node:
-            if not node.left:
-                res.append(node.val)
-                node = node.right
-            else:
-                predecessor = node.left
-
-                while predecessor.right and predecessor.right is not node:
-                    predecessor = predecessor.right
-
-                if not predecessor.right:
-                    res.append(node.val)
-                    predecessor.right = node
-                    node = node.left
-                else:
-                    predecessor.right = None
-                    node = node.right
-        return res
-
-
-## Tests
-#############
-
-import unittest
-
-
-class Test(unittest.TestCase):
-    def test_cases(self):
-        self.assertEqual(Solution().preorderTraversal([1, None, 2, 3]), [1, 2, 3])
-        self.assertEqual(Solution().preorderTraversal([]), [])
-        self.assertEqual(Solution().preorderTraversal([1]), [1])
-
-
-if __name__ == "__main__":
-    unittest.main()

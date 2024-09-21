@@ -1,9 +1,11 @@
-##
-#### 112. Path Sum (easy)
-############################
+"""
+112. Path Sum (easy)
+"""
+
+from typing import Optional
 
 
-## Definition for a binary tree node.
+# Definition for a binary tree node.
 class TreeNode:
     def __init__(self, val=0, left=None, right=None):
         self.val = val
@@ -11,65 +13,46 @@ class TreeNode:
         self.right = right
 
 
-## recursive
-################
-class Solution:
-    def hasPathSum(self, root: TreeNode, targetSum: int) -> bool:
+class Recursive:
+    def hasPathSum(self, root: Optional[TreeNode], targetSum: int) -> bool:
         if not root:
             return False
-
-        targetSum -= root.val
-
-        if not root.left and not root.right:
-            return targetSum == 0
-
-        left = self.hasPathSum(root.left, targetSum)
-        right = self.hasPathSum(root.right, targetSum)
-
+        target = targetSum - root.val
+        if not (root.left or root.right):
+            return target == 0
+        left = self.hasPathSum(root.left, target)
+        right = self.hasPathSum(root.right, target)
         return left or right
 
 
-## iterative
-################
-class Solution:
-    def hasPathSum(self, root: TreeNode, targetSum: int) -> bool:
+class Iterative:
+    def hasPathSum(self, root: Optional[TreeNode], targetSum: int) -> bool:
         if not root:
             return False
+        stack = [(root, targetSum)]
+        while stack:
+            root, target = stack.pop()
+            target -= root.val
+            if not (root.left or root.right) and target == 0:
+                return True
+            if root.right:
+                stack.append((root.right, target))
+            if root.left:
+                stack.append((root.left, target))
+        return False
 
+
+class Iterative2:
+    def hasPathSum(self, root: Optional[TreeNode], targetSum: int) -> bool:
+        if not root:
+            return False
         stack = [(root, targetSum - root.val)]
         while stack:
-            node, curr_sum = stack.pop()
-
-            if not node.left and not node.right and curr_sum == 0:
+            root, target = stack.pop()
+            if not (root.left or root.right) and target == 0:
                 return True
-
-            if node.left:
-                stack.append((node.left, curr_sum - node.left.val))
-            if node.right:
-                stack.append((node.right, curr_sum - node.right.val))
-
+            if root.right:
+                stack.append((root.right, target - root.right.val))
+            if root.left:
+                stack.append((root.left, target - root.left.val))
         return False
-
-
-class Solution:
-    def hasPathSum(self, root: TreeNode, targetSum: int) -> bool:
-        if not root:
-            return False
-
-        queue = [(root, targetSum - root.val)]
-        while queue:
-            node, curr_sum = queue.pop()
-
-            if not node.left and not node.right and curr_sum == 0:
-                return True
-
-            if node.left:
-                queue.append((node.left, curr_sum - node.left.val))
-            if node.right:
-                queue.append((node.right, curr_sum - node.right.val))
-
-        return False
-
-
-## Tests
-############
